@@ -4,7 +4,7 @@
 
 ## short term
 
-- update on Spark reading. @vhe74, 23 SEP 2016
+- update on Spark reading
 
 ## mid term 
 
