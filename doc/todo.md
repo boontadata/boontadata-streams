@@ -37,7 +37,3 @@ for instance this could be cars with speed and tank level, or sensors with tempe
 
 Ingested events will be stored in Kafka and then can be retrieved by the consuming workloads at the speed they can. Still, ingestion must be synchronous in order to reproduce late arrival events problem.
 
-## done
-
-- add a category field from device. @benjguin, 20 SEP 2016
-- create compare.py, maybe also update ingest.py. @benjguin, 20 SEP 2016
