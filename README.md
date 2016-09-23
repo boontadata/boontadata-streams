@@ -18,23 +18,17 @@ Additional goals include comparing performances, resilience to node failures, ..
 
 ## In which state is the project right now
 
-### What we have and will publish soon
-
-We have some code (mostly Python) we should be able to publish soon in this repo. 
+As you can see in the code folder, we have some code (mostly Python) we should be able to publish soon in this repo. 
 For now, an injector sends data to Kafka. It may send duplicates, send out of order, or send late. 
 The injector also aggregates what it sent and saves its version of the truth to Cassandra.
 One injector simulates one device. You can use several instances to simulate several devices. 
 Compare.py compares what the injector sent from a device time and a send time perspective. 
 
-### What we are still developing before publishing
-
-Before publishing, we want to have a first end to end scenario, because this may lead to code refactoring.
-
-Spark streaming will be the first stream processing engine. It will aggregate using processing time.
+Then, Spark streaming will be the first stream processing engine. It will aggregate using processing time.
+For now, it just consumes events from Spark and runs ... Word Count. Obviously this is the first thing that will be replaced, 
+in order to aggregate, based on processing time. 
 
 Very simple stuff to start.
-
-### And then?
 
 Once the initial code is released, the rest of the development will be done in this public repo. 
 

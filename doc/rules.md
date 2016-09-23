@@ -1,0 +1,28 @@
+# rules
+
+- documentation is in English (en-US)
+    - it is written in markdown
+- contribute on technologies you know
+    - don't start your Hello World in boontadata.
+- Reference cloud is Microsoft Azure
+    - documentation refers to Azure
+    - public demonstrations are on Azure
+    - most of the code may be executed in other cloud environments or on premises VMs
+- Everything can be executed on a single Ubuntu VM
+    - docker is used to have complex topologies
+- require minimal dependencies on the developer workstation side. You must not need more than
+    - an HTML5 compatible browser
+    - an SSH client to access Linux servers
+    - A remote desktop client to access Windows servers
+    - a git client
+    - a text editor like Visual Studio code (no IDE)
+    - a snipping tool that can generate pictures from portions of the screen
+    - all other tools must be documented in the Git repo so that users can install them in their Azure VMs
+- boontadata users need the following credentials
+    - SSH credentials they can provide while creating their Azure environment
+    - a [Microsoft account](https://account.live.com) to access an Azure subscription
+- Contributors
+    - are welcome to add an .md page (text only) in the doc/contributors folder (org or people) where they explain who they are (hyperlinks to web sites, etc.) and explain their contributions in boontadata
+    - an individual can choose to have only an org page, a people page or both. Not more.
+    - preferred names for .md files in the doc/contributors folder are Twitter handles 
+- These rules may be changed thru Git/GitHub governance rules (pull requests, ...)
