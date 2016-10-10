@@ -96,4 +96,28 @@ services:
     container_name: spark1
     environment:
       KAFKA_ADVERTISED_SERVERS: "ks1:9092,ks2:9092,ks3:9092"
-  
+  flink-master:
+    build: 
+      context: ./flink
+      dockerfile: Dockerfile_flink_master
+    ports:
+      - "6123"
+      - "8081"
+    container_name: flink-master
+  flink-worker1:
+    build:
+      context: ./flink
+      dockerfile: Dockerfile_flink_worker
+    ports:
+      - "6121"
+      - "6122"
+    container_name: flink-worker1
+  flink-worker2:
+    build:
+      context: ./flink
+      dockerfile: Dockerfile_flink_worker
+    ports:
+      - "6121"
+      - "6122"
+    container_name: flink-worker2
+
