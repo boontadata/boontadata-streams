@@ -10,4 +10,6 @@ WORKDIR /workdir
 
 ADD code/* ./
 
+RUN chmod a+x *.sh
+
 CMD ["/opt/flink/bin/start-master.sh"]
