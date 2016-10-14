@@ -6,4 +6,51 @@
   <version>1.2-SNAPSHOT</version>
 </dependency>
 
+<dependency>
+  <groupId>org.apache.flink</groupId>
+  <artifactId>flink-connector-cassandra_2.10</artifactId>
+  <version>1.2-SNAPSHOT</version>
+</dependency>
+
+<!-- https://ci.apache.org/projects/flink/flink-docs-release-1.2/dev/cluster_execution.html#linking-with-modules-not-contained-in-the-binary-distribution -->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-dependency-plugin</artifactId>
+    <version>2.9</version>
+    <executions>
+        <execution>
+            <id>unpack</id>
+            <!-- executed just before the package phase -->
+            <phase>prepare-package</phase>
+            <goals>
+                <goal>unpack</goal>
+            </goals>
+            <configuration>
+                <artifactItems>
+                    <!-- For Flink connector classes -->
+                    <artifactItem>
+                        <groupId>org.apache.flink</groupId>
+                        <artifactId>flink-connector-kafka</artifactId>
+                        <version>1.2-SNAPSHOT</version>
+                        <type>jar</type>
+                        <overWrite>false</overWrite>
+                        <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                        <includes>org/apache/flink/**</includes>
+                    </artifactItem>
+                    <!-- For Kafka API classes -->
+                    <artifactItem>
+                        <groupId>org.apache.kafka</groupId>
+                        <artifactId>kafka_<YOUR_SCALA_VERSION></artifactId>
+                        <version><YOUR_KAFKA_VERSION></version>
+                        <type>jar</type>
+                        <overWrite>false</overWrite>
+                        <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                        <includes>kafka/**</includes>
+                    </artifactItem>
+                </artifactItems>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+
 (...)

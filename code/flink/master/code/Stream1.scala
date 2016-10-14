@@ -15,7 +15,18 @@ object Main {
     myConsumer.assignTimestampsAndWatermarks(new TimeLagWatermarkGenerator());
     stream = env
         .addSource(myConsumer)
+        
         .print
+
+    CassandraSink.addSink(input)
+    .setQuery("INSERT INTO example.values (id, counter) values (?, ?);")
+    .setClusterBuilder(new ClusterBuilder() {
+        @Override
+        public Cluster buildCluster(Cluster.Builder builder) {
+        return builder.addContactPoint("127.0.0.1").build();
+        }
+    })
+    .build();
 
     env.execute("Flink Kafka Example")
   }
