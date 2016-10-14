@@ -9,7 +9,7 @@ services:
     image: kafkaserver
     container_name: ks1
     ports:
-      - "9092"
+      - "34001:9092"
     depends_on:
       - zookeeper
     environment:
@@ -22,7 +22,7 @@ services:
     image: kafkaserver
     container_name: ks2
     ports:
-      - "9092"
+      - "34002:9092"
     depends_on:
       - zookeeper
       - kafka1
@@ -36,7 +36,7 @@ services:
     image: kafkaserver
     container_name: ks3
     ports:
-      - "9092"
+      - "34003:9092"
     depends_on:
       - zookeeper
       - kafka1
@@ -99,19 +99,18 @@ services:
   flink-master:
     build: ./flink/master
     ports:
-      - "6123"
-      - "8081"
+      - "34010:8081"
+      - "34011:6123"
     container_name: flink-master
   flink-worker1:
     build: ./flink/worker
     ports:
-      - "6121"
-      - "6122"
+      - "34012:6121"
+      - "34013:6122"
     container_name: flink-worker1
   flink-worker2:
     build: ./flink/worker
     ports:
-      - "6121"
-      - "6122"
+      - "34014:6121"
+      - "34015:6122"
     container_name: flink-worker2
-
