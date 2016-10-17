@@ -20,6 +20,21 @@ package io.boontadata.flink1;
 
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
+import org.apache.flink.api.common.functions.ReduceFunction;
+import org.apache.flink.api.java.functions.KeySelector;
+import org.apache.flink.api.java.tuple.Tuple;
+import org.apache.flink.api.java.tuple.Tuple5;
+import org.apache.flink.api.java.tuple.Tuple6;
+import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.sink.SinkFunction;
+import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction;
+import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
+import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.api.windowing.windows.Window;
+import org.apache.flink.util.Collector;
+
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 /**
  * Skeleton for a Flink Streaming Job.
@@ -43,40 +58,88 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
  */
 public class StreamingJob {
 
+	Int FIELD_MESSAGE_ID = 0;
+	Int FIELD_DEVICE_ID = 1;
+	Int FIELD_TIMESTAMP = 2;
+	Int FIELD_CATEGORY = 3;
+	Int FIELD_MEASURE1 = 4;
+	Int FIELD_MESAURE2 = 5; 
+
 	public static void main(String[] args) throws Exception {
 		// set up the streaming execution environment
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 		env.enableCheckpointing(5000); // checkpoint every 5000 msecs
+		env.setParallelism(4); // may change 4 into something else...
 
-		Properties properties = new Properties();
-		properties.setProperty("bootstrap.servers", "ks1:9092,ks2:9092,ks3:9092") //should replace by environment variable
-		properties.setProperty("zookeeper.connect", "zk1:2181") //should replace by environment variable
-		properties.setProperty("group.id", "ReadKafkaWithFlink")
+		Properties kProperties = new Properties();
+		kProperties.setProperty("bootstrap.servers", "ks1:9092,ks2:9092,ks3:9092")
+		kProperties.setProperty("zookeeper.connect", "zk1:2181")
+		kProperties.setProperty("group.id", "ReadKafkaWithFlink")
 
 		// cf https://ci.apache.org/projects/flink/flink-docs-master/dev/connectors/kafka.html
 		FlinkKafkaConsumer082<String> kConsumer = new FlinkKafkaConsumer082<String>( 
 		    "sampletopic", 
 		    new SimpleStringSchema(), 
-		    properties);
+			kProperties);
 
 		// cf https://ci.apache.org/projects/flink/flink-docs-release-1.1/apis/streaming/connectors/cassandra.html
-		CassandraSink cWriter = CassandraSink.addSink(input)
-			.setHost("cassandra1:9042")
-			.setQuery("INSERT INTO example.values (id, counter) values (?, ?);")
+		CassandraSink cWriter = CassandraSink.addSink(inputXXX)
+			.setQuery("INSERT INTO agg_events"
+				+ " (window_time, device_id, category, m1_sum_flink_eventtime, m2_sum_flink_eventtime)"
+				+ " VALUES (?, ?, ?, ?, ?);")
 			.setClusterBuilder(new ClusterBuilder() {
 				@Override
 				public Cluster buildCluster(Cluster.Builder builder) {
-					return builder.addContactPoint("127.0.0.1").build();
+					return builder
+						.addContactPoint("cassandra1").withPort(9042)
+						.addContactPoint("cassandra2").withPort(9042)
+						.addContactPoint("cassandra3").withPort(9042)
+						.build();
 				}
 			})
 			.build();
 
-		DataStream<String> messageStream = env
+		env
 			.addSource(kConsumer)
+			.map(
+				new MapFunction<String, 
+					Tuple6<String, String, Long, String, Long, Float>>() {
+					private static final long serialVersionUID = 324779859156071509341591370454649244437L;
+
+					@Override
+					public Tuple6<String, String, Long, String, Long, Float> map(String value) throws Exception {
+						String[] splits = value.split("|");
+						return new Tuple6<String, String, Long, String, Long, Float>(
+							splits[FIELD_MESSAGE_ID], 
+							splits[FIELD_DEVICE_ID],
+							Long.parseLong(splits[FIELD_TIMESTAMP]),
+							splits[FIELD_CATEGORY],
+							Long.parseLong(splits[FIELD_MEASURE1]),
+							Float.parseFloat(splits[FIELD_MESAURE2])
+						);
+					}
+				}
+			)
+			.keyBy(FIELD_CATEGORY)
+
+have to go trom Tuple6 to Tuple5
+
+			.assignTimestampsAndWatermarks(new BoundedOutOfOrdernessGenerator());
+			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS))
+			.reduce(
+				new ReduceFunction<Tuple5<String, String, String, Long, Float>>() {
+					@Override
+					public Tuple5<String, String, String, Long, Float> reduce(
+						Tuple5<String, String, String, Long, Float> value1,
+						Tuple5<String, String, String, Long, Float> value2) {
+							return new Tuple5<>(value1.f0, value1.f1, value1.f2, 
+								value1.f3 + value2.f3,
+								value1.f4 + value2.f4)
+						}
+				}
+			)
 			.addSink(cWriter)
 			.print();
-
-		messageStream.assignTimestampsAndWatermarks(new BoundedOutOfOrdernessGenerator());
 
 		// execute program
 		env.execute("io.boontadata.flink1.StreamingJob");
@@ -89,15 +152,15 @@ public class StreamingJob {
  * The latest elements for a certain timestamp t will arrive at most n milliseconds after the earliest
  * elements for timestamp t.
  */
-public class BoundedOutOfOrdernessGenerator extends AssignerWithPeriodicWatermarks<String> {
+public class BoundedOutOfOrdernessGenerator extends AssignerWithPeriodicWatermarks<Tuple6<String, String, Long, String, Long, Float>> {
 
     private final long maxOutOfOrderness = 5000; // 5 seconds
 
     private long currentMaxTimestamp;
 
     @Override
-    public long extractTimestamp(MyEvent element, long previousElementTimestamp) {
-        long timestamp = XXX // get processing timestamp from current event // element.getCreationTime();
+    public long extractTimestamp(Tuple6<String, String, Long, String, Long, Float> element, long previousElementTimestamp) {
+        long timestamp = element.f2; // get processing timestamp from current event
         currentMaxTimestamp = Math.max(timestamp, currentMaxTimestamp);
         return timestamp;
     }
