@@ -4,7 +4,7 @@
 
 `git clone` or copy from your laptop where you edit files: 
 ```
-rsync -ave ssh code u2.3-4.xyz:~/boontadata
+rsync -ave ssh code u2.3-4.xyz:~/boontadata-streams
 ```
 
 
@@ -65,11 +65,11 @@ in another terminal, consume from Spark:
 docker exec -ti spark1 /workdir/start-consume.sh
 ```
 
-## build and use the devscala container
+## develop in Java or Scala without an IDE: rebuild and use the devscala container
 
 ```
 docker build -t devscala ~/boontadata-streams/code/devscala
-docker run --name devscala -d -v $HOME/boontadata-streams/code/flink/master/codesample:/usr/src/dev -w /usr/src/dev devscala 
+docker run --name devscala -d -v $BOONTADATA_HOME/code/flink/master/code:/usr/src/dev -w /usr/src/dev devscala 
 docker exec -ti devscala /bin/bash
 
 docker kill devscala
