@@ -83,7 +83,7 @@ public class StreamingJob {
 			kProperties);
 
 		// cf https://ci.apache.org/projects/flink/flink-docs-release-1.1/apis/streaming/connectors/cassandra.html
-		CassandraSink cWriter = CassandraSink.addSink(inputXXX)
+		CassandraSink cWriter = CassandraSink.addSink(Tuple5<Long, String, String, Long, Float> input)
 			.setQuery("INSERT INTO agg_events"
 				+ " (window_time, device_id, category, m1_sum_flink_eventtime, m2_sum_flink_eventtime)"
 				+ " VALUES (?, ?, ?, ?, ?);")
@@ -143,7 +143,7 @@ public class StreamingJob {
 				public void apply(Tuple tuple, TimeWindow window, Iterable<Tuple6<String, String, Long, String, Long, Float>> input, 
 					Collector<Tuple5<Long, String, String, Long, Float>> out) throws Exception {
 
-					Long window_timestamp_milliseconds = window.XXX();
+					Long window_timestamp_milliseconds = window.getEnd();
 					String device_id=input[0].f1; // FIELD_DEVICE_ID
 					String category=input[0].f3; // FIELD_CATEGORY
 					Long sum_of_m1=0L;
