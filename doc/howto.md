@@ -76,6 +76,52 @@ docker kill devscala
 docker rm devscala 
 ```
 
+Maven to generate a Flink Skeleton: 
+
+```
+PACKAGE=quickstart
+
+mvn archetype:generate                                                          \
+  -DarchetypeGroupId=org.apache.flink                           \
+  -DarchetypeArtifactId=flink-quickstart-java           \
+  -DarchetypeVersion=1.1.3                                                      \
+  -DgroupId=xyz.nullepart.quickstart                                        \
+  -DartifactId=$PACKAGE                                                         \
+  -Dversion=0.1                                                                         \
+  -Dpackage=xyz.nullepart.quickstart                                        \
+  -DinteractiveMode=false
+```
+
+Maven to build:
+
+```
+cd quickstart
+mvn clean install -Pbuild-jar 
+```
+
+recompile and find compilation bugs
+
+```
+mvn package
+```
+
+## run a Flink job
+
+from container host 
+
+```
+cd $BOONTADATA_HOME/code
+docker cp flink/master/code/target/flink1-0.1.jar flink-master:/tmp
+```
+
+from flink-master container
+
+```
+flink run -c io.boontadata.flink1.StreamingJob /tmp/flink1-0.1.jar
+```
+
+
+
 ## connect to a few dashboards
 
 Once you've started the containers, and establised an ssh tunnel with this kind of command:

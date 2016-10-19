@@ -25,7 +25,9 @@ CREATE TABLE IF NOT EXISTS boontadata.agg_events (
     m1_sum_ingest_sendtime bigint,
     m1_sum_ingest_devicetime bigint,
     m1_sum_spark_processingtime bigint,
+    m1_sum_flink_eventtime bigint,
     m2_sum_ingest_sendtime double,
     m2_sum_ingest_devicetime double,
     m2_sum_spark_processingtime double,
+    m2_sum_flink_eventtime double,
     PRIMARY KEY (window_time, device_id, category));
