@@ -120,24 +120,49 @@ public class StreamingJob {
 					}
 				}
 			)
-			.keyBy(FIELD_CATEGORY)
-
-have to go trom Tuple6 to Tuple5
-
 			.assignTimestampsAndWatermarks(new BoundedOutOfOrdernessGenerator());
+			.keyBy(FIELD_MESSAGE_ID)
 			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS))
-			.reduce(
-				new ReduceFunction<Tuple5<String, String, String, Long, Float>>() {
-					@Override
-					public Tuple5<String, String, String, Long, Float> reduce(
-						Tuple5<String, String, String, Long, Float> value1,
-						Tuple5<String, String, String, Long, Float> value2) {
-							return new Tuple5<>(value1.f0, value1.f1, value1.f2, 
-								value1.f3 + value2.f3,
-								value1.f4 + value2.f4)
-						}
+			.apply(new WindowFunction<Iterable<Tuple6<String, String, Long, String, Long, Float>>, 
+				Tuple6<String, String, Long, String, Long, Float>, Tuple, TimeWindow>() {
+				// remove duplicates. cf http://stackoverflow.com/questions/35599069/apache-flink-0-10-how-to-get-the-first-occurence-of-a-composite-key-from-an-unbo
+				
+				@Override
+				public void apply(Tuple tuple, TimeWindow window, Iterable<Tuple6<String, String, Long, String, Long, Float>> input, 
+					Collector<Tuple6<String, String, Long, String, Long, Float>> out) throws Exception {
+					out.collect(input.iterator().next());
 				}
-			)
+			})
+ 			.keyBy(FIELD_DEVICE_ID, FIELD_CATEGORY)
+			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS))
+			.apply(new WindowFunction<Iterable<Tuple6<String, String, Long, String, Long, Float>>, 
+				Tuple5<Long, String, String, Long, Float>, Tuple, TimeWindow>() {
+			    // sum measures 1 and 2
+
+				@Override
+				public void apply(Tuple tuple, TimeWindow window, Iterable<Tuple6<String, String, Long, String, Long, Float>> input, 
+					Collector<Tuple5<Long, String, String, Long, Float>> out) throws Exception {
+
+					Long window_timestamp_milliseconds = window.XXX();
+					String device_id=input[0].f1; // FIELD_DEVICE_ID
+					String category=input[0].f3; // FIELD_CATEGORY
+					Long sum_of_m1=0L;
+					Float sum_of_m2=0.;
+
+					for(Tuple6<String, String, Long, String, Long, Float> i in input) {
+						sum_of_m1 += i.f4; // FIELD_MEASURE1
+						sum_of_m2 += i.f5; // FIELD_MESAURE2
+					}
+
+					out.collect(new Tuple5<>(
+								window_timestamp_milliseconds,
+								device_id, 
+								category,
+								sum_of_m1,
+								sum_of_m2
+							));
+				}
+			})
 			.addSink(cWriter)
 			.print();
 
@@ -171,4 +196,3 @@ public class BoundedOutOfOrdernessGenerator extends AssignerWithPeriodicWatermar
         return new Watermark(currentMaxTimestamp - maxOutOfOrderness);
     }
 }
-
