@@ -38,6 +38,7 @@ export BOONTADATA_HOME=$HOME/boontadata-streams
 cd $BOONTADATA_HOME/code
 docker build -t pyclientbase ./pyclientbase && \
 docker build -t kafkaserver ./kafka-docker
+docker build -t flink ./flink/base
 ```
 
 ## start the clusters 
