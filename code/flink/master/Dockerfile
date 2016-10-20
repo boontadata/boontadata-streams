@@ -1,4 +1,4 @@
-FROM melentye/flink
+FROM flink
 
 MAINTAINER boontadata <contact@boontadata.io>
 
