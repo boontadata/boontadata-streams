@@ -100,10 +100,10 @@ cd quickstart
 mvn clean install -Pbuild-jar 
 ```
 
-recompile and find compilation bugs
+generate jar on provided pom.xml
 
 ```
-mvn package
+mvn clean package
 ```
 
 ## run a Flink job
