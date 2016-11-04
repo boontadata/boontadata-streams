@@ -62,12 +62,12 @@ public class StreamingJob {
 		// set up the streaming execution environment
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 		env.enableCheckpointing(5000); // checkpoint every 5000 msecs
-		env.setParallelism(4); // may change 4 into something else...
+		env.setParallelism(16); // may change 4 into something else...
 
 		Properties kProperties = new Properties();
 		kProperties.setProperty("bootstrap.servers", "ks1:9092,ks2:9092,ks3:9092");
 		kProperties.setProperty("zookeeper.connect", "zk1:2181");
-		kProperties.setProperty("group.id", "ReadKafkaWithFlink");
+		kProperties.setProperty("group.id", "flinkGroup");
 
 		env
 			.addSource(new FlinkKafkaConsumer09<String>(
