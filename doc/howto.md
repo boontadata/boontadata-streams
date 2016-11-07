@@ -118,10 +118,8 @@ docker cp flink/master/code/target/flink1-0.1.jar flink-master:/tmp
 from flink-master container
 
 ```
-flink run -c io.boontadata.flink1.StreamingJob /tmp/flink1-0.1.jar
+flink run -c io.boontadata.flink1.StreamingJob /tmp/flink1-0.1.jar --topic sampleTopic --bootstrap.servers ks1:9092,ks2:9092,ks3:9092 --zookeeper.connect zk1:2181 --group.id myGroup 
 ```
-
-
 
 ## connect to a few dashboards
 
@@ -179,4 +177,27 @@ sudo su
 curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 exit
 sudo chmod a+x /usr/local/bin/docker-compose
+```
+
+## summary of the most usefull commands while developing with Flink
+
+```
+docker run --name devscala -d -v $BOONTADATA_HOME/code/flink/master/code:/usr/src/dev -w /usr/src/dev devscala 
+docker exec -ti devscala /bin/bash
+mvn clean package
+
+cd $BOONTADATA_HOME/code
+docker cp flink/master/code/target/flink1-0.1.jar flink-master:/tmp
+
+docker exec -ti flink-master /bin/bash
+flink run -c io.boontadata.flink1.DevJob /tmp/flink1-0.1.jar -d
+flink run -c io.boontadata.flink1.StreamingJob /tmp/flink1-0.1.jar -d
+
+scp 
+
+ssh -D 127.0.0.1:8034 u2.3-4.xyz
+http://0.0.0.0:34010/#/overview
+
+rsync -ave ssh u2.3-4.xyz:~/sdc1/boontadata-streams/code/flink/master/code /mnt/c/afac/code
+
 ```
