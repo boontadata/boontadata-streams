@@ -81,24 +81,36 @@ public class DevJob {
 	public static void main(String[] args) throws Exception {
 		// set up the streaming execution environment
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-		//env.enableCheckpointing(5000); // checkpoint every 5000 msecs
-		//env.setParallelism(1); // may change 4 into something else...
+		env.enableCheckpointing(5000); // checkpoint every 5000 msecs
+		env.setParallelism(2); // not more than the number of nodes...
 
 
 		Properties kProperties = new Properties();
 		kProperties.setProperty("bootstrap.servers", "ks1:9092,ks2:9092,ks3:9092");
-		kProperties.setProperty("zookeeper.connect", "zk1:2181");
+		//kProperties.setProperty("zookeeper.connect", "zk1:2181");
+		//kProperties.setProperty("metadata.broker.list", "zk1:2181");
 		kProperties.setProperty("group.id", "flinkGroup");
+		kProperties.setProperty("auto.offset.reset", "earliest");
+		kProperties.setProperty("max.partition.fetch.bytes", "256");
+		kProperties.setProperty("enable.auto.commit", "false");
 
 		env
-			.addSource(new SimpleStringGenerator())
+			.addSource(new FlinkKafkaConsumer09<>(
+                                "sampletopic",
+                                new SimpleStringSchema(),
+                                kProperties))
 			.rebalance()
-			.map (s -> "prefix-" +s)
+			.map (
+				new MapFunction<String, String>() {
+					@Override
+					public String map(String value) throws Exception {
+						return "Kafka and Flink say: " + value;
+					}
+				}
+			)
 			.print();
 
-		env.execute("161107c");
-
-
+		env.execute("161107g");
 	}
 
 	public static class SimpleStringGenerator implements SourceFunction<String> {

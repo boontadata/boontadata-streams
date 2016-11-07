@@ -74,6 +74,7 @@ public class StreamingJob {
                                 "sampletopic",
                                 new SimpleStringSchema(),
                                 kProperties))
+			.rebalance()
 			.map(
 				new MapFunction<String, 
 					Tuple6<String, String, Long, String, Long, Float>>() {
