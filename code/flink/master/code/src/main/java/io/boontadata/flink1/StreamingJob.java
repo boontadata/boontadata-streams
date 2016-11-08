@@ -62,7 +62,7 @@ public class StreamingJob {
 		// set up the streaming execution environment
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 		env.enableCheckpointing(5000); // checkpoint every 5000 msecs
-		env.setParallelism(16); // may change 4 into something else...
+		env.setParallelism(2); // may change 4 into something else...
 
 		Properties kProperties = new Properties();
 		kProperties.setProperty("bootstrap.servers", "ks1:9092,ks2:9092,ks3:9092");
@@ -139,7 +139,7 @@ public class StreamingJob {
 				}
 			})
 			.addSink(new CassandraTupleSink<Tuple5<Long, String, String, Long, Float>>(
-                                "INSERT INTO agg_events"
+                                "INSERT INTO boontadata.agg_events"
                                         + " (window_time, device_id, category, m1_sum_flink_eventtime, m2_sum_flink_eventtime)"
                                         + " VALUES (?, ?, ?, ?, ?);",
                                 new ClusterBuilder() {
@@ -154,6 +154,6 @@ public class StreamingJob {
                                 }));
 
 		// execute program
-		env.execute("io.boontadata.flink1.StreamingJob");
+		env.execute("io.boontadata.flink1.StreamingJob V161108a");
 	}
 }

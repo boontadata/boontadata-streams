@@ -148,7 +148,7 @@
 									<type>jar</type>
 									<overWrite>true</overWrite>
 									<outputDirectory>${project.build.directory}/classes</outputDirectory>
-									<includes>org/apache/flink/streaming/connectors/cassandra/**</includes>
+									<includes>org/apache/flink/**,com/datastax/driver/**</includes>
 								</artifactItem>
 								<artifactItem>
 									<groupId>com.yammer.metrics</groupId>
