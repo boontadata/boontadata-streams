@@ -35,7 +35,7 @@ import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.api.java.tuple.Tuple6;
 import org.apache.flink.streaming.connectors.cassandra.CassandraTupleSink;
 import org.apache.flink.streaming.connectors.cassandra.ClusterBuilder;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer09;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer082;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
@@ -87,15 +87,15 @@ public class DevJob {
 
 		Properties kProperties = new Properties();
 		kProperties.setProperty("bootstrap.servers", "ks1:9092,ks2:9092,ks3:9092");
-		//kProperties.setProperty("zookeeper.connect", "zk1:2181");
-		//kProperties.setProperty("metadata.broker.list", "zk1:2181");
+		kProperties.setProperty("zookeeper.connect", "zk1:2181");
+		kProperties.setProperty("metadata.broker.list", "zk1:2181");
 		kProperties.setProperty("group.id", "flinkGroup");
 		kProperties.setProperty("auto.offset.reset", "earliest");
 		kProperties.setProperty("max.partition.fetch.bytes", "256");
 		kProperties.setProperty("enable.auto.commit", "false");
 
 		env
-			.addSource(new FlinkKafkaConsumer09<>(
+			.addSource(new FlinkKafkaConsumer082<>(
                                 "sampletopic",
                                 new SimpleStringSchema(),
                                 kProperties))

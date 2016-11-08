@@ -184,6 +184,7 @@ sudo chmod a+x /usr/local/bin/docker-compose
 ```
 rsync -ave ssh u2.3-4.xyz:~/sdc1/boontadata-streams/code/flink/master/code /mnt/c/afac/code
 rsync -ave ssh /mnt/c/dev/_git/GitHub/boontadata/boontadata-streams/code/flink/master/code/src u2.3-4.xyz:~/sdc1/boontadata-streams/code/flink/master/code
+scp /mnt/c/dev/_git/GitHub/boontadata/boontadata-streams/code/flink/master/code/pom.xml u2.3-4.xyz:~/sdc1/boontadata-streams/code/flink/master/code
 
 docker run --name devscala -d -v $BOONTADATA_HOME/code/flink/master/code:/usr/src/dev -w /usr/src/dev devscala 
 docker exec -ti devscala /bin/bash
@@ -192,6 +193,7 @@ vi src/main/java/io/boontadata/flink1/DevJob.java
 
 cd $BOONTADATA_HOME/code
 docker cp flink/master/code/target/flink1-0.1.jar flink-master:/tmp
+docker exec -ti client1 python /workdir/ingest.py
 
 docker exec -ti flink-master /bin/bash
 flink run -c io.boontadata.flink1.DevJob /tmp/flink1-0.1.jar -d
@@ -199,6 +201,4 @@ flink run -c io.boontadata.flink1.StreamingJob /tmp/flink1-0.1.jar -d
 
 ssh -D 127.0.0.1:8034 u2.3-4.xyz
 http://0.0.0.0:34010/#/overview
-
-docker exec -ti client1 python /workdir/ingest.py
 ```

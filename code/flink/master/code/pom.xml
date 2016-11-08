@@ -50,7 +50,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.flink</groupId>
-			<artifactId>flink-connector-kafka-0.9_2.11</artifactId>
+			<artifactId>flink-connector-kafka-0.8_2.11</artifactId>
 			<version>${flink.version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -98,15 +98,6 @@
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.apache.flink</groupId>
-									<artifactId>flink-connector-kafka-0.9_2.11</artifactId>
-									<version>${flink.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-									<outputDirectory>${project.build.directory}/classes</outputDirectory>
-									<includes>org/apache/flink/streaming/connectors/kafka/**</includes>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.apache.flink</groupId>
 									<artifactId>flink-connector-kafka-base_2.11</artifactId>
 									<version>${flink.version}</version>
 									<type>jar</type>
@@ -115,13 +106,40 @@
 									<includes>org/apache/flink/streaming/**</includes>
 								</artifactItem>
 								<artifactItem>
-									<groupId>org.apache.kafka</groupId>
-									<artifactId>kafka-clients</artifactId>
-									<version>0.10.1.0</version>
+									<groupId>org.apache.flink</groupId>
+									<artifactId>flink-connector-kafka-0.8_2.11</artifactId>
+									<version>${flink.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 									<outputDirectory>${project.build.directory}/classes</outputDirectory>
-									<includes>org/apache/kafka/**</includes>
+									<includes>org/apache/flink/streaming/connectors/kafka/**</includes>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.apache.flink</groupId>
+									<artifactId>flink-streaming-java_2.11</artifactId>
+									<version>${flink.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/classes</outputDirectory>
+									<includes>org/apache/flink/**</includes>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.apache.kafka</groupId>
+									<artifactId>kafka_2.11</artifactId>
+									<version>0.8.2.2</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/classes</outputDirectory>
+									<includes>kafka/**</includes>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.101tec</groupId>
+									<artifactId>zkclient</artifactId>
+									<version>0.8</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/classes</outputDirectory>
+									<includes>org/I0Itec/zkclient\/**</includes>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.apache.flink</groupId>
@@ -131,6 +149,24 @@
 									<overWrite>true</overWrite>
 									<outputDirectory>${project.build.directory}/classes</outputDirectory>
 									<includes>org/apache/flink/streaming/connectors/cassandra/**</includes>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.yammer.metrics</groupId>
+									<artifactId>metrics-core</artifactId>
+									<version>2.2.0</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/classes</outputDirectory>
+									<includes>com/yammer/metrics/**</includes>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.apache.servicemix.bundles</groupId>
+									<artifactId>org.apache.servicemix.bundles.kafka-clients</artifactId>
+									<version>0.8.2.2_1</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/classes</outputDirectory>
+									<includes>org/apache/kafka/**</includes>
 								</artifactItem>
 							</artifactItems>
 						</configuration>

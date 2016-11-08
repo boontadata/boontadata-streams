@@ -15,7 +15,7 @@ import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.api.java.tuple.Tuple6;
 import org.apache.flink.streaming.connectors.cassandra.CassandraTupleSink;
 import org.apache.flink.streaming.connectors.cassandra.ClusterBuilder;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer09;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer082;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
@@ -70,7 +70,7 @@ public class StreamingJob {
 		kProperties.setProperty("group.id", "flinkGroup");
 
 		env
-			.addSource(new FlinkKafkaConsumer09<String>(
+			.addSource(new FlinkKafkaConsumer082<>(
                                 "sampletopic",
                                 new SimpleStringSchema(),
                                 kProperties))
