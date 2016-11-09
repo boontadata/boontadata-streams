@@ -13,7 +13,9 @@ import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple;
 
 // DEBUG
+import java.time.Instant;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -26,10 +28,9 @@ import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
-//import org.apache.flink.streaming.connectors.kafka.KafkaSink;
 import org.apache.flink.streaming.util.serialization.DeserializationSchema;
 import org.apache.flink.streaming.util.serialization.SerializationSchema;
-//import org.apache.flink.streaming.util.serialization.SimpleStringSchema;
+import org.apache.flink.streaming.connectors.cassandra.CassandraPojoSink;
 
 import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.api.java.tuple.Tuple6;
@@ -49,26 +50,6 @@ import org.apache.flink.streaming.util.serialization.SimpleStringSchema;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-/**
- * Skeleton for a Flink Streaming Job.
- *
- * For a full example of a Flink Streaming Job, see the SocketTextStreamWordCount.java
- * file in the same package/directory or have a look at the website.
- *
- * You can also generate a .jar file that you can submit on your Flink
- * cluster.
- * Just type
- * 		mvn clean package
- * in the projects root directory.
- * You will find the jar in
- * 		target/quickstart-0.1.jar
- * From the CLI you can then run
- * 		./bin/flink run -c io.boontadata.flink1.StreamingJob target/quickstart-0.1.jar
- *
- * For more information on the CLI see:
- *
- * http://flink.apache.org/docs/latest/apis/cli.html
- */
 public class DevJob {
 
 	private static final Integer FIELD_MESSAGE_ID = 0;
@@ -77,8 +58,11 @@ public class DevJob {
 	private static final Integer FIELD_CATEGORY = 3;
 	private static final Integer FIELD_MEASURE1 = 4;
 	private static final Integer FIELD_MESAURE2 = 5; 
+	private static final String VERSION = "161109a";
 
 	public static void main(String[] args) throws Exception {
+		
+
 		// set up the streaming execution environment
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 		env.enableCheckpointing(5000); // checkpoint every 5000 msecs
@@ -100,17 +84,32 @@ public class DevJob {
                                 new SimpleStringSchema(),
                                 kProperties))
 			.rebalance()
-			.map (
-				new MapFunction<String, String>() {
+			.map(
+				new MapFunction<String, Tuple2<String,String>>() {
 					@Override
-					public String map(String value) throws Exception {
-						return "Kafka and Flink say: " + value;
+					public Tuple2<String,String> map(String value) throws Exception {
+						return new Tuple2<String,String>(
+							"DevJob-v" + VERSION + "-" + Instant.now().toString(), 
+							"Kafka and Flink say: " + value);
 					}
 				}
 			)
-			.print();
+			.addSink(new CassandraTupleSink<Tuple2<String, String>>(
+                                "INSERT INTO boontadata.debug"
+                                        + " (id, message)"
+                                        + " VALUES (?, ?);",
+                                new ClusterBuilder() {
+                                        @Override
+                                        public Cluster buildCluster(Cluster.Builder builder) {
+                                                return builder
+                                                        .addContactPoint("cassandra1").withPort(9042)
+                                                        .addContactPoint("cassandra2").withPort(9042)
+                                                        .addContactPoint("cassandra3").withPort(9042)
+                                                        .build();
+                                        }
+                                }));
 
-		env.execute("161107g");
+		env.execute("DevJob-v" + VERSION);
 	}
 
 	public static class SimpleStringGenerator implements SourceFunction<String> {

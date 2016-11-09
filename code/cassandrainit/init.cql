@@ -31,3 +31,12 @@ CREATE TABLE IF NOT EXISTS boontadata.agg_events (
     m2_sum_spark_processingtime double,
     m2_sum_flink_eventtime double,
     PRIMARY KEY (window_time, device_id, category));
+
+CREATE TABLE IF NOT EXISTS boontadata.debug (
+    id text,
+    message text,
+    PRIMARY KEY (id));
+
+INSERT INTO boontadata.debug 
+    (id, message) 
+    VALUES ('sample-1', 'this is a sample debug message');
