@@ -44,12 +44,12 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  * The latest elements for a certain timestamp t will arrive at most n milliseconds after the earliest
  * elements for timestamp t.
  */
-public class BoundedOutOfOrdernessGenerator implements AssignerWithPeriodicWatermarks<Tuple6<String, String, Long, String, Long, Float>> {
+public class BoundedOutOfOrdernessGenerator implements AssignerWithPeriodicWatermarks<Tuple6<String, String, Long, String, Long, Double>> {
     private final long maxOutOfOrderness = 5000; // 5 seconds
     private long currentMaxTimestamp;
 
     @Override
-    public long extractTimestamp(Tuple6<String, String, Long, String, Long, Float> element, long previousElementTimestamp) {
+    public long extractTimestamp(Tuple6<String, String, Long, String, Long, Double> element, long previousElementTimestamp) {
         long timestamp = element.f2; // get processing timestamp from current event
         currentMaxTimestamp = Math.max(timestamp, currentMaxTimestamp);
         return timestamp;

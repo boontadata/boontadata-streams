@@ -1,7 +1,7 @@
 package io.boontadata.flink1;
 
 import com.datastax.driver.core.Cluster;
-import java.lang.Float;
+import java.lang.Double;
 import java.lang.Long;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -82,19 +82,19 @@ public class StreamingJob {
 			.rebalance()
 			.map(
 				new MapFunction<String, 
-					Tuple6<String, String, Long, String, Long, Float>>() {
+					Tuple6<String, String, Long, String, Long, Double>>() {
 					private static final long serialVersionUID = 34_2016_10_19_001L;
 
 					@Override
-					public Tuple6<String, String, Long, String, Long, Float> map(String value) throws Exception {
+					public Tuple6<String, String, Long, String, Long, Double> map(String value) throws Exception {
 						String[] splits = value.split("\\|");
-						return new Tuple6<String, String, Long, String, Long, Float>(
+						return new Tuple6<String, String, Long, String, Long, Double>(
 							splits[FIELD_MESSAGE_ID], 
 							splits[FIELD_DEVICE_ID],
 							Long.parseLong(splits[FIELD_TIMESTAMP]),
 							splits[FIELD_CATEGORY],
 							Long.parseLong(splits[FIELD_MEASURE1]),
-							Float.parseFloat(splits[FIELD_MESAURE2])
+							Double.parseDouble(splits[FIELD_MESAURE2])
 						);
 					}
 				}
@@ -102,39 +102,39 @@ public class StreamingJob {
 			.assignTimestampsAndWatermarks(new BoundedOutOfOrdernessGenerator())
 			.keyBy(FIELD_MESSAGE_ID)
 			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS))
-			.apply(new WindowFunction<Tuple6<String, String, Long, String, Long, Float>, 
-				Tuple6<String, String, Long, String, Long, Float>, Tuple, TimeWindow>() {
+			.apply(new WindowFunction<Tuple6<String, String, Long, String, Long, Double>, 
+				Tuple6<String, String, Long, String, Long, Double>, Tuple, TimeWindow>() {
 				// remove duplicates. cf http://stackoverflow.com/questions/35599069/apache-flink-0-10-how-to-get-the-first-occurence-of-a-composite-key-from-an-unbo
 				
 				@Override
-				public void apply(Tuple tuple, TimeWindow window, Iterable<Tuple6<String, String, Long, String, Long, Float>> input, 
-					Collector<Tuple6<String, String, Long, String, Long, Float>> out) throws Exception {
+				public void apply(Tuple tuple, TimeWindow window, Iterable<Tuple6<String, String, Long, String, Long, Double>> input, 
+					Collector<Tuple6<String, String, Long, String, Long, Double>> out) throws Exception {
 					out.collect(input.iterator().next());
 				}
 			})
  			.keyBy(FIELD_DEVICE_ID, FIELD_CATEGORY)
 			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS))
-			.apply(new WindowFunction<Tuple6<String, String, Long, String, Long, Float>, 
-				Tuple5<String, String, String, Long, Float>, Tuple, TimeWindow>() {
+			.apply(new WindowFunction<Tuple6<String, String, Long, String, Long, Double>, 
+				Tuple5<String, String, String, Long, Double>, Tuple, TimeWindow>() {
 			        // sum measures 1 and 2
 
 				@Override
-				public void apply(Tuple keyTuple, TimeWindow window, Iterable<Tuple6<String, String, Long, String, Long, Float>> input, 
-					Collector<Tuple5<String, String, String, Long, Float>> out) throws Exception {
+				public void apply(Tuple keyTuple, TimeWindow window, Iterable<Tuple6<String, String, Long, String, Long, Double>> input, 
+					Collector<Tuple5<String, String, String, Long, Double>> out) throws Exception {
 
 					long window_timestamp_milliseconds = window.getEnd();
 					String device_id=keyTuple.getField(0); // DEVICE_ID
 					String category=keyTuple.getField(1); // CATEGORY
 					long sum_of_m1=0L;
-					float sum_of_m2=0;
+					Double sum_of_m2=0.0d;
 
-					for(Iterator<Tuple6<String, String, Long, String, Long, Float>> i=input.iterator(); i.hasNext();) {
-                                                Tuple6<String, String, Long, String, Long, Float> item = i.next();
+					for(Iterator<Tuple6<String, String, Long, String, Long, Double>> i=input.iterator(); i.hasNext();) {
+                                                Tuple6<String, String, Long, String, Long, Double> item = i.next();
 						sum_of_m1 += item.f4; // FIELD_MEASURE1
 						sum_of_m2 += item.f5; // FIELD_MESAURE2
 					}
 
-					out.collect(new Tuple5<String, String, String, Long, Float>(
+					out.collect(new Tuple5<String, String, String, Long, Double>(
 								windowTimeFormat.format(new Date(window_timestamp_milliseconds)),
 								device_id, 
 								category,
@@ -143,7 +143,7 @@ public class StreamingJob {
 							));
 				}
 			})
-			.addSink(new CassandraTupleSink<Tuple5<String, String, String, Long, Float>>(
+			.addSink(new CassandraTupleSink<Tuple5<String, String, String, Long, Double>>(
                                 "INSERT INTO boontadata.agg_events"
                                         + " (window_time, device_id, category, m1_sum_flink_eventtime, m2_sum_flink_eventtime)"
                                         + " VALUES (?, ?, ?, ?, ?);",
