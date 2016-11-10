@@ -198,6 +198,17 @@ docker exec -ti client1 python /workdir/ingest.py
 docker exec -ti flink-master /bin/bash
 flink run -c io.boontadata.flink1.DevJob /tmp/flink1-0.1.jar -d
 flink run -c io.boontadata.flink1.StreamingJob /tmp/flink1-0.1.jar -d
+flink list
+flink cancel xxx
+
+docker exec -ti cassandra2 cqlsh
+use boontadata;
+select count(*) from debug;
+select * from debug limit 100;
+truncate table debug;
+truncate table agg_events;
+truncate table raw_events;
+select window_time, device_id, category, m1_sum_ingest_devicetime, m1_sum_flink_eventtime from agg_events limit 100;
 
 ssh -D 127.0.0.1:8034 u2.3-4.xyz
 http://0.0.0.0:34010/#/overview

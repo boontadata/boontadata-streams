@@ -85,12 +85,36 @@ public class DevJob {
                                 kProperties))
 			.rebalance()
 			.map(
-				new MapFunction<String, Tuple2<String,String>>() {
+				new MapFunction<String, 
+					Tuple6<String, String, Long, String, Long, Float>>() {
+					private static final long serialVersionUID = 34_2016_10_19_001L;
+
 					@Override
-					public Tuple2<String,String> map(String value) throws Exception {
+					public Tuple6<String, String, Long, String, Long, Float> map(String value) throws Exception {
+						String[] splits = value.split("\\|");
+						return new Tuple6<String, String, Long, String, Long, Float>(
+							splits[FIELD_MESSAGE_ID], 
+							splits[FIELD_DEVICE_ID],
+							Long.parseLong(splits[FIELD_TIMESTAMP]),
+							splits[FIELD_CATEGORY],
+							Long.parseLong(splits[FIELD_MEASURE1]),
+							Float.parseFloat(splits[FIELD_MESAURE2])
+						);
+					}
+				}
+			)
+			.map(
+				new MapFunction<Tuple6<String, String, Long, String, Long, Float>, Tuple2<String, String>>() {
+					@Override
+					public Tuple2<String,String> map(Tuple6<String, String, Long, String, Long, Float> value) throws Exception {
 						return new Tuple2<String,String>(
 							"DevJob-v" + VERSION + "-" + Instant.now().toString(), 
-							"Kafka and Flink say: " + value);
+							"MESSAGE_ID=" + value.getField(0).toString() + ", "
+							+ "DEVICE_ID=" + value.getField(1).toString() + ", "
+							+ "TIMESTAMP=" + value.getField(2).toString() + ", "
+							+ "CATEGORY=" + value.getField(3).toString() + ", "
+							+ "M1=" + value.getField(4).toString() + ", "
+							+ "M2=" + value.getField(5).toString());
 					}
 				}
 			)

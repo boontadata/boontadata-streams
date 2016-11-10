@@ -3,6 +3,9 @@ package io.boontadata.flink1;
 import com.datastax.driver.core.Cluster;
 import java.lang.Float;
 import java.lang.Long;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Properties;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -69,6 +72,8 @@ public class StreamingJob {
 		kProperties.setProperty("zookeeper.connect", "zk1:2181");
 		kProperties.setProperty("group.id", "flinkGroup");
 
+		Format windowTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 		env
 			.addSource(new FlinkKafkaConsumer082<>(
                                 "sampletopic",
@@ -78,11 +83,11 @@ public class StreamingJob {
 			.map(
 				new MapFunction<String, 
 					Tuple6<String, String, Long, String, Long, Float>>() {
-					private static final long serialVersionUID = 2016_10_19_001L;
+					private static final long serialVersionUID = 34_2016_10_19_001L;
 
 					@Override
 					public Tuple6<String, String, Long, String, Long, Float> map(String value) throws Exception {
-						String[] splits = value.split("|");
+						String[] splits = value.split("\\|");
 						return new Tuple6<String, String, Long, String, Long, Float>(
 							splits[FIELD_MESSAGE_ID], 
 							splits[FIELD_DEVICE_ID],
@@ -110,12 +115,12 @@ public class StreamingJob {
  			.keyBy(FIELD_DEVICE_ID, FIELD_CATEGORY)
 			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS))
 			.apply(new WindowFunction<Tuple6<String, String, Long, String, Long, Float>, 
-				Tuple5<Long, String, String, Long, Float>, Tuple, TimeWindow>() {
+				Tuple5<String, String, String, Long, Float>, Tuple, TimeWindow>() {
 			        // sum measures 1 and 2
 
 				@Override
 				public void apply(Tuple keyTuple, TimeWindow window, Iterable<Tuple6<String, String, Long, String, Long, Float>> input, 
-					Collector<Tuple5<Long, String, String, Long, Float>> out) throws Exception {
+					Collector<Tuple5<String, String, String, Long, Float>> out) throws Exception {
 
 					long window_timestamp_milliseconds = window.getEnd();
 					String device_id=keyTuple.getField(0); // DEVICE_ID
@@ -129,8 +134,8 @@ public class StreamingJob {
 						sum_of_m2 += item.f5; // FIELD_MESAURE2
 					}
 
-					out.collect(new Tuple5<>(
-								window_timestamp_milliseconds,
+					out.collect(new Tuple5<String, String, String, Long, Float>(
+								windowTimeFormat.format(new Date(window_timestamp_milliseconds)),
 								device_id, 
 								category,
 								sum_of_m1,
@@ -138,7 +143,7 @@ public class StreamingJob {
 							));
 				}
 			})
-			.addSink(new CassandraTupleSink<Tuple5<Long, String, String, Long, Float>>(
+			.addSink(new CassandraTupleSink<Tuple5<String, String, String, Long, Float>>(
                                 "INSERT INTO boontadata.agg_events"
                                         + " (window_time, device_id, category, m1_sum_flink_eventtime, m2_sum_flink_eventtime)"
                                         + " VALUES (?, ?, ?, ?, ?);",
