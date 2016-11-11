@@ -112,6 +112,7 @@ public class StreamingJob {
 					out.collect(input.iterator().next());
 				}
 			})
+			.assignTimestampsAndWatermarks(new BoundedOutOfOrdernessGenerator())
  			.keyBy(FIELD_DEVICE_ID, FIELD_CATEGORY)
 			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS))
 			.apply(new WindowFunction<Tuple6<String, String, Long, String, Long, Double>, 

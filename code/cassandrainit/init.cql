@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS boontadata.agg_events (
     m2_sum_ingest_devicetime double,
     m2_sum_spark_processingtime double,
     m2_sum_flink_eventtime double,
-    PRIMARY KEY (window_time, device_id, category));
+    PRIMARY KEY (category, device_id));
 
 CREATE TABLE IF NOT EXISTS boontadata.debug (
     id text,

@@ -185,6 +185,7 @@ sudo chmod a+x /usr/local/bin/docker-compose
 rsync -ave ssh u2.3-4.xyz:~/sdc1/boontadata-streams/code/flink/master/code /mnt/c/afac/code
 rsync -ave ssh /mnt/c/dev/_git/GitHub/boontadata/boontadata-streams/code/flink/master/code/src u2.3-4.xyz:~/sdc1/boontadata-streams/code/flink/master/code
 scp /mnt/c/dev/_git/GitHub/boontadata/boontadata-streams/code/flink/master/code/pom.xml u2.3-4.xyz:~/sdc1/boontadata-streams/code/flink/master/code
+scp /mnt/c/dev/_git/GitHub/boontadata/boontadata-streams/code/pyclient/ingest.py u2.3-4.xyz:~/sdc1/boontadata-streams/code/pyclient
 
 docker run --name devscala -d -v $BOONTADATA_HOME/code/flink/master/code:/usr/src/dev -w /usr/src/dev devscala 
 docker exec -ti devscala /bin/bash
@@ -210,6 +211,13 @@ truncate table agg_events;
 truncate table raw_events;
 select window_time, device_id, category, m1_sum_ingest_devicetime, m1_sum_ingest_sendtime, m1_sum_flink_eventtime from agg_events limit 100;
 select window_time, device_id, category, m2_sum_ingest_devicetime, m2_sum_ingest_sendtime, m2_sum_flink_eventtime from agg_events limit 100;
+
+select window_time, device_id, category, 
+  m2_sum_ingest_devicetime, m2_sum_ingest_sendtime, m2_sum_flink_eventtime 
+from agg_events 
+order by category, device_id, window_time
+limit 100;
+
 
 ssh -D 127.0.0.1:8034 u2.3-4.xyz
 http://0.0.0.0:34010/#/overview

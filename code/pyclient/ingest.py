@@ -19,7 +19,7 @@ batchsize=300
 m1max=100
 m2max=500
 basedelay=2*60*1000 #2 minutes
-resolution=datetime.timedelta(seconds=5)
+aggwindowlength=datetime.timedelta(seconds=5)
 
 deviceid=str(uuid.uuid4())
 
@@ -41,7 +41,7 @@ else:
 
 def gettimewindow(secondssinceepoch):
     dt=datetime.datetime.fromtimestamp(int(secondssinceepoch))
-    return dt-datetime.timedelta(seconds=dt.second%resolution.seconds)
+    return dt+aggwindowlength-datetime.timedelta(seconds=dt.second%aggwindowlength.seconds)
 
 def senddata(messageid, deviceid, devicetime, category, measure1, measure2, sendtime, patterncode):
     data="|".join([
