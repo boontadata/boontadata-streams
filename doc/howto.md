@@ -199,7 +199,6 @@ docker cp pyclient/compare.py client1:/workdir
 docker exec -ti client1 python /workdir/ingest.py
 
 docker exec -ti flink-master /bin/bash
-flink run -c io.boontadata.flink1.DevJob /tmp/flink1-0.1.jar -d
 flink run -c io.boontadata.flink1.StreamingJob /tmp/flink1-0.1.jar -d
 flink list
 flink cancel xxx

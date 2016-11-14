@@ -18,18 +18,19 @@ import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.api.java.tuple.Tuple6;
-import org.apache.flink.streaming.connectors.cassandra.CassandraTupleSink;
-import org.apache.flink.streaming.connectors.cassandra.ClusterBuilder;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer082;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.WindowedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction;
 import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
+import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
+import org.apache.flink.streaming.connectors.cassandra.CassandraTupleSink;
+import org.apache.flink.streaming.connectors.cassandra.ClusterBuilder;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer082;
 import org.apache.flink.util.Collector;
 import org.apache.flink.streaming.util.serialization.SimpleStringSchema;
 
@@ -70,6 +71,7 @@ public class StreamingJob {
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 		env.enableCheckpointing(5000); // checkpoint every 5000 msecs
 		env.setParallelism(2); // may change 4 into something else...
+		env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
 		Properties kProperties = new Properties();
 		kProperties.setProperty("bootstrap.servers", "ks1:9092,ks2:9092,ks3:9092");
@@ -78,7 +80,7 @@ public class StreamingJob {
 
 		Format windowTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-		// get data from Kafka and parse
+		// get data from Kafka, parse, and assign time and watermarks
 		DataStream<Tuple6<String, String, Long, String, Long, Double>> streampart1 = env 
 			.addSource(new FlinkKafkaConsumer082<>(
                                 "sampletopic",
@@ -103,7 +105,8 @@ public class StreamingJob {
 						);
 					}
 				}
-			);
+			)
+			.assignTimestampsAndWatermarks(new BoundedOutOfOrdernessGenerator());
 
 		// add debug information on streampart1
 		streampart1
@@ -139,10 +142,12 @@ public class StreamingJob {
 
 
 		// deduplicate on message ID
-		DataStream<Tuple6<String,String,Long,String,Long,Double>> streampart2 = streampart1
-			.assignTimestampsAndWatermarks(new BoundedOutOfOrdernessGenerator())
+		WindowedStream streampart2a = streampart1
 			.keyBy(FIELD_MESSAGE_ID)
-			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS))
+			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS));
+
+
+		DataStream<Tuple6<String,String,Long,String,Long,Double>> streampart2 = streampart2a			
 			.apply(new WindowFunction<Tuple6<String, String, Long, String, Long, Double>, 
 				Tuple6<String, String, Long, String, Long, Double>, Tuple, TimeWindow>() {
 				// remove duplicates. cf http://stackoverflow.com/questions/35599069/apache-flink-0-10-how-to-get-the-first-occurence-of-a-composite-key-from-an-unbo
@@ -153,6 +158,47 @@ public class StreamingJob {
 					out.collect(input.iterator().next());
 				}
 			});
+
+		// add debug information on streampart2a
+		streampart2a
+			.apply(new WindowFunction<Tuple6<String, String, Long, String, Long, Double>, 
+				Tuple2<String, String>, Tuple, TimeWindow>() {
+
+				@Override
+				public void apply(Tuple keyTuple, TimeWindow window, Iterable<Tuple6<String, String, Long, String, Long, Double>> input, 
+					Collector<Tuple2<String, String>> out) throws Exception {
+
+					for(Iterator<Tuple6<String, String, Long, String, Long, Double>> i=input.iterator(); i.hasNext();) {
+                                                Tuple6<String, String, Long, String, Long, Double> value = i.next();
+
+						out.collect(new Tuple2<String, String>(
+							"v" + VERSION + "- streampart2a - " + Instant.now().toString(), 
+							"MESSAGE_ID=" + value.getField(0).toString() + ", "
+							+ "DEVICE_ID=" + value.getField(1).toString() + ", "
+							+ "TIMESTAMP=" + value.getField(2).toString() + ", "
+							+ "time window start=" + (new Long(window.getStart()).toString()) + ", "
+							+ "time window end=" + (new Long(window.getEnd()).toString()) + ", "
+							+ "CATEGORY=" + value.getField(3).toString() + ", "
+							+ "M1=" + value.getField(4).toString() + ", "
+							+ "M2=" + value.getField(5).toString()
+						));
+					}
+				}
+			})
+			.addSink(new CassandraTupleSink<Tuple2<String, String>>(
+                                "INSERT INTO boontadata.debug"
+                                        + " (id, message)"
+                                        + " VALUES (?, ?);",
+                                new ClusterBuilder() {
+                                        @Override
+                                        public Cluster buildCluster(Cluster.Builder builder) {
+                                                return builder
+                                                        .addContactPoint("cassandra1").withPort(9042)
+                                                        .addContactPoint("cassandra2").withPort(9042)
+                                                        .addContactPoint("cassandra3").withPort(9042)
+                                                        .build();
+                                        }
+                                }));
 
 		// add debug information on streampart2
 		streampart2
@@ -188,8 +234,7 @@ public class StreamingJob {
 		
 		// Group by device ID, Category
 		WindowedStream streampart3 = streampart2
-			.assignTimestampsAndWatermarks(new BoundedOutOfOrdernessGenerator())
- 			.keyBy(FIELD_DEVICE_ID, FIELD_CATEGORY)
+			.keyBy(FIELD_DEVICE_ID, FIELD_CATEGORY)
 			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS));
 
 		// add debug information on streampart3
@@ -244,7 +289,7 @@ public class StreamingJob {
 				public void apply(Tuple keyTuple, TimeWindow window, Iterable<Tuple6<String, String, Long, String, Long, Double>> input, 
 					Collector<Tuple5<String, String, String, Long, Double>> out) throws Exception {
 
-					long window_timestamp_milliseconds = window.getStart();
+					long window_timestamp_milliseconds = window.getEnd();
 					String device_id=keyTuple.getField(0); // DEVICE_ID
 					String category=keyTuple.getField(1); // CATEGORY
 					long sum_of_m1=0L;

@@ -27,8 +27,8 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  * elements for timestamp t.
  */
 public class BoundedOutOfOrdernessGenerator implements AssignerWithPeriodicWatermarks<Tuple6<String, String, Long, String, Long, Double>> {
-    private final long maxOutOfOrderness = 20000; // 20 seconds
-    private long currentMaxTimestamp;
+    private final long maxOutOfOrderness = 1_000L; // 1 second
+    private long currentMaxTimestamp = 0;
 
     @Override
     public long extractTimestamp(Tuple6<String, String, Long, String, Long, Double> element, long previousElementTimestamp) {
