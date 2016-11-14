@@ -5,6 +5,7 @@ import java.lang.Double;
 import java.lang.Long;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Properties;
@@ -14,12 +15,14 @@ import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple;
+import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.api.java.tuple.Tuple6;
 import org.apache.flink.streaming.connectors.cassandra.CassandraTupleSink;
 import org.apache.flink.streaming.connectors.cassandra.ClusterBuilder;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer082;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.WindowedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction;
@@ -53,6 +56,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  * http://flink.apache.org/docs/latest/apis/cli.html
  */
 public class StreamingJob {
+	private static final String VERSION = "161114a";
 
 	private static final Integer FIELD_MESSAGE_ID = 0;
 	private static final Integer FIELD_DEVICE_ID = 1;
@@ -74,7 +78,8 @@ public class StreamingJob {
 
 		Format windowTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-		env
+		// get data from Kafka and parse
+		DataStream<Tuple6<String, String, Long, String, Long, Double>> streampart1 = env 
 			.addSource(new FlinkKafkaConsumer082<>(
                                 "sampletopic",
                                 new SimpleStringSchema(),
@@ -98,7 +103,43 @@ public class StreamingJob {
 						);
 					}
 				}
+			);
+
+		// add debug information on streampart1
+		streampart1
+			.map(
+				new MapFunction<Tuple6<String, String, Long, String, Long, Double>, Tuple2<String, String>>() {
+					@Override
+					public Tuple2<String,String> map(Tuple6<String, String, Long, String, Long, Double> value) throws Exception {
+						return new Tuple2<String,String>(
+							"v" + VERSION + "- streampart1 - " + Instant.now().toString(), 
+							"MESSAGE_ID=" + value.getField(0).toString() + ", "
+							+ "DEVICE_ID=" + value.getField(1).toString() + ", "
+							+ "TIMESTAMP=" + value.getField(2).toString() + ", "
+							+ "CATEGORY=" + value.getField(3).toString() + ", "
+							+ "M1=" + value.getField(4).toString() + ", "
+							+ "M2=" + value.getField(5).toString());
+					}
+				}
 			)
+			.addSink(new CassandraTupleSink<Tuple2<String, String>>(
+                                "INSERT INTO boontadata.debug"
+                                        + " (id, message)"
+                                        + " VALUES (?, ?);",
+                                new ClusterBuilder() {
+                                        @Override
+                                        public Cluster buildCluster(Cluster.Builder builder) {
+                                                return builder
+                                                        .addContactPoint("cassandra1").withPort(9042)
+                                                        .addContactPoint("cassandra2").withPort(9042)
+                                                        .addContactPoint("cassandra3").withPort(9042)
+                                                        .build();
+                                        }
+                                }));
+
+
+		// deduplicate on message ID
+		DataStream<Tuple6<String,String,Long,String,Long,Double>> streampart2 = streampart1
 			.assignTimestampsAndWatermarks(new BoundedOutOfOrdernessGenerator())
 			.keyBy(FIELD_MESSAGE_ID)
 			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS))
@@ -111,10 +152,90 @@ public class StreamingJob {
 					Collector<Tuple6<String, String, Long, String, Long, Double>> out) throws Exception {
 					out.collect(input.iterator().next());
 				}
-			})
+			});
+
+		// add debug information on streampart2
+		streampart2
+			.map(
+				new MapFunction<Tuple6<String, String, Long, String, Long, Double>, Tuple2<String, String>>() {
+					@Override
+					public Tuple2<String,String> map(Tuple6<String, String, Long, String, Long, Double> value) throws Exception {
+						return new Tuple2<String,String>(
+							"v" + VERSION + "- streampart2 - " + Instant.now().toString(), 
+							"MESSAGE_ID=" + value.getField(0).toString() + ", "
+							+ "DEVICE_ID=" + value.getField(1).toString() + ", "
+							+ "TIMESTAMP=" + value.getField(2).toString() + ", "
+							+ "CATEGORY=" + value.getField(3).toString() + ", "
+							+ "M1=" + value.getField(4).toString() + ", "
+							+ "M2=" + value.getField(5).toString());
+					}
+				}
+			)
+			.addSink(new CassandraTupleSink<Tuple2<String, String>>(
+                                "INSERT INTO boontadata.debug"
+                                        + " (id, message)"
+                                        + " VALUES (?, ?);",
+                                new ClusterBuilder() {
+                                        @Override
+                                        public Cluster buildCluster(Cluster.Builder builder) {
+                                                return builder
+                                                        .addContactPoint("cassandra1").withPort(9042)
+                                                        .addContactPoint("cassandra2").withPort(9042)
+                                                        .addContactPoint("cassandra3").withPort(9042)
+                                                        .build();
+                                        }
+                                }));
+		
+		// Group by device ID, Category
+		WindowedStream streampart3 = streampart2
 			.assignTimestampsAndWatermarks(new BoundedOutOfOrdernessGenerator())
  			.keyBy(FIELD_DEVICE_ID, FIELD_CATEGORY)
-			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS))
+			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS));
+
+		// add debug information on streampart3
+		streampart3
+			.apply(new WindowFunction<Tuple6<String, String, Long, String, Long, Double>, 
+				Tuple2<String, String>, Tuple, TimeWindow>() {
+
+				@Override
+				public void apply(Tuple keyTuple, TimeWindow window, Iterable<Tuple6<String, String, Long, String, Long, Double>> input, 
+					Collector<Tuple2<String, String>> out) throws Exception {
+
+					for(Iterator<Tuple6<String, String, Long, String, Long, Double>> i=input.iterator(); i.hasNext();) {
+                                                Tuple6<String, String, Long, String, Long, Double> value = i.next();
+
+						out.collect(new Tuple2<String, String>(
+							"v" + VERSION + "- streampart3 - " + Instant.now().toString(), 
+							"MESSAGE_ID=" + value.getField(0).toString() + ", "
+							+ "DEVICE_ID=" + value.getField(1).toString() + ", "
+							+ "TIMESTAMP=" + value.getField(2).toString() + ", "
+							+ "time window start=" + (new Long(window.getStart()).toString()) + ", "
+							+ "time window end=" + (new Long(window.getEnd()).toString()) + ", "
+							+ "CATEGORY=" + value.getField(3).toString() + ", "
+							+ "M1=" + value.getField(4).toString() + ", "
+							+ "M2=" + value.getField(5).toString()
+						));
+					}
+				}
+			})
+			.addSink(new CassandraTupleSink<Tuple2<String, String>>(
+                                "INSERT INTO boontadata.debug"
+                                        + " (id, message)"
+                                        + " VALUES (?, ?);",
+                                new ClusterBuilder() {
+                                        @Override
+                                        public Cluster buildCluster(Cluster.Builder builder) {
+                                                return builder
+                                                        .addContactPoint("cassandra1").withPort(9042)
+                                                        .addContactPoint("cassandra2").withPort(9042)
+                                                        .addContactPoint("cassandra3").withPort(9042)
+                                                        .build();
+                                        }
+                                }));
+
+
+		// calculate sums for M1 and M2
+		DataStream<Tuple5<String, String, String, Long, Double>> streampart4 = streampart3
 			.apply(new WindowFunction<Tuple6<String, String, Long, String, Long, Double>, 
 				Tuple5<String, String, String, Long, Double>, Tuple, TimeWindow>() {
 			        // sum measures 1 and 2
@@ -123,7 +244,7 @@ public class StreamingJob {
 				public void apply(Tuple keyTuple, TimeWindow window, Iterable<Tuple6<String, String, Long, String, Long, Double>> input, 
 					Collector<Tuple5<String, String, String, Long, Double>> out) throws Exception {
 
-					long window_timestamp_milliseconds = window.getEnd();
+					long window_timestamp_milliseconds = window.getStart();
 					String device_id=keyTuple.getField(0); // DEVICE_ID
 					String category=keyTuple.getField(1); // CATEGORY
 					long sum_of_m1=0L;
@@ -143,7 +264,40 @@ public class StreamingJob {
 								sum_of_m2
 							));
 				}
-			})
+			});
+
+		// add debug information on streampart4
+		streampart4
+			.map(
+				new MapFunction<Tuple5<String, String, String, Long, Double>, Tuple2<String, String>>() {
+					@Override
+					public Tuple2<String,String> map(Tuple5<String, String, String, Long, Double> value) throws Exception {
+						return new Tuple2<String,String>(
+							"v" + VERSION + "- streampart4 - " + Instant.now().toString(), 
+							"window timestamp=" + value.getField(0).toString() + ", "
+							+ "DEVICE_ID=" + value.getField(1).toString() + ", "
+							+ "CATEGORY=" + value.getField(2).toString() + ", "
+							+ "sum_of_M1=" + value.getField(3).toString() + ", "
+							+ "sum_of_M2=" + value.getField(4).toString());
+					}
+				}
+			)
+			.addSink(new CassandraTupleSink<Tuple2<String, String>>(
+                                "INSERT INTO boontadata.debug"
+                                        + " (id, message)"
+                                        + " VALUES (?, ?);",
+                                new ClusterBuilder() {
+                                        @Override
+                                        public Cluster buildCluster(Cluster.Builder builder) {
+                                                return builder
+                                                        .addContactPoint("cassandra1").withPort(9042)
+                                                        .addContactPoint("cassandra2").withPort(9042)
+                                                        .addContactPoint("cassandra3").withPort(9042)
+                                                        .build();
+                                        }
+                                }));
+								
+		streampart4
 			.addSink(new CassandraTupleSink<Tuple5<String, String, String, Long, Double>>(
                                 "INSERT INTO boontadata.agg_events"
                                         + " (window_time, device_id, category, m1_sum_flink_eventtime, m2_sum_flink_eventtime)"
@@ -160,6 +314,6 @@ public class StreamingJob {
                                 }));
 
 		// execute program
-		env.execute("io.boontadata.flink1.StreamingJob V161108a");
+		env.execute("io.boontadata.flink1.StreamingJob v" + VERSION);
 	}
 }

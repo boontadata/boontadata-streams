@@ -186,6 +186,7 @@ rsync -ave ssh u2.3-4.xyz:~/sdc1/boontadata-streams/code/flink/master/code /mnt/
 rsync -ave ssh /mnt/c/dev/_git/GitHub/boontadata/boontadata-streams/code/flink/master/code/src u2.3-4.xyz:~/sdc1/boontadata-streams/code/flink/master/code
 scp /mnt/c/dev/_git/GitHub/boontadata/boontadata-streams/code/flink/master/code/pom.xml u2.3-4.xyz:~/sdc1/boontadata-streams/code/flink/master/code
 scp /mnt/c/dev/_git/GitHub/boontadata/boontadata-streams/code/pyclient/ingest.py u2.3-4.xyz:~/sdc1/boontadata-streams/code/pyclient
+scp /mnt/c/dev/_git/GitHub/boontadata/boontadata-streams/code/pyclient/compare.py u2.3-4.xyz:~/sdc1/boontadata-streams/code/pyclient
 
 docker run --name devscala -d -v $BOONTADATA_HOME/code/flink/master/code:/usr/src/dev -w /usr/src/dev devscala 
 docker exec -ti devscala /bin/bash
@@ -194,6 +195,7 @@ vi src/main/java/io/boontadata/flink1/DevJob.java
 
 cd $BOONTADATA_HOME/code
 docker cp flink/master/code/target/flink1-0.1.jar flink-master:/tmp
+docker cp pyclient/compare.py client1:/workdir
 docker exec -ti client1 python /workdir/ingest.py
 
 docker exec -ti flink-master /bin/bash
@@ -215,6 +217,7 @@ select window_time, device_id, category, m2_sum_ingest_devicetime, m2_sum_ingest
 select window_time, device_id, category, 
   m2_sum_ingest_devicetime, m2_sum_ingest_sendtime, m2_sum_flink_eventtime 
 from agg_events 
+where category='cat-1'
 order by category, device_id, window_time
 limit 100;
 

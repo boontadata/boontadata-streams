@@ -15,28 +15,47 @@ session=cluster.connect('boontadata')
 session.row_factory = tuple_factory
 session.client_protocol_handler = NumpyProtocolHandler
 
-# this is an example. Many other things could be compared.
+#Compare Injector and Flink
 result = session.execute(
     "SELECT window_time, device_id, category, "
-    + "m1_sum_ingest_sendtime, m1_sum_ingest_devicetime, m1_sum_spark_processingtime "
+    + "m1_sum_ingest_sendtime, m1_sum_ingest_devicetime, m1_sum_flink_eventtime, "
+    + "m2_sum_ingest_sendtime, m2_sum_ingest_devicetime, m2_sum_flink_eventtime "
     + "FROM agg_events ")
 df = pandas.DataFrame(result[0])
-df['delta_m1_sum_ingest_send_device'] = df.apply(lambda row: row.m1_sum_ingest_sendtime - row.m1_sum_ingest_devicetime, axis=1)
+df['delta_m1_sum_ingestdevice_flinkevent'] = df.apply(lambda row: row.m1_sum_ingest_devicetime - row.m1_sum_flink_eventtime, axis=1)
+df['delta_m2_sum_ingestdevice_flinkevent'] = df.apply(lambda row: row.m2_sum_ingest_devicetime - row.m2_sum_flink_eventtime, axis=1)
 
 #disconnect from Cassandra
 cluster.shutdown()
 
+pandas.set_option('display.height', 1000)
+pandas.set_option('display.max_rows', 500)
+pandas.set_option('display.max_columns', 50)
+pandas.set_option('display.width', 200)
 
-print('Comparing ingest device and send for m1_sum')
-print('-------------------------------------------')
+print('showing all lines (not all columns) from aggregated events')
+print('----------------------------------------------')
+print(df
+    .sort_values(by=['device_id', 'category', 'window_time'], axis=0, ascending=[True, True, True], inplace=False)
+    .loc[:,['category', 'window_time', 'm1_sum_ingest_devicetime', 'm1_sum_flink_eventtime', 
+        'delta_m1_sum_ingestdevice_flinkevent', 'm1_sum_ingest_sendtime', 
+        'm2_sum_ingest_devicetime', 'm2_sum_flink_eventtime', 
+        'delta_m2_sum_ingestdevice_flinkevent', 'm2_sum_ingest_sendtime',
+        'device_id']])
+print()
+
+print('Comparing ingest device and flink event for m1_sum')
+print('--------------------------------------------------')
 print("{} exceptions out of {}"
     .format(
-        len(df.query('delta_m1_sum_ingest_send_device != 0').index),
+        len(df.query('delta_m1_sum_ingestdevice_flinkevent != 0').index),
         len(df.index)
     ))
 print()
+
 print('Exceptions are:')
 print(
-    df.query('delta_m1_sum_ingest_send_device != 0')
-    .loc[:,['window_time', 'device_id', 'category', 'm1_sum_ingest_sendtime', 'm1_sum_ingest_devicetime', 'delta_m1_sum_ingest_send_device']]
+    df.query('delta_m1_sum_ingestdevice_flinkevent != 0')
+    .loc[:,['window_time', 'device_id', 'category', 'm1_sum_ingest_devicetime', 'm1_sum_flink_eventtime', 'delta_m1_sum_ingestdevice_flinkevent']]
     )
+

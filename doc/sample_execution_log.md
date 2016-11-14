@@ -501,3 +501,31 @@ select window_time, device_id, category, m2_sum_ingest_devicetime, m2_sum_ingest
 
 (26 rows)
 ```
+
+
+debug on Flink
+
+```
+root@0f7a4a64daa8:/workdir# python small_ingest.py
+Connected a producer to Kafka servers: ks1:9092,ks2:9092,ks3:9092
+6c3609e2-f0d0-480b-a32c-cd72bc943e5e-0|6c3609e2-f0d0-480b-a32c-cd72bc943e5e|1479121710150|cat-2|66|127.348810523 1479121710150 0.0
+aggregates of type devicetime:
+                              measure1    measure2
+devicetimewindow    category
+2016-11-14 11:08:35 cat-2           66  127.348811
+aggregates of type sendtime:
+                              measure1    measure2
+sendtimewindow      category
+2016-11-14 11:08:35 cat-2           66  127.348811
+
+
+---------
+     v161114a- streampart3 - 2016-11-14T11:08:40Z | MESSAGE_ID=6c3609e2-f0d0-480b-a32c-cd72bc943e5e-0, DEVICE_ID=6c3609e2-f0d0-480b-a32c-cd72bc943e5e, TIMESTAMP=1479121710150, time window start=1479121715000, time window end=1479121720000, CATEGORY=cat-2, M1=66, M2=127.348810523
+ v161114a- streampart4 - 2016-11-14T11:08:40.001Z |                                                                                         window timestamp=2016-11-14 11:08:40, DEVICE_ID=6c3609e2-f0d0-480b-a32c-cd72bc943e5e, CATEGORY=cat-2, sum_of_M1=66, sum_of_M2=127.348810523
+     v161114a- streampart2 - 2016-11-14T11:08:35Z |                                                                 MESSAGE_ID=6c3609e2-f0d0-480b-a32c-cd72bc943e5e-0, DEVICE_ID=6c3609e2-f0d0-480b-a32c-cd72bc943e5e, TIMESTAMP=1479121710150, CATEGORY=cat-2, M1=66, M2=127.348810523
+ v161114a- streampart1 - 2016-11-14T11:08:30.345Z |                                                                 MESSAGE_ID=6c3609e2-f0d0-480b-a32c-cd72bc943e5e-0, DEVICE_ID=6c3609e2-f0d0-480b-a32c-cd72bc943e5e, TIMESTAMP=1479121710150, CATEGORY=cat-2, M1=66, M2=127.348810523
+
+1479121710150 -                     Mon, 14 Nov 2016 11:08:30.150 GMT
+time window start=1479121715000 -   Mon, 14 Nov 2016 11:08:35 GMT
+time window end=1479121720000 -     Mon, 14 Nov 2016 11:08:40 GMT
+```
