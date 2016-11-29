@@ -5,7 +5,7 @@ then
     command=$0
     echo "usage: $command <scenario>"
     echo "scenario can be flink, spark, ..."
-    exit 0
+    return 0
 fi
 
 scenario=$1
@@ -13,7 +13,7 @@ scenario=$1
 if test -z $BOONTADATA_HOME
 then
     echo BOONTADATA_HOME variable must not be null or empty
-    exit 1
+    return 1
 fi
 
 cd $BOONTADATA_HOME/code
@@ -31,4 +31,8 @@ export HOSTIP=`hostname -i`
 export DOCKER_NETWORK_TYPE=bridge
 
 echo starting scenario $scenario 
+
 docker-compose up -d
+
+echo use docker-compose ps to see the containers, docker-compose down to shut down the containers.
+return 0

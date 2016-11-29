@@ -1,7 +1,8 @@
   sparkm1:
     build: ./spark
     container_name: sparkm1
-    command: bin/spark-class org.apache.spark.deploy.master.Master -h sparkm1
+    hostname: sparkm1
+    command: spark-class org.apache.spark.deploy.master.Master -h sparkm1
     environment:
       MASTER: spark://sparkm1:7077
       SPARK_CONF_DIR: /conf
@@ -23,7 +24,8 @@
   sparkw1:
     build: ./spark
     container_name: sparkw1
-    command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://sparkm1:7077
+    hostname: sparkw1
+    command: spark-class org.apache.spark.deploy.worker.Worker spark://sparkm1:7077
     environment:
       SPARK_CONF_DIR: /conf
       SPARK_WORKER_CORES: 2
@@ -47,7 +49,8 @@
   sparkw2:
     build: ./spark
     container_name: sparkw2
-    command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://sparkm1:7077
+    hostname: sparkw2
+    command: spark-class org.apache.spark.deploy.worker.Worker spark://sparkm1:7077
     environment:
       SPARK_CONF_DIR: /conf
       SPARK_WORKER_CORES: 2

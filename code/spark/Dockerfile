@@ -10,4 +10,4 @@ ADD *.py ./
 ADD *.sh ./
 RUN chmod a+x *.sh
 
-ENTRYPOINT ["init"]
+CMD [ "/bin/bash" ]
