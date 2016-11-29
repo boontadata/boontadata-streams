@@ -1,7 +1,70 @@
-  spark1:
+  sparkm1:
     build: ./spark
-    container_name: spark1
+    container_name: sparkm1
+    command: bin/spark-class org.apache.spark.deploy.master.Master -h sparkm1
     environment:
+      MASTER: spark://sparkm1:7077
+      SPARK_CONF_DIR: /conf
+      SPARK_PUBLIC_DNS: localhost
       KAFKA_ADVERTISED_SERVERS: "ks1:9092,ks2:9092,ks3:9092"
+    ports:
+      - 34101:4040
+      - 34102:6066
+      - 34103:7001
+      - 34104:7002
+      - 34105:7003
+      - 34106:7004
+      - 34107:7005
+      - 34108:7006
+      - 34109:7077
+      - 34110:8080
+    networks:
+      - boontadatanet
+  sparkw1:
+    build: ./spark
+    container_name: sparkw1
+    command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://sparkm1:7077
+    environment:
+      SPARK_CONF_DIR: /conf
+      SPARK_WORKER_CORES: 2
+      SPARK_WORKER_MEMORY: 1g
+      SPARK_WORKER_PORT: 8881
+      SPARK_WORKER_WEBUI_PORT: 8081
+      SPARK_PUBLIC_DNS: localhost
+      KAFKA_ADVERTISED_SERVERS: "ks1:9092,ks2:9092,ks3:9092"
+    depends_on:
+      - sparkm1
+    ports:
+      - 34120:7012
+      - 34121:7013
+      - 34122:7014
+      - 34123:7015
+      - 34124:7016
+      - 34125:8881
+      - 34126:8081
+    networks:
+      - boontadatanet
+  sparkw2:
+    build: ./spark
+    container_name: sparkw2
+    command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://sparkm1:7077
+    environment:
+      SPARK_CONF_DIR: /conf
+      SPARK_WORKER_CORES: 2
+      SPARK_WORKER_MEMORY: 1g
+      SPARK_WORKER_PORT: 8881
+      SPARK_WORKER_WEBUI_PORT: 8081
+      SPARK_PUBLIC_DNS: localhost
+      KAFKA_ADVERTISED_SERVERS: "ks1:9092,ks2:9092,ks3:9092"
+    depends_on:
+      - sparkm1
+    ports:
+      - 34130:7012
+      - 34131:7013
+      - 34132:7014
+      - 34133:7015
+      - 34134:7016
+      - 34135:8881
+      - 34136:8081
     networks:
       - boontadatanet
