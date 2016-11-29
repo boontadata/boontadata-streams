@@ -4,10 +4,11 @@
 
 this could be added to your ~/.bashrc file 
 
-The following value is an example, change depending on your environment
+The following values are an example, please change with your own values
 
 ```
 export BOONTADATA_HOME=$HOME/boontadata-streams
+export BOONTADATA_DOCKER_REGISTRY=acr34-microsoft.azurecr.io
 ```
 
 ## update code in the host
@@ -43,9 +44,11 @@ docker build -t flink ./flink/base
 
 ## start the clusters 
 
+$scenario can be flink, spark, anything that has a corresponding .yml file in the `compose-blocks` folder ...
+
 ```
-echo $HOSTIP
-docker-compose up -d
+cd $BOONTADATA_HOME/code
+. startscenarios.sh $scenario
 ```
 
 ## inject and consume data
@@ -134,6 +137,7 @@ and set a proxy to `127.0.0.1:8034` or the address you chose, then you can conne
 role | url
 :----|:----
 Apache Flink Web Dashboard | http://0.0.0.0:34010/#/overview
+Apache Spark Web Dashboard | http://0.0.0.0:34110
 
 ## clean volumes
 
