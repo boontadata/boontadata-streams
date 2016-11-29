@@ -1,0 +1,24 @@
+  flink-master:
+    build: ./flink/master
+    ports:
+      - "34010:8081"
+      - "34011:6123"
+    container_name: flink-master
+    networks:
+      - boontadatanet
+  flink-worker1:
+    build: ./flink/worker
+    ports:
+      - "34012:6121"
+      - "34013:6122"
+    container_name: flink-worker1
+    networks:
+      - boontadatanet
+  flink-worker2:
+    build: ./flink/worker
+    ports:
+      - "34014:6121"
+      - "34015:6122"
+    container_name: flink-worker2
+    networks:
+      - boontadatanet

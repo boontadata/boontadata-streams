@@ -112,13 +112,3 @@ services:
       - cassandra3
     networks:
       - boontadatanet
-  spark1:
-    build: ./spark
-    container_name: spark1
-    environment:
-      KAFKA_ADVERTISED_SERVERS: "ks1:9092,ks2:9092,ks3:9092"
-    networks:
-      - boontadatanet
-networks:
-  boontadatanet:
-    driver: ${DOCKER_NETWORK_TYPE}

@@ -1,12 +1,21 @@
 # How to
 
+## set variables
+
+this could be added to your ~/.bashrc file 
+
+The following value is an example, change depending on your environment
+
+```
+export BOONTADATA_HOME=$HOME/boontadata-streams
+```
+
 ## update code in the host
 
 `git clone` or copy from your laptop where you edit files: 
 ```
 rsync -ave ssh code u2.3-4.xyz:~/boontadata-streams
 ```
-
 
 ## reset cache: do the following: 
 
@@ -21,15 +30,6 @@ or
 ```
 docker images | awk '{print $1}' | xargs --no-run-if-empty docker rmi
 docker images | awk '{print $3}' | xargs --no-run-if-empty docker rmi
-```
-
-## set variables
-
-this could be added to your ~/.bashrc file 
-
-```
-export HOSTIP=`hostname -i`
-export BOONTADATA_HOME=$HOME/boontadata-streams
 ```
 
 ## build or rebuild required images: 

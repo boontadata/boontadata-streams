@@ -1,0 +1,3 @@
+networks:
+  boontadatanet:
+    driver: ${DOCKER_NETWORK_TYPE}
