@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#usage: . buildimages.sh <reset: true|false>
-if test $# -lt 1; then reset=false; else reset=$1; fi
+#usage: . buildimages.sh <reset|noreset>
+if test $# -lt 1; then reset=noreset; else reset=$1; fi
 
 if test -z $BOONTADATA_DOCKER_REGISTRY
 then
@@ -16,14 +16,28 @@ then
     return 1
 fi
 
-cd $BOONTADATA_HOME/code
+build_and_push()
+{
+    folderpath=$1
+    filepath=$1/Dockerfile
+    tagname=$(eval echo "`head -1 $filepath | awk '{print $2}'`")
+    tagversion=`head -3 $filepath | tail -1| awk '{print $3}'`
+    fulltag="$tagname:$tagversion"
 
-docker build -t $BOONTADATA_DOCKER_REGISTRY/pyclientbase ./pyclientbase
-docker push $BOONTADATA_DOCKER_REGISTRY/pyclientbase
+    if test $reset = "reset"
+    then
+        echo "will reset image $fulltag"
+        docker rmi $fulltag
+    fi
 
-docker build -t $BOONTADATA_DOCKER_REGISTRY/kafkaserver ./kafka-docker
-docker push $BOONTADATA_DOCKER_REGISTRY/kafkaserver
+    docker build -t $fulltag $folderpath
+    docker push $fulltag
+}
 
-docker build -t $BOONTADATA_DOCKER_REGISTRY/flink ./flink/base
-docker push $BOONTADATA_DOCKER_REGISTRY/flink
+build_and_push $BOONTADATA_HOME/code/cassandrainit
+build_and_push $BOONTADATA_HOME/code/devscala
+build_and_push 
+build_and_push pyclientbase ./pyclientbase
+build_and_push kafkaserver ./kafka-docker
+build_and_push flink ./flink/base
 

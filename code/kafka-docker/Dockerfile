@@ -1,3 +1,7 @@
+# $BOONTADATA_DOCKER_REGISTRY/boontadata/kafka
+#
+# VERSION   0.1
+
 FROM anapsix/alpine-java
 
 MAINTAINER Wurstmeister 

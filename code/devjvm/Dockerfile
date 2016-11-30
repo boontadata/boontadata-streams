@@ -1,3 +1,7 @@
+# $BOONTADATA_DOCKER_REGISTRY/boontadata/devjvm
+#
+# VERSION   0.1
+
 #FROM openjdk:8
 FROM ubuntu:16.04
 

@@ -1,3 +1,7 @@
+# $BOONTADATA_DOCKER_REGISTRY/boontadata/flinkbase
+#
+# VERSION   0.1
+
 # from https://github.com/melentye/flink-docker
 FROM shouldbee/scala:2.11.7-openjdk8
 
