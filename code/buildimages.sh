@@ -25,18 +25,27 @@ build_and_push()
     tagversion=`head -3 $filepath | tail -1| awk '{print $3}'`
     fulltag="$tagname:$tagversion"
 
-    if test -e $filepath2; then rm $filepath2; fi
-    replacestring="s/\$BOONTADATA_DOCKER_REGISTRY/${BOONTADATA_DOCKER_REGISTRY}/g"
-    sed $replacestring $filepath > $filepath2
-
     if test $reset = "reset"
     then
         echo "will reset image $fulltag"
         docker rmi $fulltag
     fi
 
-    docker build -t $fulltag $folderpath --file $filepath2
-    docker push $fulltag
+    imageavailability=`docker images | grep "$tagname *$tagversion"`
+    if test -n "$imageavailability"
+    then
+        echo "local image $fulltag already exists, no reset so no rebuild"
+    else
+        echo "will build $fulltag"
+        if test -e $filepath2; then rm $filepath2; fi
+        replacestring="s/\$BOONTADATA_DOCKER_REGISTRY/${BOONTADATA_DOCKER_REGISTRY}/g"
+        sed $replacestring $filepath > $filepath2
+
+        docker build -t $fulltag $folderpath --file $filepath2
+        echo "local docker images for $tagname:"
+        docker images | grep "$tagname"
+        docker push $fulltag
+    fi
 }
 
 #create a container that we can use to build sources as jars
