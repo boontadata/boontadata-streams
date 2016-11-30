@@ -39,10 +39,18 @@ build_and_push()
     docker push $fulltag
 }
 
+#create a container that we can use to build sources as jars
+build_and_push $BOONTADATA_HOME/code/devjvm
+devjvmimage="$BOONTADATA_DOCKER_REGISTRY/boontadata/devjvm:0.1"
+echo "will compile flink job"
+docker run --name devjvm -d -v $BOONTADATA_HOME/code/flink/master/code:/usr/src/dev -w /usr/src/dev $devjvmimage
+docker exec -ti devjvm mvn clean package
+#keep the container running as it contains Maven cache data - uncomment next line if you prefer to kill it
+#docker rm -f devjvm
+
 build_and_push $BOONTADATA_HOME/code/pyclientbase
 build_and_push $BOONTADATA_HOME/code/pyclient
 build_and_push $BOONTADATA_HOME/code/cassandrainit
-build_and_push $BOONTADATA_HOME/code/devjvm
 build_and_push $BOONTADATA_HOME/code/flink/base
 build_and_push $BOONTADATA_HOME/code/flink/master
 build_and_push $BOONTADATA_HOME/code/flink/worker

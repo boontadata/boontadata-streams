@@ -11,8 +11,6 @@ MAINTAINER boontadata <contact@boontadata.io>
 #		maven
 
 WORKDIR /workdir
-
-#ADD code/* ./
-#RUN chmod a+x *.sh
+ADD code/target/flink1-0.1.jar .
 
 CMD ["/opt/flink/bin/start-master.sh"]

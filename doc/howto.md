@@ -31,7 +31,9 @@ cd $BOONTADATA_HOME/code
 
 Here is an example where we use devjvm to develop code for the flinkmaster container:
 ```
-docker run --name devjvm -d -v $BOONTADATA_HOME/code/flink/master/code:/usr/src/dev -w /usr/src/dev $BOONTADATA_DOCKER_REGISTRY/boontadata/devjvm 
+devjvmimage="$BOONTADATA_DOCKER_REGISTRY/boontadata/devjvm:0.1"
+docker pull $devjvmimage 
+docker run --name devjvm -d -v $BOONTADATA_HOME/code/flink/master/code:/usr/src/dev -w /usr/src/dev $devjvmimage 
 docker exec -ti devjvm /bin/bash
 
 docker rm -f devjvm
@@ -74,6 +76,14 @@ $scenario can be flink, spark, anything that has a corresponding .yml file in th
 cd $BOONTADATA_HOME/code
 . startscenarios.sh $scenario
 ```
+
+On Azure Container Services with Swarm. 
+Ssh to the main node. Then:
+```
+export DOCKER_HOST=:2375
+
+```
+
 
 ## inject and consume data
 
@@ -167,7 +177,9 @@ exit
 sudo chmod a+x /usr/local/bin/docker-compose
 ```
 
-## summary of the most usefull commands while developing with Flink
+## Appendix
+
+### summary of the most usefull commands while developing with Flink
 
 ```
 rsync -ave ssh u2.3-4.xyz:~/sdc1/boontadata-streams/code/flink/master/code /mnt/c/afac/code
@@ -213,7 +225,7 @@ ssh -D 127.0.0.1:8034 u2.3-4.xyz
 http://0.0.0.0:34010/#/overview
 ```
 
-## reset cache: do the following: 
+### reset cache: do the following: 
 
 ```
 docker images | grep "code_" | awk '{print $1}' | xargs --no-run-if-empty docker rmi
