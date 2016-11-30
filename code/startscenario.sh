@@ -3,12 +3,24 @@
 if test $# -eq 0
 then
     command=$0
-    echo "usage: $command <scenario>"
-    echo "scenario can be flink, spark, ..."
+    echo "usage: $command <scenario> [<docker_network_type>]"
+    echo "<scenario> can be flink, spark, ..."
+    echo "<docker_network_type> is bridge by default. Other value is overlay."
     return 0
 fi
 
 scenario=$1
+
+#DOCKER_NETWORK_TYPE
+#- bridge for single host node 
+#- overlay for multi host nodes 
+if test $# -ge 2
+then
+    export DOCKER_NETWORK_TYPE=$2
+else
+    export DOCKER_NETWORK_TYPE=bridge
+fi
+echo "Network type will be : ${DOCKER_NETWORK_TYPE}. (bridge is for one host VM, overlay is for multiple host VMs)"
 
 if test -z $BOONTADATA_HOME
 then
@@ -25,10 +37,6 @@ cat compose-blocks/common-end.yml >> docker-compose.yml
 
 export HOSTIP=`hostname -i`
 
-#DOCKER_NETWORK_TYPE
-#- bridge for single host node 
-#- overlay for multi host nodes 
-export DOCKER_NETWORK_TYPE=bridge
 
 echo starting scenario $scenario 
 
