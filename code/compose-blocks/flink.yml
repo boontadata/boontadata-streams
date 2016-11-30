@@ -1,5 +1,5 @@
   flink-master:
-    build: ./flink/master
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/flinkmaster:0.1
     ports:
       - "34010:8081"
       - "34011:6123"
@@ -7,7 +7,7 @@
     networks:
       - boontadatanet
   flink-worker1:
-    build: ./flink/worker
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/flinkworker:0.1
     ports:
       - "34012:6121"
       - "34013:6122"
@@ -15,7 +15,7 @@
     networks:
       - boontadatanet
   flink-worker2:
-    build: ./flink/worker
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/flinkworker:0.1
     ports:
       - "34014:6121"
       - "34015:6122"

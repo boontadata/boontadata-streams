@@ -11,7 +11,7 @@ services:
     networks:
       - boontadatanet
   kafka1:
-    image: kafkaserver
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/kafka:0.1
     container_name: ks1
     ports:
       - "34001:9092"
@@ -26,7 +26,7 @@ services:
     networks:
       - boontadatanet
   kafka2:
-    image: kafkaserver
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/kafka:0.1
     container_name: ks2
     ports:
       - "34002:9092"
@@ -42,7 +42,7 @@ services:
     networks:
       - boontadatanet
   kafka3:
-    image: kafkaserver
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/kafka:0.1
     container_name: ks3
     ports:
       - "34003:9092"
@@ -60,7 +60,7 @@ services:
     networks:
       - boontadatanet
   pyclient:
-    build: ./pyclient
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/pyclient:0.1
     container_name: client1
     environment:
       KAFKA_ADVERTISED_SERVERS: "ks1:9092,ks2:9092,ks3:9092"
@@ -103,7 +103,7 @@ services:
     networks:
       - boontadatanet
   cassandrainit:
-    build: ./cassandrainit
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/cassandra:0.1
     container_name: cinit
     restart: on-failure:5
     depends_on:
