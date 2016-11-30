@@ -18,66 +18,23 @@ export BOONTADATA_DOCKER_REGISTRY=acr34-microsoft.azurecr.io
 rsync -ave ssh code u2.3-4.xyz:~/boontadata-streams
 ```
 
-## reset cache: do the following: 
-
-```
-docker images | grep "code_" | awk '{print $1}' | xargs --no-run-if-empty docker rmi
-docker rmi kafkaserver
-docker rmi pyclientbase
-```
-
-or 
-
-```
-docker images | awk '{print $1}' | xargs --no-run-if-empty docker rmi
-docker images | awk '{print $3}' | xargs --no-run-if-empty docker rmi
-```
-
 ## build or rebuild required images: 
 
-```
-cd $BOONTADATA_HOME/code
-docker build -t pyclientbase ./pyclientbase && \
-docker build -t kafkaserver ./kafka-docker
-docker build -t flink ./flink/base
-```
-
-## start the clusters 
-
-$scenario can be flink, spark, anything that has a corresponding .yml file in the `compose-blocks` folder ...
+$resetoption is optional and it can be reset or noreset. The default is noreset.
 
 ```
 cd $BOONTADATA_HOME/code
-. startscenarios.sh $scenario
+. buildimages.sh $resetoption
 ```
 
-## inject and consume data
+## develop in Java or Scala without an IDE: use the devjvm container
 
-try for one device only:
+Here is an example where we use devjvm to develop code for the flinkmaster container:
+```
+docker run --name devjvm -d -v $BOONTADATA_HOME/code/flink/master/code:/usr/src/dev -w /usr/src/dev $BOONTADATA_DOCKER_REGISTRY/boontadata/devjvm 
+docker exec -ti devjvm /bin/bash
 
-```
-docker exec -ti client1 python /workdir/ingest.py
-```
-
-once it works, try with 10 devices for instance:
-```
-docker exec -ti client1 bash /workdir/ingestfromdevices.sh 10
-```
-
-in another terminal, consume from Spark:
-```
-docker exec -ti spark1 /workdir/start-consume.sh
-```
-
-## develop in Java or Scala without an IDE: rebuild and use the devscala container
-
-```
-docker build -t devscala ~/boontadata-streams/code/devscala
-docker run --name devscala -d -v $BOONTADATA_HOME/code/flink/master/code:/usr/src/dev -w /usr/src/dev devscala 
-docker exec -ti devscala /bin/bash
-
-docker kill devscala
-docker rm devscala 
+docker rm -f devjvm
 ```
 
 Maven to generate a Flink Skeleton: 
@@ -107,6 +64,33 @@ generate jar on provided pom.xml
 
 ```
 mvn clean package
+```
+
+## start the clusters 
+
+$scenario can be flink, spark, anything that has a corresponding .yml file in the `compose-blocks` folder ...
+
+```
+cd $BOONTADATA_HOME/code
+. startscenarios.sh $scenario
+```
+
+## inject and consume data
+
+try for one device only:
+
+```
+docker exec -ti client1 python /workdir/ingest.py
+```
+
+once it works, try with 10 devices for instance:
+```
+docker exec -ti client1 bash /workdir/ingestfromdevices.sh 10
+```
+
+in another terminal, consume from Spark:
+```
+docker exec -ti spark1 /workdir/start-consume.sh
 ```
 
 ## run a Flink job
@@ -228,3 +212,19 @@ limit 100;
 ssh -D 127.0.0.1:8034 u2.3-4.xyz
 http://0.0.0.0:34010/#/overview
 ```
+
+## reset cache: do the following: 
+
+```
+docker images | grep "code_" | awk '{print $1}' | xargs --no-run-if-empty docker rmi
+docker rmi kafkaserver
+docker rmi pyclientbase
+```
+
+or 
+
+```
+docker images | awk '{print $1}' | xargs --no-run-if-empty docker rmi
+docker images | awk '{print $3}' | xargs --no-run-if-empty docker rmi
+```
+

@@ -6,6 +6,7 @@ services:
   zookeeper:
     image: wurstmeister/zookeeper
     container_name: zk1
+    hostname: zk1
     ports:
       - "2181:2181"
     networks:
@@ -13,6 +14,7 @@ services:
   kafka1:
     image: $BOONTADATA_DOCKER_REGISTRY/boontadata/kafka:0.1
     container_name: ks1
+    hostname: ks1
     ports:
       - "34001:9092"
     depends_on:
@@ -28,6 +30,7 @@ services:
   kafka2:
     image: $BOONTADATA_DOCKER_REGISTRY/boontadata/kafka:0.1
     container_name: ks2
+    hostname: ks2
     ports:
       - "34002:9092"
     depends_on:
@@ -44,6 +47,7 @@ services:
   kafka3:
     image: $BOONTADATA_DOCKER_REGISTRY/boontadata/kafka:0.1
     container_name: ks3
+    hostname: ks3
     ports:
       - "34003:9092"
     depends_on:
@@ -62,6 +66,7 @@ services:
   pyclient:
     image: $BOONTADATA_DOCKER_REGISTRY/boontadata/pyclient:0.1
     container_name: client1
+    hostname: client1
     environment:
       KAFKA_ADVERTISED_SERVERS: "ks1:9092,ks2:9092,ks3:9092"
     networks:
@@ -69,6 +74,7 @@ services:
   cassandra1:
     image: cassandra:3.7
     container_name: cassandra1
+    hostname: cassandra1
     restart: on-failure:10
     environment:
       MAX_HEAP_SIZE: "2G"
@@ -79,6 +85,7 @@ services:
   cassandra2:
     image: cassandra:3.7
     container_name: cassandra2
+    hostname: cassandra2
     restart: on-failure:10
     depends_on:
       - cassandra1
@@ -92,6 +99,7 @@ services:
   cassandra3:
     image: cassandra:3.7
     container_name: cassandra3
+    hostname: cassandra3
     restart: on-failure:10
     depends_on:
       - cassandra1
@@ -105,6 +113,7 @@ services:
   cassandrainit:
     image: $BOONTADATA_DOCKER_REGISTRY/boontadata/cassandra:0.1
     container_name: cinit
+    hostname: cinit
     restart: on-failure:5
     depends_on:
       - cassandra1
