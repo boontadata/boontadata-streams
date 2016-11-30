@@ -65,3 +65,5 @@ build_and_push $BOONTADATA_HOME/code/flink/master
 build_and_push $BOONTADATA_HOME/code/flink/worker
 build_and_push $BOONTADATA_HOME/code/kafka-docker
 build_and_push $BOONTADATA_HOME/code/spark
+
+docker images
