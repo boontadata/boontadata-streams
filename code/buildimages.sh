@@ -35,7 +35,7 @@ build_and_push()
         docker rmi $fulltag
     fi
 
-    docker build -t $fulltag $folderpath --file tmpDockerfile
+    docker build -t $fulltag $folderpath --file $filepath2
     docker push $fulltag
 }
 

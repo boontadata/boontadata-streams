@@ -1,5 +1,5 @@
   sparkm1:
-    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/sparkmaster:0.1
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/spark:0.1
     container_name: sparkm1
     hostname: sparkm1
     command: spark-class org.apache.spark.deploy.master.Master -h sparkm1
@@ -22,7 +22,7 @@
     networks:
       - boontadatanet
   sparkw1:
-    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/sparkworker:0.1
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/spark:0.1
     container_name: sparkw1
     hostname: sparkw1
     command: spark-class org.apache.spark.deploy.worker.Worker spark://sparkm1:7077
@@ -47,7 +47,7 @@
     networks:
       - boontadatanet
   sparkw2:
-    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/sparkworker:0.1
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/spark:0.1
     container_name: sparkw2
     hostname: sparkw2
     command: spark-class org.apache.spark.deploy.worker.Worker spark://sparkm1:7077
