@@ -43,4 +43,5 @@ echo starting scenario $scenario
 docker-compose up -d
 
 echo use docker-compose ps to see the containers, docker-compose down to shut down the containers.
+echo use . runscenario.sh to run scenarios like flink1
 return 0

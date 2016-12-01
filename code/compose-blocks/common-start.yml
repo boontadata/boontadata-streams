@@ -4,7 +4,7 @@
 version: '2'
 services:
   zookeeper:
-    image: wurstmeister/zookeeper
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/zookeeper:0.1
     container_name: zk1
     hostname: zk1
     ports:
@@ -72,7 +72,7 @@ services:
     networks:
       - boontadatanet
   cassandra1:
-    image: cassandra:3.7
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/cassandra:0.2
     container_name: cassandra1
     hostname: cassandra1
     restart: on-failure:10
@@ -83,7 +83,7 @@ services:
     networks:
       - boontadatanet
   cassandra2:
-    image: cassandra:3.7
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/cassandra:0.2
     container_name: cassandra2
     hostname: cassandra2
     restart: on-failure:10
@@ -97,7 +97,7 @@ services:
     networks:
       - boontadatanet
   cassandra3:
-    image: cassandra:3.7
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/cassandra:0.2
     container_name: cassandra3
     hostname: cassandra3
     restart: on-failure:10
@@ -111,7 +111,7 @@ services:
     networks:
       - boontadatanet
   cassandrainit:
-    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/cassandra:0.1
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/cassandrainit:0.2
     container_name: cinit
     hostname: cinit
     restart: on-failure:5

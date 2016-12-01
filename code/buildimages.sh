@@ -59,11 +59,13 @@ docker exec -ti devjvm mvn clean package
 
 build_and_push $BOONTADATA_HOME/code/pyclientbase
 build_and_push $BOONTADATA_HOME/code/pyclient
-build_and_push $BOONTADATA_HOME/code/cassandrainit
+build_and_push $BOONTADATA_HOME/code/cassandra/base
+build_and_push $BOONTADATA_HOME/code/cassandra/init
 build_and_push $BOONTADATA_HOME/code/flink/base
 build_and_push $BOONTADATA_HOME/code/flink/master
 build_and_push $BOONTADATA_HOME/code/flink/worker
 build_and_push $BOONTADATA_HOME/code/kafka-docker
 build_and_push $BOONTADATA_HOME/code/spark
+build_and_push $BOONTADATA_HOME/code/zookeeper
 
 docker images
