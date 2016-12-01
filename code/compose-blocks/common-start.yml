@@ -8,7 +8,10 @@ services:
     container_name: zk1
     hostname: zk1
     ports:
-      - "2181:2181"
+      - "34050:2181"
+      - "34051:2888"
+      - "34052:3888"
+      - "34053:22"
     networks:
       - boontadatanet
   kafka1:
@@ -76,6 +79,12 @@ services:
     container_name: cassandra1
     hostname: cassandra1
     restart: on-failure:10
+    ports:
+      - "34060:7000"
+      - "34061:7001"
+      - "34062:7199"
+      - "34063:9042"
+      - "34064:9160"
     environment:
       MAX_HEAP_SIZE: "2G"
       HEAP_NEWSIZE: "256M"
@@ -87,6 +96,12 @@ services:
     container_name: cassandra2
     hostname: cassandra2
     restart: on-failure:10
+    ports:
+      - "34070:7000"
+      - "34071:7001"
+      - "34072:7199"
+      - "34073:9042"
+      - "34074:9160"
     depends_on:
       - cassandra1
     environment:
@@ -101,6 +116,12 @@ services:
     container_name: cassandra3
     hostname: cassandra3
     restart: on-failure:10
+    ports:
+      - "34080:7000"
+      - "34081:7001"
+      - "34082:7199"
+      - "34083:9042"
+      - "34084:9160"
     depends_on:
       - cassandra1
       - cassandra2

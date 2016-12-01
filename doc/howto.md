@@ -115,7 +115,7 @@ docker cp flink/master/code/target/flink1-0.1.jar flink-master:/tmp
 from flink-master container
 
 ```
-flink run -c io.boontadata.flink1.StreamingJob /tmp/flink1-0.1.jar --topic sampleTopic --bootstrap.servers ks1:9092,ks2:9092,ks3:9092 --zookeeper.connect zk1:2181 --group.id myGroup 
+flink run -c io.boontadata.flink1.StreamingJob /workdir/flink1-0.1.jar --topic sampleTopic --bootstrap.servers ks1:9092,ks2:9092,ks3:9092 --zookeeper.connect zk1:2181 --group.id myGroup 
 ```
 
 ## connect to a few dashboards
