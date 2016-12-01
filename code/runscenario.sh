@@ -24,8 +24,8 @@ scenario_flink()
     docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) from debug; select count(*) from raw_events; select count(*) from agg_events;"
 
     echo "start Flink job"
-    docker exec -ti flink-master flink run -c io.boontadata.flink1.StreamingJob /workdir/flink1-0.1.jar -d
-    tellandwaitnsecs 10
+    docker exec -ti flink-master flink run -c io.boontadata.flink1.StreamingJob /workdir/flink1-0.1.jar -d &
+    tellandwaitnsecs 15
     docker exec -ti flink-master flink list
 
     echo "inject data"
