@@ -1,7 +1,3 @@
 networks:
   boontadatanet:
-    ipam:
-      driver: ${DOCKER_NETWORK_TYPE}
-      config:
-        - subnet: 10.34.0.0/16
-        - gateway: 10.34.0.1
+    driver: ${DOCKER_NETWORK_TYPE}

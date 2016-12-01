@@ -58,7 +58,7 @@ scenario_truncate_cassandra_data()
 }
 
 case $scenario in
-    flink1)
+    flink)
         scenario_flink
         ;;
     truncate_cassandra_data)
