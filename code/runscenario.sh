@@ -4,7 +4,7 @@ if test $# -eq 0
 then
     command=$0
     echo "usage: $command <scenario>"
-    echo "<scenario> can be flink1, truncate_cassandra_data, ..."
+    echo "<scenario> can be flink, truncate_cassandra_data, ..."
     return 0
 fi
 
@@ -18,7 +18,7 @@ tellandwaitnsecs()
     sleep $nbofseconds
 }
 
-scenario_flink1()
+scenario_flink()
 {
     echo "Initial content in the Cassandra database"
     docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) from debug; select count(*) from raw_events; select count(*) from agg_events;"
@@ -59,7 +59,7 @@ scenario_truncate_cassandra_data()
 
 case $scenario in
     flink1)
-        scenario_flink1
+        scenario_flink
         ;;
     truncate_cassandra_data)
         scenario_truncate_cassandra_data
