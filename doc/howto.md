@@ -11,23 +11,67 @@ export BOONTADATA_HOME=$HOME/boontadata-streams
 export BOONTADATA_DOCKER_REGISTRY=acr34-microsoft.azurecr.io
 ```
 
-## update code in the host
-
-`git clone` or copy from your laptop where you edit files: 
-```
-rsync -ave ssh code u2.3-4.xyz:~/boontadata-streams
-```
-
 ## build or rebuild required images: 
 
 $resetoption is optional and it can be reset or noreset. The default is noreset.
 
 ```
+docker login $BOONTADATA_DOCKER_REGISTRY
 cd $BOONTADATA_HOME/code
 . buildimages.sh $resetoption
 ```
 
-## develop in Java or Scala without an IDE: use the devjvm container
+## start the topology and run a scenario
+
+```
+cd $BOONTADATA_HOME/code
+. startscenario.sh flink
+. runscenario.sh flink
+```
+
+cf [sample_execution_log.md](sample_execution_log.md) for more.
+
+## Appendix
+
+### install Docker (latest version) on a host VM (Ubuntu 16.04 LTS)
+
+ssh into the VM and execute the following statements
+
+```
+#following https://docs.docker.com/engine/installation/linux/ubuntulinux/
+sudo apt-get update
+sudo apt-get -y upgrade
+sudo apt-get update
+sudo apt-get install apt-transport-https ca-certificates
+sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+sudo vi /etc/apt/sources.list.d/docker.list
+#add the following line:
+#echo deb https://apt.dockerproject.org/repo ubuntu-xenial main
+sudo apt-get update
+sudo apt-get purge lxc-docker
+apt-cache policy docker-engine
+sudo apt-get update
+sudo apt-get install linux-image-extra-$(uname -r) linux-image-extra-virtual
+sudo apt-get update
+sudo apt-get -y install docker-engine
+sudo service docker start
+sudo docker run hello-world
+sudo usermod -aG docker $USER
+```
+
+disconnect and reconnect 
+
+```
+docker run hello-world
+
+#following https://docs.docker.com/compose/install/
+sudo su
+curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+exit
+sudo chmod a+x /usr/local/bin/docker-compose
+```
+
+### develop in Java or Scala without an IDE: use the devjvm container
 
 Here is an example where we use devjvm to develop code for the flinkmaster container:
 ```
@@ -68,7 +112,7 @@ generate jar on provided pom.xml
 mvn clean package
 ```
 
-## start the clusters 
+### start the clusters 
 
 $scenario can be flink, spark, anything that has a corresponding .yml file in the `compose-blocks` folder ...
 
@@ -85,7 +129,7 @@ export DOCKER_HOST=:2375
 ```
 
 
-## inject and consume data
+### inject and consume data
 
 try for one device only:
 
@@ -103,7 +147,7 @@ in another terminal, consume from Spark:
 docker exec -ti spark1 /workdir/start-consume.sh
 ```
 
-## run a Flink job
+### run a Flink job
 
 from container host 
 
@@ -139,45 +183,12 @@ Apache Spark Web Dashboard | http://0.0.0.0:34110
 docker volume ls | awk '{print $2}' | xargs docker volume rm
 ```
 
-## install Docker (latest version) on a host VM (Ubuntu 16.04 LTS)
+### update code in the host
 
-ssh into the VM and execute the following statements
-
+`git clone` or copy from your laptop where you edit files: 
 ```
-#following https://docs.docker.com/engine/installation/linux/ubuntulinux/
-sudo apt-get update
-sudo apt-get -y upgrade
-sudo apt-get update
-sudo apt-get install apt-transport-https ca-certificates
-sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-sudo vi /etc/apt/sources.list.d/docker.list
-#add the following line:
-#echo deb https://apt.dockerproject.org/repo ubuntu-xenial main
-sudo apt-get update
-sudo apt-get purge lxc-docker
-apt-cache policy docker-engine
-sudo apt-get update
-sudo apt-get install linux-image-extra-$(uname -r) linux-image-extra-virtual
-sudo apt-get update
-sudo apt-get -y install docker-engine
-sudo service docker start
-sudo docker run hello-world
-sudo usermod -aG docker $USER
+rsync -ave ssh code u2.3-4.xyz:~/boontadata-streams
 ```
-
-disconnect and reconnect 
-
-```
-docker run hello-world
-
-#following https://docs.docker.com/compose/install/
-sudo su
-curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-exit
-sudo chmod a+x /usr/local/bin/docker-compose
-```
-
-## Appendix
 
 ### summary of the most usefull commands while developing with Flink
 
@@ -238,5 +249,21 @@ or
 ```
 docker images | awk '{print $1}' | xargs --no-run-if-empty docker rmi
 docker images | awk '{print $3}' | xargs --no-run-if-empty docker rmi
+```
+
+### sample run on Azure Container Services
+
+```
+ssh acs34mgmt.eastus.cloudapp.azure.com
+git clone https://github.com/boontadata/boontadata-streams.git
+git pull origin multi1
+git checkout multi1
+cd boontadata-streams/
+export BOONTADATA_HOME=`pwd`
+export BOONTADATA_DOCKER_REGISTRY=acr34-microsoft.azurecr.io
+docker login $BOONTADATA_DOCKER_REGISTRY
+export DOCKER_HOST=172.16.0.5:2375
+cd code
+. startscenario.sh flink overlay
 ```
 
