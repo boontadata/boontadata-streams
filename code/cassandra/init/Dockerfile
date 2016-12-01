@@ -1,4 +1,8 @@
-FROM cassandra:3.7
+# $BOONTADATA_DOCKER_REGISTRY/boontadata/cassandrainit
+#
+# VERSION   0.2
+
+FROM $BOONTADATA_DOCKER_REGISTRY/boontadata/cassandra:0.2
 
 MAINTAINER boontadata <contact@boontadata.io>
 

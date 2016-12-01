@@ -1,0 +1,27 @@
+  flink-master:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/flinkmaster:0.1
+    ports:
+      - "34010:8081"
+      - "34011:6123"
+    container_name: flink-master
+    hostname: flink-master
+    networks:
+      - boontadatanet
+  flink-worker1:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/flinkworker:0.1
+    ports:
+      - "34012:6121"
+      - "34013:6122"
+    container_name: flink-worker1
+    hostname: flink-worker1
+    networks:
+      - boontadatanet
+  flink-worker2:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/flinkworker:0.1
+    ports:
+      - "34014:6121"
+      - "34015:6122"
+    container_name: flink-worker2
+    hostname: flink-worker2
+    networks:
+      - boontadatanet

@@ -1,3 +1,7 @@
+# $BOONTADATA_DOCKER_REGISTRY/boontadata/pyclientbase
+#
+# VERSION   0.1
+
 FROM continuumio/anaconda3
 
 MAINTAINER boontadata <contact@boontadata.io>

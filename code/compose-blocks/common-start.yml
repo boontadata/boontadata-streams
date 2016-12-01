@@ -1,13 +1,23 @@
+#Do not edit the docker-compose.yml file directly!
+#the file is created from blocks in the compose-blocks folder
+#please change the blocks and startscenario.sh instead 
 version: '2'
 services:
   zookeeper:
-    image: wurstmeister/zookeeper
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/zookeeper:0.1
     container_name: zk1
+    hostname: zk1
     ports:
-      - "2181:2181"
+      - "34050:2181"
+      - "34051:2888"
+      - "34052:3888"
+      - "34053:22"
+    networks:
+      - boontadatanet
   kafka1:
-    image: kafkaserver
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/kafka:0.1
     container_name: ks1
+    hostname: ks1
     ports:
       - "34001:9092"
     depends_on:
@@ -18,9 +28,12 @@ services:
       KAFKA_BROKER_ID: 1      
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - boontadatanet
   kafka2:
-    image: kafkaserver
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/kafka:0.1
     container_name: ks2
+    hostname: ks2
     ports:
       - "34002:9092"
     depends_on:
@@ -32,9 +45,12 @@ services:
       KAFKA_BROKER_ID: 2     
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - boontadatanet
   kafka3:
-    image: kafkaserver
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/kafka:0.1
     container_name: ks3
+    hostname: ks3
     ports:
       - "34003:9092"
     depends_on:
@@ -48,23 +64,44 @@ services:
       KAFKA_BROKER_ID: 3      
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - boontadatanet
   pyclient:
-    build: ./pyclient
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/pyclient:0.1
     container_name: client1
+    hostname: client1
     environment:
       KAFKA_ADVERTISED_SERVERS: "ks1:9092,ks2:9092,ks3:9092"
+    networks:
+      - boontadatanet
   cassandra1:
-    image: cassandra:3.7
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/cassandra:0.2
     container_name: cassandra1
+    hostname: cassandra1
     restart: on-failure:10
+    ports:
+      - "34060:7000"
+      - "34061:7001"
+      - "34062:7199"
+      - "34063:9042"
+      - "34064:9160"
     environment:
       MAX_HEAP_SIZE: "2G"
       HEAP_NEWSIZE: "256M"
       CASSANDRA_BROADCAST_ADDRESS: "cassandra1"
+    networks:
+      - boontadatanet
   cassandra2:
-    image: cassandra:3.7
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/cassandra:0.2
     container_name: cassandra2
+    hostname: cassandra2
     restart: on-failure:10
+    ports:
+      - "34070:7000"
+      - "34071:7001"
+      - "34072:7199"
+      - "34073:9042"
+      - "34074:9160"
     depends_on:
       - cassandra1
     environment:
@@ -72,10 +109,19 @@ services:
       HEAP_NEWSIZE: "256M"
       CASSANDRA_BROADCAST_ADDRESS: "cassandra2"
       CASSANDRA_SEEDS: "cassandra1"
+    networks:
+      - boontadatanet
   cassandra3:
-    image: cassandra:3.7
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/cassandra:0.2
     container_name: cassandra3
+    hostname: cassandra3
     restart: on-failure:10
+    ports:
+      - "34080:7000"
+      - "34081:7001"
+      - "34082:7199"
+      - "34083:9042"
+      - "34084:9160"
     depends_on:
       - cassandra1
       - cassandra2
@@ -83,34 +129,16 @@ services:
       MAX_HEAP_SIZE: "2G"
       HEAP_NEWSIZE: "256M"
       CASSANDRA_SEEDS: "cassandra1,cassandra2"
+    networks:
+      - boontadatanet
   cassandrainit:
-    build: ./cassandrainit
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/cassandrainit:0.2
     container_name: cinit
+    hostname: cinit
     restart: on-failure:5
     depends_on:
       - cassandra1
       - cassandra2
       - cassandra3
-  spark1:
-    build: ./spark
-    container_name: spark1
-    environment:
-      KAFKA_ADVERTISED_SERVERS: "ks1:9092,ks2:9092,ks3:9092"
-  flink-master:
-    build: ./flink/master
-    ports:
-      - "34010:8081"
-      - "34011:6123"
-    container_name: flink-master
-  flink-worker1:
-    build: ./flink/worker
-    ports:
-      - "34012:6121"
-      - "34013:6122"
-    container_name: flink-worker1
-  flink-worker2:
-    build: ./flink/worker
-    ports:
-      - "34014:6121"
-      - "34015:6122"
-    container_name: flink-worker2
+    networks:
+      - boontadatanet

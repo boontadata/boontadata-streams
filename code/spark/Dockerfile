@@ -1,4 +1,9 @@
-FROM sequenceiq/spark:1.6.0
+# $BOONTADATA_DOCKER_REGISTRY/boontadata/spark
+#
+# VERSION   0.1
+
+FROM gettyimages/spark:2.0.2-hadoop-2.7
+#FROM sequenceiq/spark:1.6.0
 #FROM gettyimages/spark:1.6.2-hadoop-2.6
 
 MAINTAINER boontadata <contact@boontadata.io>
@@ -9,4 +14,4 @@ ADD *.py ./
 ADD *.sh ./
 RUN chmod a+x *.sh
 
-ENTRYPOINT ["init"]
+CMD [ "/bin/bash" ]
