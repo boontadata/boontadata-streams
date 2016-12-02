@@ -15,6 +15,7 @@ import pandas
 import time
 import uuid
 
+randomseed=34
 batchsize=300
 m1max=100
 m2max=500
@@ -83,6 +84,7 @@ def sendaggdata(aggtype, aggdf):
                     int(r[0]), r[1]))
 
 def main():
+    numpy.random.seed(randomseed)
     df = pandas.DataFrame({
         'measure1'   : numpy.random.randint(0, m1max, batchsize),
         'm2r'  : numpy.random.rand(batchsize),
