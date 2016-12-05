@@ -6,6 +6,7 @@ use_print=True
 if use_cassandra:
     from cassandra.cluster import Cluster
 import datetime
+import getopt
 if use_kafka:
     from kafka import KafkaProducer
 import math
@@ -14,31 +15,7 @@ import os
 import pandas
 import time
 import uuid
-
-randomseed=34
-batchsize=300
-m1max=100
-m2max=500
-basedelay=2*60*1000 #2 minutes
-aggwindowlength=datetime.timedelta(seconds=5)
-
-deviceid=str(uuid.uuid4())
-
-#connect to Kafka
-if use_kafka:
-    producer = KafkaProducer(bootstrap_servers=os.environ['KAFKA_ADVERTISED_SERVERS'])
-    if use_print:
-        print("Connected a producer to Kafka servers: {}".format(os.environ['KAFKA_ADVERTISED_SERVERS']))
-else:
-    producer = None
-
-#connect to Cassandra
-if use_cassandra:
-    cluster=Cluster(['cassandra1', 'cassandra2', 'cassandra3'])
-    session=cluster.connect('boontadata')
-else:
-    cluster = None
-    session = None
+import sys
 
 def gettimewindow(secondssinceepoch):
     dt=datetime.datetime.fromtimestamp(int(secondssinceepoch))
@@ -83,7 +60,49 @@ def sendaggdata(aggtype, aggdf):
                     str(i[0]), deviceid, i[1],
                     int(r[0]), r[1]))
 
-def main():
+def main(argv):
+    scriptusage='ingest.py -r <random-seed> -b <batch-size>'
+    randomseed=34
+    batchsize=300
+    m1max=100
+    m2max=500
+    basedelay=2*60*1000 #2 minutes
+    aggwindowlength=datetime.timedelta(seconds=5)
+
+    deviceid=str(uuid.uuid4())
+    
+    try:
+        opts, args = getopt.getopt(argv,"hr:b:",["random-seed=","batch-size="])
+    except getopt.GetoptError:
+        print(scriptusage)
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt == '-h':
+            print(scriptusage)
+            sys.exit()
+        elif opt in ("-r", "--random-seed"):
+            randomseed = arg
+        elif opt in ("-b", "--batch-size"):
+            batchsize = arg
+    
+    print("randomseed={}, batchsize={}", randomseed, batchsize)
+
+    #connect to Kafka
+    if use_kafka:
+        producer = KafkaProducer(bootstrap_servers=os.environ['KAFKA_ADVERTISED_SERVERS'])
+        if use_print:
+            print("Connected a producer to Kafka servers: {}".format(os.environ['KAFKA_ADVERTISED_SERVERS']))
+    else:
+        producer = None
+
+    #connect to Cassandra
+    if use_cassandra:
+        cluster=Cluster(['cassandra1', 'cassandra2', 'cassandra3'])
+        session=cluster.connect('boontadata')
+    else:
+        cluster = None
+        session = None
+
     numpy.random.seed(randomseed)
     df = pandas.DataFrame({
         'measure1'   : numpy.random.randint(0, m1max, batchsize),

@@ -20,11 +20,14 @@ tellandwaitnsecs()
 
 scenario_flink()
 {
+    timecharacterictic=$1
+    echo "starting Flink scenario with a time characteristic of $timecharacterictic"
+
     echo "Initial content in the Cassandra database"
     docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) from debug; select count(*) from raw_events; select count(*) from agg_events;"
 
     echo "start Flink job"
-    docker exec -ti flink-master flink run -c io.boontadata.flink1.StreamingJob /workdir/flink1-0.1.jar -d &
+    docker exec -ti flink-master flink run -c io.boontadata.flink1.StreamingJob --time.characteristic=$timecharacterictic /workdir/flink1-0.1.jar -d &
     tellandwaitnsecs 15
     docker exec -ti flink-master flink list
 
@@ -35,6 +38,13 @@ scenario_flink()
     tellandwaitnsecs 10
 
     echo "get the result"
+    docker exec -ti client1 python /workdir/compare.py
+
+    tellandwaitnsecs 5
+
+    echo "add 1 event later, then get the result again"
+    docker exec -ti client1 python /workdir/ingest.py --batch-size 1
+    tellandwaitnsecs 10
     docker exec -ti client1 python /workdir/compare.py
 
     echo "kill the Flink job"
@@ -58,8 +68,11 @@ scenario_truncate_cassandra_data()
 }
 
 case $scenario in
-    flink)
-        scenario_flink
+    flink1)
+        scenario_flink EventTime
+        ;;
+    flink2)
+        scenario_flink ProcessingTime
         ;;
     truncate_cassandra_data)
         scenario_truncate_cassandra_data
