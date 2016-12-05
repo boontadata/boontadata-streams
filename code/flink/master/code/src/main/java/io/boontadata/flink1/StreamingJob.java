@@ -67,28 +67,32 @@ public class StreamingJob {
 	private static final Integer FIELD_MESAURE2 = 5; 
 
 	public static void main(String[] args) throws Exception {
-		// default properties that can be overriden by flink run
-		Properties kProperties = new Properties();
-		kProperties.setProperty("bootstrap.servers", "ks1:9092,ks2:9092,ks3:9092");
-		kProperties.setProperty("zookeeper.connect", "zk1:2181");
-		kProperties.setProperty("group.id", "flinkGroup");
-		kProperties.setProperty("time.characteristic", "EventTime");
+		String timeCharacteristic = "EventTime";
+		if (args.length > 0) {
+			timeCharacteristic = args[0];
+		}
 
 		// set up the streaming execution environment
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 		env.enableCheckpointing(5000); // checkpoint every 5000 msecs
-		env.setParallelism(2); // may change 4 into something else...
+		env.setParallelism(2);
 		
-		String timeCharacteristic = kProperties.getPproperty("time.characteristic");
-		if (timeCharacteristic == "EventTime") {
+		if (timeCharacteristic.equals("EventTime")) {
 			env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
-		} else if (timeCharacteristic == "ProcessingTime") {
+		} else if (timeCharacteristic.equals("ProcessingTime")) {
 			env.setStreamTimeCharacteristic(TimeCharacteristic.ProcessingTime);
-		} else if (timeCharacteristic == "IngestionTime") {
+		} else if (timeCharacteristic.equals("IngestionTime")) {
 			env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
 		}
 
 		Format windowTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		// properties about Kafka
+		Properties kProperties = new Properties();
+		kProperties.setProperty("bootstrap.servers", "ks1:9092,ks2:9092,ks3:9092");
+		kProperties.setProperty("zookeeper.connect", "zk1:2181");
+		kProperties.setProperty("group.id", "flinkGroup");
+
 
 		// get data from Kafka, parse, and assign time and watermarks
 		DataStream<Tuple6<String, String, Long, String, Long, Double>> stream_parsed_with_timestamps = env 
@@ -232,6 +236,6 @@ public class StreamingJob {
                                 }));
 
 		// execute program
-		env.execute("io.boontadata.flink1.StreamingJob v" + VERSION);
+		env.execute("io.boontadata.flink1.StreamingJob v" + VERSION + " (" + timeCharacteristic + ")");
 	}
 }

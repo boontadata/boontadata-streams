@@ -20,15 +20,15 @@ tellandwaitnsecs()
 
 scenario_flink()
 {
-    timecharacterictic=$1
-    echo "starting Flink scenario with a time characteristic of $timecharacterictic"
+    timeType=$1
+    echo "starting Flink scenario with $timeType"
 
     echo "Initial content in the Cassandra database"
-    docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) from debug; select count(*) from raw_events; select count(*) from agg_events;"
+    docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) as nb_debug from debug; select count(*) as nb_rawevents from raw_events; select count(*) as nb_aggevents from agg_events;"
 
     echo "start Flink job"
-    docker exec -ti flink-master flink run -c io.boontadata.flink1.StreamingJob --time.characteristic=$timecharacterictic /workdir/flink1-0.1.jar -d &
-    tellandwaitnsecs 15
+    docker exec -ti flink-master flink run -d -c io.boontadata.flink1.StreamingJob /workdir/flink1-0.1.jar $timeType
+    tellandwaitnsecs 10
     docker exec -ti flink-master flink list
 
     echo "inject data"
@@ -40,13 +40,6 @@ scenario_flink()
     echo "get the result"
     docker exec -ti client1 python /workdir/compare.py
 
-    tellandwaitnsecs 5
-
-    echo "add 1 event later, then get the result again"
-    docker exec -ti client1 python /workdir/ingest.py --batch-size 1
-    tellandwaitnsecs 10
-    docker exec -ti client1 python /workdir/compare.py
-
     echo "kill the Flink job"
     flinkjobid=`docker exec -ti flink-master flink list | grep io.boontadata.flink1.StreamingJob | awk '{print $4}'`
     echo "Flink job id is $flinkjobid"
@@ -54,28 +47,37 @@ scenario_flink()
     docker exec -ti flink-master flink list
 }
 
-scenario_truncate_cassandra_data()
+scenario_truncate()
 {
     echo "Initial content in the Cassandra database"
-    docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) from debug; select count(*) from raw_events; select count(*) from agg_events;"
+    docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) as nb_debug from debug; select count(*) as nb_rawevents from raw_events; select count(*) as nb_aggevents from agg_events;"
 
     echo "truncate"
     docker exec -ti cassandra3 cqlsh --execute "use boontadata; truncate table debug; truncate table raw_events; truncate table agg_events;"
 
     echo "new content in the Cassandra database"
-    docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) from debug; select count(*) from raw_events; select count(*) from agg_events;"
+    docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) as nb_debug from debug; select count(*) as nb_rawevents from raw_events; select count(*) as nb_aggevents from agg_events;"
     
+}
+
+scenario_test_cassandra()
+{
+    echo "get the first lines in Cassandra's debug table"
+    docker exec -ti cassandra3 cqlsh --execute "select * from boontadata.debug limit 5;"
 }
 
 case $scenario in
     flink1)
-        scenario_flink EventTime
-        ;;
-    flink2)
         scenario_flink ProcessingTime
         ;;
-    truncate_cassandra_data)
-        scenario_truncate_cassandra_data
+    flink2)
+        scenario_flink EventTime
+        ;;
+    truncate)
+        scenario_truncate
+        ;;
+    test_cassandra)
+        scenario_test_cassandra
         ;;
     *)
         echo "scenario $scenario is not implemented (yet?)."
