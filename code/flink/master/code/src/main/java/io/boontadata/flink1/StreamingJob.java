@@ -222,7 +222,7 @@ public class StreamingJob {
 		stream_with_aggregations
 			.addSink(new CassandraTupleSink<Tuple5<String, String, String, Long, Double>>(
                                 "INSERT INTO boontadata.agg_events"
-                                        + " (window_time, device_id, category, m1_sum_flink_eventtime, m2_sum_flink_eventtime)"
+                                        + " (window_time, device_id, category, m1_sum_flink, m2_sum_flink)"
                                         + " VALUES (?, ?, ?, ?, ?);",
                                 new ClusterBuilder() {
                                         @Override

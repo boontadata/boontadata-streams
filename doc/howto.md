@@ -31,6 +31,14 @@ cd $BOONTADATA_HOME/code
 
 cf [sample_execution_log.md](sample_execution_log.md) for more.
 
+## copy patches into docker running containers
+
+```
+cd $BOONTADATA_HOME/code
+docker cp flink/master/code/target/flink1-0.1.jar flink-master:/workdir
+```
+
+
 ## Appendix
 
 ### install Docker (latest version) on a host VM (Ubuntu 16.04 LTS)
@@ -77,7 +85,10 @@ Here is an example where we use devjvm to develop code for the flinkmaster conta
 ```
 devjvmimage="$BOONTADATA_DOCKER_REGISTRY/boontadata/devjvm:0.1"
 docker pull $devjvmimage 
-docker run --name devjvm -d -v $BOONTADATA_HOME/code/flink/master/code:/usr/src/dev -w /usr/src/dev $devjvmimage 
+docker run --name devjvm -d \
+    -v $BOONTADATA_HOME/dockervolumesforcache/maven-m2:/root/.m2 \
+    -v $BOONTADATA_HOME/code/flink/master/code:/usr/src/dev \
+    -w /usr/src/dev $devjvmimage
 docker exec -ti devjvm /bin/bash
 
 docker rm -f devjvm
@@ -153,7 +164,7 @@ from container host
 
 ```
 cd $BOONTADATA_HOME/code
-docker cp flink/master/code/target/flink1-0.1.jar flink-master:/tmp
+docker cp flink/master/code/target/flink1-0.1.jar flink-master:/workdir
 ```
 
 from flink-master container
@@ -205,7 +216,7 @@ mvn clean package
 vi src/main/java/io/boontadata/flink1/DevJob.java
 
 cd $BOONTADATA_HOME/code
-docker cp flink/master/code/target/flink1-0.1.jar flink-master:/tmp
+docker cp flink/master/code/target/flink1-0.1.jar flink-master:/workdir
 docker cp pyclient/compare.py client1:/workdir
 docker exec -ti client1 python /workdir/ingest.py
 
