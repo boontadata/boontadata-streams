@@ -31,6 +31,38 @@ build_and_push()
         docker rmi $fulltag
     fi
 
+    #special build steps
+    case $tagname in
+        "$BOONTADATA_DOCKER_REGISTRY/boontadata/flinkmaster")
+            jarfile="$BOONTADATA_HOME/code/flink/master/code/target/flink1-0.1.jar"
+            if test -e $jarfile
+            then
+                if test $reset = "reset"
+                then
+                    echo "resetting $jarfile"
+                    rm $jarfile
+                else
+                    echo "will not rebuild $jarfile which already exists"
+                fi
+            fi
+
+            if test ! -e $jarfile
+            then
+                echo "will build $jarfile"
+                devjvmimage="$BOONTADATA_DOCKER_REGISTRY/boontadata/devjvm:0.1"
+                echo "will compile flink job"
+                docker run --name devjvm -d \
+                    -v $BOONTADATA_HOME/dockervolumesforcache/maven-m2:/root/.m2 \
+                    -v $BOONTADATA_HOME/code/flink/master/code:/usr/src/dev \
+                    -w /usr/src/dev $devjvmimage
+                docker exec -ti devjvm mvn clean package
+                docker rm -f devjvm
+            fi
+            ;;
+        *)
+            ;;
+    esac
+
     imageavailability=`docker images | grep "$tagname *$tagversion"`
     if test -n "$imageavailability"
     then
@@ -50,13 +82,8 @@ build_and_push()
 
 #create a container that we can use to build sources as jars
 build_and_push $BOONTADATA_HOME/code/devjvm
-devjvmimage="$BOONTADATA_DOCKER_REGISTRY/boontadata/devjvm:0.1"
-echo "will compile flink job"
-docker run --name devjvm -d -v $BOONTADATA_HOME/code/flink/master/code:/usr/src/dev -w /usr/src/dev $devjvmimage
-docker exec -ti devjvm mvn clean package
-#keep the container running as it contains Maven cache data - uncomment next line if you prefer to kill it
-#docker rm -f devjvm
 
+#create other containers
 build_and_push $BOONTADATA_HOME/code/pyclientbase
 build_and_push $BOONTADATA_HOME/code/pyclient
 build_and_push $BOONTADATA_HOME/code/cassandra/base

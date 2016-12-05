@@ -20,12 +20,15 @@ tellandwaitnsecs()
 
 scenario_flink()
 {
+    timeType=$1
+    echo "starting Flink scenario with $timeType"
+
     echo "Initial content in the Cassandra database"
-    docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) from debug; select count(*) from raw_events; select count(*) from agg_events;"
+    docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) as nb_debug from debug; select count(*) as nb_rawevents from raw_events; select count(*) as nb_aggevents from agg_events;"
 
     echo "start Flink job"
-    docker exec -ti flink-master flink run -c io.boontadata.flink1.StreamingJob /workdir/flink1-0.1.jar -d &
-    tellandwaitnsecs 15
+    docker exec -ti flink-master flink run -d -c io.boontadata.flink1.StreamingJob /workdir/flink1-0.1.jar $timeType
+    tellandwaitnsecs 10
     docker exec -ti flink-master flink list
 
     echo "inject data"
@@ -44,25 +47,37 @@ scenario_flink()
     docker exec -ti flink-master flink list
 }
 
-scenario_truncate_cassandra_data()
+scenario_truncate()
 {
     echo "Initial content in the Cassandra database"
-    docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) from debug; select count(*) from raw_events; select count(*) from agg_events;"
+    docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) as nb_debug from debug; select count(*) as nb_rawevents from raw_events; select count(*) as nb_aggevents from agg_events;"
 
     echo "truncate"
     docker exec -ti cassandra3 cqlsh --execute "use boontadata; truncate table debug; truncate table raw_events; truncate table agg_events;"
 
     echo "new content in the Cassandra database"
-    docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) from debug; select count(*) from raw_events; select count(*) from agg_events;"
+    docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) as nb_debug from debug; select count(*) as nb_rawevents from raw_events; select count(*) as nb_aggevents from agg_events;"
     
 }
 
+scenario_test_cassandra()
+{
+    echo "get the first lines in Cassandra's debug table"
+    docker exec -ti cassandra3 cqlsh --execute "select * from boontadata.debug limit 5;"
+}
+
 case $scenario in
-    flink)
-        scenario_flink
+    flink1)
+        scenario_flink ProcessingTime
         ;;
-    truncate_cassandra_data)
-        scenario_truncate_cassandra_data
+    flink2)
+        scenario_flink EventTime
+        ;;
+    truncate)
+        scenario_truncate
+        ;;
+    test_cassandra)
+        scenario_test_cassandra
         ;;
     *)
         echo "scenario $scenario is not implemented (yet?)."

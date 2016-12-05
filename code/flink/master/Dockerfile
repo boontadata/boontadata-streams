@@ -6,10 +6,6 @@ FROM $BOONTADATA_DOCKER_REGISTRY/boontadata/flinkbase:0.1
 
 MAINTAINER boontadata <contact@boontadata.io>
 
-#RUN apt-get update && \
-#	apt-get install -y \
-#		maven
-
 WORKDIR /workdir
 ADD code/target/flink1-0.1.jar .
 

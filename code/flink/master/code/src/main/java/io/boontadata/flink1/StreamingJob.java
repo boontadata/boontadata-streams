@@ -57,7 +57,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  * http://flink.apache.org/docs/latest/apis/cli.html
  */
 public class StreamingJob {
-	private static final String VERSION = "161114b";
+	private static final String VERSION = "161205a";
 
 	private static final Integer FIELD_MESSAGE_ID = 0;
 	private static final Integer FIELD_DEVICE_ID = 1;
@@ -67,18 +67,32 @@ public class StreamingJob {
 	private static final Integer FIELD_MESAURE2 = 5; 
 
 	public static void main(String[] args) throws Exception {
+		String timeCharacteristic = "EventTime";
+		if (args.length > 0) {
+			timeCharacteristic = args[0];
+		}
+
 		// set up the streaming execution environment
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 		env.enableCheckpointing(5000); // checkpoint every 5000 msecs
-		env.setParallelism(2); // may change 4 into something else...
-		env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+		env.setParallelism(2);
+		
+		if (timeCharacteristic.equals("EventTime")) {
+			env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+		} else if (timeCharacteristic.equals("ProcessingTime")) {
+			env.setStreamTimeCharacteristic(TimeCharacteristic.ProcessingTime);
+		} else if (timeCharacteristic.equals("IngestionTime")) {
+			env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
+		}
 
+		Format windowTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		// properties about Kafka
 		Properties kProperties = new Properties();
 		kProperties.setProperty("bootstrap.servers", "ks1:9092,ks2:9092,ks3:9092");
 		kProperties.setProperty("zookeeper.connect", "zk1:2181");
 		kProperties.setProperty("group.id", "flinkGroup");
 
-		Format windowTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		// get data from Kafka, parse, and assign time and watermarks
 		DataStream<Tuple6<String, String, Long, String, Long, Double>> stream_parsed_with_timestamps = env 
@@ -208,7 +222,7 @@ public class StreamingJob {
 		stream_with_aggregations
 			.addSink(new CassandraTupleSink<Tuple5<String, String, String, Long, Double>>(
                                 "INSERT INTO boontadata.agg_events"
-                                        + " (window_time, device_id, category, m1_sum_flink_eventtime, m2_sum_flink_eventtime)"
+                                        + " (window_time, device_id, category, m1_sum_flink, m2_sum_flink)"
                                         + " VALUES (?, ?, ?, ?, ?);",
                                 new ClusterBuilder() {
                                         @Override
@@ -222,6 +236,6 @@ public class StreamingJob {
                                 }));
 
 		// execute program
-		env.execute("io.boontadata.flink1.StreamingJob v" + VERSION);
+		env.execute("io.boontadata.flink1.StreamingJob v" + VERSION + " (" + timeCharacteristic + ")");
 	}
 }
