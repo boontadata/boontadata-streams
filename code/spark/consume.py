@@ -7,9 +7,9 @@ from pyspark.streaming.kafka import KafkaUtils
 sc = SparkContext(appName="ReadKafkaWithPython")
 ssc = StreamingContext(sc, 2)
 
-# consume Kafka
-kstream = KafkaUtils.createDirectStream(ssc, ["sampletopic"], {"metadata.broker.list": "ks1:9092,ks2:9092,ks3:9092"})
-lines = kstream.map(lambda x: x)
+# consume Kafka as a key value stream
+kvStream = KafkaUtils.createDirectStream(ssc, ["sampletopic"], {"metadata.broker.list": "ks1:9092,ks2:9092,ks3:9092"})
+lines = kvStream.map(lambda x: x[1]) # take the value, leave the key that we don't need
 counts = lines.flatMap(lambda line: line.split("|")) \
     .map(lambda word: (word, 1)) \
     .reduceByKey(lambda a,b: a + b)

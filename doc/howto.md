@@ -136,7 +136,8 @@ On Azure Container Services with Swarm.
 Ssh to the main node. Then:
 ```
 export DOCKER_HOST=:2375
-
+cd $BOONTADATA_HOME/code
+. startscenarios.sh $scenario
 ```
 
 
@@ -157,6 +158,11 @@ in another terminal, consume from Spark:
 ```
 docker exec -ti sparkm1 spark-submit --packages org.apache.spark:spark-streaming-kafka-0-8-assembly_2.11:2.0.2 /workdir/consume.py
 ```
+or
+```
+docker exec -ti sparkm1 /workdir/start-consume.sh
+```
+
 
 ### run a Flink job
 
