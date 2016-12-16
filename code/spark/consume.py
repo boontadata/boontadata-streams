@@ -8,11 +8,11 @@ sc = SparkContext(appName="ReadKafkaWithPython")
 ssc = StreamingContext(sc, 2)
 
 # consume Kafka
-kvs = KafkaUtils.createDirectStream(ssc, ["sampletopic"], {"metadata.broker.list": "ks1:9092,ks2:9092,ks3:9092"})
-lines = kvs.map(lambda x: x[1])
+kstream = KafkaUtils.createDirectStream(ssc, ["sampletopic"], {"metadata.broker.list": "ks1:9092,ks2:9092,ks3:9092"})
+lines = kstream.map(lambda x: x)
 counts = lines.flatMap(lambda line: line.split("|")) \
     .map(lambda word: (word, 1)) \
-    .reduceByKey(lambda a, b: a+b)
+    .reduceByKey(lambda a,b: a + b)
 counts.pprint()
 
 ssc.start()

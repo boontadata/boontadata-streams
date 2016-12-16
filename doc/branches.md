@@ -7,6 +7,10 @@ Branch `master` is the first one, then the newest branches are at the top.
 
 This branch always has the latest stable and global version
 
+## spark1
+
+Add scenario with Spark Streaming
+
 ## flink2
 
 Prepare demos around the Flink scenario. 

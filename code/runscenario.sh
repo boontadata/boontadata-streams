@@ -68,9 +68,11 @@ scenario_test_cassandra()
 
 case $scenario in
     flink1)
+        scenario_truncate
         scenario_flink ProcessingTime
         ;;
     flink2)
+        scenario_truncate
         scenario_flink EventTime
         ;;
     truncate)

@@ -64,7 +64,7 @@ public class StreamingJob {
 	private static final Integer FIELD_TIMESTAMP = 2;
 	private static final Integer FIELD_CATEGORY = 3;
 	private static final Integer FIELD_MEASURE1 = 4;
-	private static final Integer FIELD_MESAURE2 = 5; 
+	private static final Integer FIELD_MEASURE2 = 5; 
 
 	public static void main(String[] args) throws Exception {
 		String timeCharacteristic = "EventTime";
@@ -115,7 +115,7 @@ public class StreamingJob {
 							Long.parseLong(splits[FIELD_TIMESTAMP]),
 							splits[FIELD_CATEGORY],
 							Long.parseLong(splits[FIELD_MEASURE1]),
-							Double.parseDouble(splits[FIELD_MESAURE2])
+							Double.parseDouble(splits[FIELD_MEASURE2])
 						);
 					}
 				}
@@ -205,7 +205,7 @@ public class StreamingJob {
 					for(Iterator<Tuple6<String, String, Long, String, Long, Double>> i=input.iterator(); i.hasNext();) {
                                                 Tuple6<String, String, Long, String, Long, Double> item = i.next();
 						sum_of_m1 += item.f4; // FIELD_MEASURE1
-						sum_of_m2 += item.f5; // FIELD_MESAURE2
+						sum_of_m2 += item.f5; // FIELD_MEASURE2
 					}
 
 					out.collect(new Tuple5<String, String, String, Long, Double>(

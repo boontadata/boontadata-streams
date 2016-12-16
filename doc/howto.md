@@ -155,7 +155,7 @@ docker exec -ti client1 bash /workdir/ingestfromdevices.sh 10
 
 in another terminal, consume from Spark:
 ```
-docker exec -ti spark1 /workdir/start-consume.sh
+docker exec -ti sparkm1 spark-submit --packages org.apache.spark:spark-streaming-kafka-0-8-assembly_2.11:2.0.2 /workdir/consume.py
 ```
 
 ### run a Flink job
@@ -187,6 +187,7 @@ role | url
 :----|:----
 Apache Flink Web Dashboard | http://0.0.0.0:34010/#/overview
 Apache Spark Web Dashboard | http://0.0.0.0:34110
+Apache Spark UI | http://0.0.0.0:34101
 
 ## clean volumes
 
