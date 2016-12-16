@@ -27,7 +27,7 @@ def main:
     # set up our contexts
     sc = CassandraSparkContext(conf=conf)
     sql = SQLContext(sc)
-    streamingContext = StreamingContext(sc, 5) # 5 second window
+    streamingContext = StreamingContext(sc, batchDuration=5)
 
     kafka_stream = KafkaUtils.createDirectStream(streamingContext,
         ["sampletopic"], 

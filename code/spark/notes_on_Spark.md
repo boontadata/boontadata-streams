@@ -25,6 +25,8 @@ cf <https://spark.apache.org/docs/1.3.1/streaming-kafka-integration.html>
 ## resources
 
 - <https://spark.apache.org/docs/1.3.1/api/python/pyspark.streaming.html#pyspark.streaming.kafka.KafkaUtils>
+- <https://github.com/apache/spark/tree/master/python/pyspark/streaming>
+
 
 ## sample code
 
