@@ -1,10 +1,3 @@
-#import pip
-
-#try:
-#    import pyspark_cassandra
-#except ImportError:
-#    pip.main(["install", "cassandra-driver"])
-#    import pyspark_cassandra
 import pyspark_cassandra
 import pyspark_cassandra.streaming
 from pyspark_cassandra import CassandraSparkContext
@@ -30,8 +23,8 @@ def main():
         .setMaster("spark://sparkm1:7077") \
         .set("spark.cassandra.connection.host", "cassandra1")
 
-    # set up our contexts
     sc = CassandraSparkContext(conf=conf) 
+    #sc = SparkContext(conf=conf) 
     streamingContext = StreamingContext(sc, batchDuration=5)
 
     kafka_stream = KafkaUtils.createDirectStream(streamingContext,
@@ -60,7 +53,11 @@ def main():
                 "m2_sum_spark": kv[1][1] }))
 
     aggregated.pprint()
+
     #aggregated.saveToCassandra("boontadata", "agg_events")
+
+    # the following line does not crash. It does not save anything either...
+    aggregated.transform(lambda time,rdd: rdd.saveToCassandra("boontadata", "agg_events"))
 
     streamingContext.start()
     streamingContext.awaitTermination()
