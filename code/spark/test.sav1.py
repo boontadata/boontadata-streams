@@ -29,9 +29,26 @@ def main():
         ["sampletopic"], 
         {"metadata.broker.list": "ks1:9092,ks2:9092,ks3:9092"})
 
-    parsed = kafka_stream.map(lambda event: parseEvent(event[1]))
+    parsed = kafka_stream.map(lambda k,v: parseEvent(v))
 
-    parsed.pprint()
+    # remove duplicates
+    parsedDeduplicated = parsed.map(lambda event: (event[FIELD_MESSAGE_ID],event)) \
+        .reduceByKey(lambda x,y: y)
+
+    aggregated = parsedDeduplicated.map(lambda event:
+        (
+            (event[FIELD_DEVICE_ID], event[FIELD_CATEGORY]),
+            (event[FIELD_MEASURE1], event[FIELD_MEASURE2])
+        )) \
+        .reduceByKey(lambda vN,vNplus1: (vN[0] + vNplus1[0], vN[1] + vNplus1[1])) \
+        .transform(lambda kvpair,time: {
+            "window_time": time,
+            "device_id": kvpair.key[0],
+            "category": kvpair.key[1], 
+            "m1_sum_spark": kvpair.value[0],
+            "m2_sum_spark": kvpair.value[1] })
+
+    aggregated.pprint()
     # sc.parallelize(aggregated) \
     #    .saveToCassandra("boontadata", "agg_events")
 
