@@ -25,7 +25,7 @@ def main:
         .set("spark.cassandra.connection.host", "cassandra1")
 
     # set up our contexts
-    sc = CassandraSparkContext(conf=conf)
+    sc = SparkContext(conf=conf) # also try with CassandraSparkContext
     sql = SQLContext(sc)
     streamingContext = StreamingContext(sc, batchDuration=5)
 
