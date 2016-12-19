@@ -27,6 +27,10 @@ def main():
     #sc = SparkContext(conf=conf) 
     streamingContext = StreamingContext(sc, batchDuration=5)
 
+    sc.parallelize([{"id":"testing1", "message": "from Spark 1"},
+        {"id":"testing2", "message": "from Spark 2"}]) \
+	.saveToCassandra("boontadata", "debug", {"id", "message"})
+
     kafka_stream = KafkaUtils.createDirectStream(streamingContext,
         ["sampletopic"], 
         {"metadata.broker.list": "ks1:9092,ks2:9092,ks3:9092"})
