@@ -1,12 +1,13 @@
 #import pip
 
 #try:
-#    from pyspark_cassandra import streaming
+#    import pyspark_cassandra
 #except ImportError:
 #    pip.main(["install", "cassandra-driver"])
-#    from pyspark_cassandra import streaming
-
-#from pyspark_cassandra import streaming
+#    import pyspark_cassandra
+import pyspark_cassandra
+import pyspark_cassandra.streaming
+from pyspark_cassandra import CassandraSparkContext
 
 from pyspark import SparkContext, SparkConf
 from pyspark.streaming import StreamingContext
@@ -30,7 +31,7 @@ def main():
         .set("spark.cassandra.connection.host", "cassandra1")
 
     # set up our contexts
-    sc = SparkContext(conf=conf) 
+    sc = CassandraSparkContext(conf=conf) 
     streamingContext = StreamingContext(sc, batchDuration=5)
 
     kafka_stream = KafkaUtils.createDirectStream(streamingContext,
