@@ -87,7 +87,9 @@ devjvmimage="$BOONTADATA_DOCKER_REGISTRY/boontadata/devjvm:0.1"
 docker pull $devjvmimage 
 docker run --name devjvm -d \
     -v $BOONTADATA_HOME/dockervolumesforcache/maven-m2:/root/.m2 \
-    -v $BOONTADATA_HOME/code/flink/master/code:/usr/src/dev \
+    -v $BOONTADATA_HOME/dockervolumesforcache/sbt-ivy2:/root/.ivy2 \
+    -v $BOONTADATA_HOME/dockervolumesforcache/sbt-sbt:/root/.sbt \
+    -v $BOONTADATA_HOME/code/spark/master/code:/usr/src/dev \
     -w /usr/src/dev $devjvmimage
 docker exec -ti devjvm /bin/bash
 
