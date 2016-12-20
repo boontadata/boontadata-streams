@@ -1,7 +1,3 @@
-import pyspark_cassandra
-import pyspark_cassandra.streaming
-from pyspark_cassandra import CassandraSparkContext
-
 from pyspark import SparkContext, SparkConf
 from pyspark.streaming import StreamingContext
 from pyspark.streaming.kafka import KafkaUtils
@@ -23,13 +19,8 @@ def main():
         .setMaster("spark://sparkm1:7077") \
         .set("spark.cassandra.connection.host", "cassandra1")
 
-    sc = CassandraSparkContext(conf=conf) 
-    #sc = SparkContext(conf=conf) 
+    sc = SparkContext(conf=conf) 
     streamingContext = StreamingContext(sc, batchDuration=5)
-
-    sc.parallelize([{"id":"testing1", "message": "from Spark 1"},
-        {"id":"testing2", "message": "from Spark 2"}]) \
-	.saveToCassandra("boontadata", "debug", {"id", "message"})
 
     kafka_stream = KafkaUtils.createDirectStream(streamingContext,
         ["sampletopic"], 
