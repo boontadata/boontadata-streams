@@ -58,25 +58,20 @@ object DirectKafkaAggregateEvents {
         reduceByKey(x,y => y)
     val aggregated = parsedDeduplicated.map(event =>
       (
-        (event[1][FIELD_DEVICE_ID], event[1][FIELD_CATEGORY]),
-        (int(event[1][FIELD_MEASURE1]), float(event[1][FIELD_MEASURE2]))
+        (event._2[FIELD_DEVICE_ID], event._2[FIELD_CATEGORY]),
+        (int(event._2[FIELD_MEASURE1]), float(event._2[FIELD_MEASURE2]))
       )).
         reduceByKey(vN,vNplus1 => (vN._1 + vNplus1._1, vN._2 + vNplus1._2)).
         transform(time,x => x.
-          map(kv => {
-            "window_time": time,
-            "device_id": kv[0][0],
-            "category": kv[0][1], 
-            "m1_sum_spark": kv[1][0],
-            "m2_sum_spark": kv[1][1] }))
+          map(kv => new {
+            val window_time = time
+            val device_id = kv._1._1
+            val category = kv._1._2 
+            val m1_sum_spark = kv._2._1
+            val m2_sum_spark = kv._2._2 }))
 
     aggregated.pprint()
-    aggregated.foreachRDD(lambda rdd: rdd.saveToCassandra("boontadata", "agg_events"))
-    
-
-
-    val wordCounts = words.map(x => (x, 1L)).reduceByKey(_ + _)
-    wordCounts.print()
+    aggregated.saveToCassandra("boontadata", "agg_events")
 
     // Start the computation
     ssc.start()

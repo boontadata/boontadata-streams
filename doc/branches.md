@@ -7,9 +7,13 @@ Branch `master` is the first one, then the newest branches are at the top.
 
 This branch always has the latest stable and global version
 
+## spark2
+
+Add scenario with Spark Streaming - in Scala this time
+
 ## spark1
 
-Add scenario with Spark Streaming
+Add scenario with Spark Streaming - that was a tentative in Python
 
 ## flink2
 
