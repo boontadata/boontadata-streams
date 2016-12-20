@@ -1,6 +1,9 @@
-import pyspark_cassandra
-import pyspark_cassandra.streaming
-from pyspark_cassandra import CassandraSparkContext
+import pip
+try:
+    from cassandra.cluster import Cluster
+except ImportError:
+    pip.main(["install", "cassandra-driver"])
+    from cassandra.cluster import Cluster
 
 from pyspark import SparkContext, SparkConf
 from pyspark.streaming import StreamingContext
@@ -17,14 +20,29 @@ FIELD_MEASURE2 = 5
 def parseEvent(message):
     return message.split('|')
 
+# NB: could not make the standard saveToCassandra method work in this context where Spark and Cassandra are in different clusters
+#please, contribute if you know how to enhance this
+def saveRowToCassandra(csession, e):
+    csession.execute("INSERT INTO agg_events "
+        + "(window_time, device_id, category, m1_sum_spark, m2_sum_spark) " \
+        + "VALUES ('{0}', '{1}', '{2}', {3}, {4})"
+        .format(
+            str(e['window_time']), 
+            str(e['device_id']), 
+            str(e['category']),
+            int(e['m1_sum_spark']),
+            float(e['m2_sum_spark']))
+
 def main():
+    #connect to Cassandra
+    ccluster=Cluster(['cassandra1', 'cassandra2', 'cassandra3'])
+    csession=ccluster.connect('boontadata')
+
+    #connect to Spark
     conf = SparkConf() \
         .setAppName("boontadata-streams-spark") \
-        .setMaster("spark://sparkm1:7077") \
-        .set("spark.cassandra.connection.host", "cassandra1")
-
-    sc = CassandraSparkContext(conf=conf) 
-    #sc = SparkContext(conf=conf) 
+        .setMaster("spark://sparkm1:7077")
+    sc = SparkContext(conf=conf) 
     streamingContext = StreamingContext(sc, batchDuration=5)
 
     sc.parallelize([{"id":"testing1", "message": "from Spark 1"},
@@ -58,13 +76,16 @@ def main():
 
     aggregated.pprint()
 
-    #aggregated.saveToCassandra("boontadata", "agg_events")
+    # save to Cassandra
+    aggregated.map(lambda e: saveRowToCassandra(csession, e))
 
-    # the following line does not crash. It does not save anything either...
-    aggregated.transform(lambda time,rdd: rdd.saveToCassandra("boontadata", "agg_events"))
+    #could not have the correct jars, or the correct architecture to make the following line working:
+    #aggregated.saveToCassandra("boontadata", "agg_events")
 
     streamingContext.start()
     streamingContext.awaitTermination()
+    ccluster.shutdown()
+    print("OK.")
 
 if __name__ == '__main__':
     main()

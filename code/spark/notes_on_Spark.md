@@ -26,6 +26,7 @@ cf <https://spark.apache.org/docs/1.3.1/streaming-kafka-integration.html>
 
 - <https://spark.apache.org/docs/1.3.1/api/python/pyspark.streaming.html#pyspark.streaming.kafka.KafkaUtils>
 - <https://github.com/apache/spark/tree/master/python/pyspark/streaming>
+- [spark-submit on Spark 2.0.2](http://spark.apache.org/docs/latest/submitting-applications.html)
 
 
 ## sample code
