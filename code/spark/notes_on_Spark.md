@@ -22,6 +22,16 @@ cf <https://spark.apache.org/docs/1.3.1/streaming-kafka-integration.html>
 > 
 > Note that one disadvantage of this approach is that it does not update offsets in Zookeeper, hence Zookeeper-based Kafka monitoring tools will not show progress. However, you can access the offsets processed by this approach in each batch and update Zookeeper yourself (see below).
 
+## TargetHolding
+
+The author of TargetHolding explains the difference between datastax saveToCassandra and his version
+
+<http://stackoverflow.com/questions/35414677/saving-data-back-into-cassandra-as-rdd/35417126>
+
+> You're using the Spark Cassandra Connector by Datastax which doesn't have support for python at the RDD / DStream level. Only Dataframes are supported. See the docs for more information.
+> 
+> I've authored a wrapper around the aforementioned connector: PySpark Cassandra. It is not feature complete with respect to the connector by Datastax, but a lot of stuff is there. Also, if performance is important, investigating the performance hit may be worth while.
+
 ## resources
 
 - <https://spark.apache.org/docs/1.3.1/api/python/pyspark.streaming.html#pyspark.streaming.kafka.KafkaUtils>
