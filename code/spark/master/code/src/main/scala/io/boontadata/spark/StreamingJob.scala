@@ -36,8 +36,6 @@ object DirectKafkaAggregateEvents {
       System.exit(1)
     }
 
-    Utility.setStreamingLogLevels()
-
     val Array(brokers, topics) = args
 
     // Create context with 2 second batch interval
@@ -52,8 +50,9 @@ object DirectKafkaAggregateEvents {
 
     // Get the lines, split them into words, count the words and print
     val lines = messages.map(tuple => tuple._2)
-    val parsed = lines.flatMap(_.split("|"))
-    val parsedDeduplicated = parsed.map(event => 
+    val parsed = lines.map(_.split("|"))
+    /*
+    val parsedDeduplicated = parsed.map(event =>  
       (event[FIELD_MESSAGE_ID],event)).
         reduceByKey(x,y => y)
     val aggregated = parsedDeduplicated.map(event =>
@@ -69,9 +68,11 @@ object DirectKafkaAggregateEvents {
             val category = kv._1._2 
             val m1_sum_spark = kv._2._1
             val m2_sum_spark = kv._2._2 }))
+    */
 
-    aggregated.pprint()
-    aggregated.saveToCassandra("boontadata", "agg_events")
+    parsed.print()
+    //aggregated.pprint()
+    //aggregated.saveToCassandra("boontadata", "agg_events")
 
     // Start the computation
     ssc.start()
