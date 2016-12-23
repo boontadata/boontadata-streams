@@ -36,7 +36,9 @@ object DirectKafkaAggregateEvents {
       System.exit(1)
     }
 
-    val Array(brokers, topics) = args
+    //val Array(brokers, topics) = args
+    val brokers="ks1,ks2,ks3"
+    val topics="sampletopic"
 
     // Create context with 2 second batch interval
     val sparkConf = new SparkConf().setAppName("boontadata-DirectKafkaAggregateEvents")
