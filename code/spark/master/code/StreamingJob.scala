@@ -1,4 +1,3 @@
-// scalastyle:off println
 package io.boontadata.spark.job1
 
 import org.apache.spark.sql.SparkSession
@@ -27,7 +26,7 @@ object DirectKafkaAggregateEvents {
 
     val spark = SparkSession
       .builder
-      .appName("StructuredKafkaWordCount")
+      .appName("boontadata-spark-job1")
       .getOrCreate()
 
     import spark.implicits._
