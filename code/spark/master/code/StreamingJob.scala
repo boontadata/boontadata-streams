@@ -9,7 +9,7 @@ object DirectKafkaAggregateEvents {
   val FIELD_CATEGORY = 3
   val FIELD_MEASURE1 = 4
   val FIELD_MEASURE2 = 5
-  val VERSION = "v161223a"
+  val VERSION = "v161223b"
 
   def main(args: Array[String]) {
     if (args.length < 2) {
@@ -32,6 +32,7 @@ object DirectKafkaAggregateEvents {
       .getOrCreate()
 
     import spark.implicits._
+    import org.apache.spark.sql.expressions.scalalang.typed._
 
     // Create DataSet representing the stream of input lines from kafka
     val lines = spark
@@ -43,13 +44,33 @@ object DirectKafkaAggregateEvents {
       .selectExpr("CAST(value AS STRING)")
       .as[String]
 
-    // Generate running word count
-    val wordCounts = lines.flatMap(_.split(" ")).groupBy("value").count()
+    // !!! this is pure pseudo code at this stage, inspired by some Scala code I could read previously!!
+    val parsedDeduplicated = lines
+      .flatMap(value: String => 
+        Array(
+          messageId: String, 
+          deviceId: String,
+          timestampAsString: String, 
+          category: String,
+          m1AsString: String,
+          m2AsString: String
+          ) = _.split("|"))
+      .map(
+        case timestampAsString: String => timestamp: Timestamp = Timestamp.parse(timestampAsString),
+        case mm1AsString1: String => m1: Long = Long.parse(mm1AsString1),
+        case m2AsString: String => m2: Float = Float.parse(m2AsString)
+      )
+      .groupBy(window($"timestamp", "5 seconds", "5 seconds"), $"messageId")
+      .agg(_) // get the latest one in the group to deduplicate
+
+    val aggregated = parsedDeduplicated
+      .groupBy(window($"timestamp", "5 seconds", "5 seconds"), $"deviceId", $"category")
+      .agg(typed.sum(_.m1), typed.sum(_.m2))
 
     // Start running the query that prints the running counts to the console
     val query = wordCounts.writeStream
-      .outputMode("complete")
-      .format("console")
+      .outputMode("append")
+      .format("cassandra")
       .start()
 
     query.awaitTermination()
