@@ -1,4 +1,3 @@
-// scalastyle:off println
 package io.boontadata.spark.job1
 
 import org.apache.spark.sql.SparkSession
@@ -10,24 +9,26 @@ object DirectKafkaAggregateEvents {
   val FIELD_CATEGORY = 3
   val FIELD_MEASURE1 = 4
   val FIELD_MEASURE2 = 5
+  val VERSION = "v161223a"
 
   def main(args: Array[String]) {
-    if (args.length < 3) {
+    if (args.length < 2) {
       System.err.println(s"""
         |Usage: DirectKafkaAggregateEvents <brokers> <subscribeType> <topics>
         |  <brokers> is a list of one or more Kafka brokers
-        |  <subscribeType> sample value: subscribe
         |  <topics> is a list of one or more kafka topics to consume from
         |
         """.stripMargin)
       System.exit(1)
     }
 
-    val Array(bootstrapServers, subscribeType, topics) = args
+    println(s"starting io.boontadata.spark.job1.DirectKafkaAggregateEvents ${VERSION}")
+
+    val Array(bootstrapServers, topics) = args
 
     val spark = SparkSession
       .builder
-      .appName("StructuredKafkaWordCount")
+      .appName("boontadata-spark-job1")
       .getOrCreate()
 
     import spark.implicits._
@@ -37,7 +38,7 @@ object DirectKafkaAggregateEvents {
       .readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", bootstrapServers)
-      .option(subscribeType, topics)
+      .option("subscribe", topics)
       .load()
       .selectExpr("CAST(value AS STRING)")
       .as[String]
@@ -55,3 +56,4 @@ object DirectKafkaAggregateEvents {
   }
 
 }
+

@@ -9,7 +9,7 @@
 #    --deploy-mode cluster \
 #    --files boontadata-spark-job1-assembly-0.1.jar
 #    boontadata-spark-job1-assembly-0.1.jar \ 
-#    ks1:9092,ks2:9092,ks3:9092 subscribe sampletopic
+#    ks1:9092,ks2:9092,ks3:9092 sampletopic
 
 #TODO: have to be able to submit to the whole cluster
-spark-submit boontadata-spark-job1-assembly-0.1.jar ks1:9092,ks2:9092,ks3:9092 subscribe sampletopic
+spark-submit boontadata-spark-job1-assembly-0.1.jar ks1:9092,ks2:9092,ks3:9092 sampletopic
