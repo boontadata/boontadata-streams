@@ -1,22 +1,8 @@
 // scalastyle:off println
 package io.boontadata.spark.job1
 
-import kafka.serializer.StringDecoder
+import org.apache.spark.sql.SparkSession
 
-import org.apache.spark.streaming._
-import org.apache.spark.streaming.kafka._
-import org.apache.spark.SparkConf
-
-/**
- * Consumes messages from one or more topics in Kafka and does wordcount.
- * Usage: DirectKafkaWordCount <brokers> <topics>
- *   <brokers> is a list of one or more Kafka brokers
- *   <topics> is a list of one or more kafka topics to consume from
- *
- * Example:
- *    $ bin/run-example streaming.DirectKafkaWordCount broker1-host:port,broker2-host:port \
- *    topic1,topic2
- */
 object DirectKafkaAggregateEvents {
   val FIELD_MESSAGE_ID = 0
   val FIELD_DEVICE_ID = 1
@@ -26,62 +12,46 @@ object DirectKafkaAggregateEvents {
   val FIELD_MEASURE2 = 5
 
   def main(args: Array[String]) {
-    if (args.length < 2) {
+    if (args.length < 3) {
       System.err.println(s"""
-        |Usage: DirectKafkaAggregateEvents <brokers> <topics>
+        |Usage: DirectKafkaAggregateEvents <brokers> <subscribeType> <topics>
         |  <brokers> is a list of one or more Kafka brokers
+        |  <subscribeType> sample value: subscribe
         |  <topics> is a list of one or more kafka topics to consume from
         |
         """.stripMargin)
       System.exit(1)
     }
 
-    val Array(brokers, topics) = args
+    val Array(bootstrapServers, subscribeType, topics) = args
 
-    // Create context with 2 second batch interval
-    val sparkConf = new SparkConf().setAppName("boontadata-DirectKafkaAggregateEvents")
-    val ssc = new StreamingContext(sparkConf, Seconds(5))
+    val spark = SparkSession
+      .builder
+      .appName("StructuredKafkaWordCount")
+      .getOrCreate()
 
-    // Create direct kafka stream with brokers and topics
-    val topicsSet = topics.split(",").toSet
-    val kafkaParams = Map[String, String]("metadata.broker.list" -> brokers)
-    val messages = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
-      ssc, kafkaParams, topicsSet)
+    import spark.implicits._
 
-    // Get the lines, split them into words, count the words and print
-    val lines = messages.map(tuple => tuple._2)
-    val parsed = lines.map(_.split("|"))
-    val parsedDeduplicated = parsed.map(event =>  
-      (event(FIELD_MESSAGE_ID),event))
-        .reduceByKey((x,y) => y)
-    /*
-    val aggregated = parsedDeduplicated.map(event =>
-      (
-        (event._2[FIELD_DEVICE_ID], event._2[FIELD_CATEGORY]),
-        (int(event._2[FIELD_MEASURE1]), float(event._2[FIELD_MEASURE2]))
-      ))
-        .reduceByKey(vN,vNplus1 => (vN._1 + vNplus1._1, vN._2 + vNplus1._2))
-        .transform(time,x => x
-          .map(kv => new {
-            val window_time = time
-            val device_id = kv._1._1
-            val category = kv._1._2 
-            val m1_sum_spark = kv._2._1
-            val m2_sum_spark = kv._2._2 }))
-    */
+    // Create DataSet representing the stream of input lines from kafka
+    val lines = spark
+      .readStream
+      .format("kafka")
+      .option("kafka.bootstrap.servers", bootstrapServers)
+      .option(subscribeType, topics)
+      .load()
+      .selectExpr("CAST(value AS STRING)")
+      .as[String]
 
-    parsed.print()
-    parsed.foreachRDD(_.map(case (x: String, y: String) => 
-      s"$x | $y").collect().foreach(println))
+    // Generate running word count
+    val wordCounts = lines.flatMap(_.split(" ")).groupBy("value").count()
 
-    parsedDeduplicated.print()
-    //parsed.foreachRDD(_.collect().foreach(println))
-    //aggregated.pprint()
-    //aggregated.saveToCassandra("boontadata", "agg_events")
+    // Start running the query that prints the running counts to the console
+    val query = wordCounts.writeStream
+      .outputMode("complete")
+      .format("console")
+      .start()
 
-    // Start the computation
-    ssc.start()
-    ssc.awaitTermination()
+    query.awaitTermination()
   }
+
 }
-// scalastyle:on println
