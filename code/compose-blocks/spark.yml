@@ -19,6 +19,8 @@
       - 34108:7006
       - 34109:7077
       - 34110:8080
+    volumes:
+      - /$BOONTADATA_HOME/dockervolumesforcache/sparkhdfs:/clustervolume
     networks:
       - boontadatanet
   sparkw1:
@@ -44,6 +46,8 @@
       - 34124:7016
       - 34125:8881
       - 34126:8081
+    volumes:
+      - /$BOONTADATA_HOME/dockervolumesforcache/sparkhdfs:/clustervolume
     networks:
       - boontadatanet
   sparkw2:
@@ -69,5 +73,7 @@
       - 34134:7016
       - 34135:8881
       - 34136:8081
+    volumes:
+      - /$BOONTADATA_HOME/dockervolumesforcache/sparkhdfs:/clustervolume
     networks:
       - boontadatanet

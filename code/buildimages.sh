@@ -71,7 +71,7 @@ build_and_push()
             build_jar "$BOONTADATA_HOME/code/flink/master/code/target/flink1-0.1.jar" "$BOONTADATA_HOME/code/flink/master/code" "mvn clean package"
             ;;
         "$BOONTADATA_DOCKER_REGISTRY/boontadata/sparkmaster")
-            build_jar "$BOONTADATA_HOME/code/spark/master/code/target/scala-2.11/boontadata-spark-job1_2.11-0.1.jar" "$BOONTADATA_HOME/code/spark/master/code" "sbt clean package"
+            build_jar "$BOONTADATA_HOME/code/spark/master/code/target/scala-2.11/boontadata-spark-job1-assembly-0.1.jar" "$BOONTADATA_HOME/code/spark/master/code" "sbt clean assembly"
             ;;
         *)
             ;;

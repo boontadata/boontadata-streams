@@ -36,9 +36,7 @@ object DirectKafkaAggregateEvents {
       System.exit(1)
     }
 
-    //val Array(brokers, topics) = args
-    val brokers="ks1,ks2,ks3"
-    val topics="sampletopic"
+    val Array(brokers, topics) = args
 
     // Create context with 2 second batch interval
     val sparkConf = new SparkConf().setAppName("boontadata-DirectKafkaAggregateEvents")
@@ -53,18 +51,18 @@ object DirectKafkaAggregateEvents {
     // Get the lines, split them into words, count the words and print
     val lines = messages.map(tuple => tuple._2)
     val parsed = lines.map(_.split("|"))
-    /*
     val parsedDeduplicated = parsed.map(event =>  
-      (event[FIELD_MESSAGE_ID],event)).
-        reduceByKey(x,y => y)
+      (event(FIELD_MESSAGE_ID),event))
+        .reduceByKey((x,y) => y)
+    /*
     val aggregated = parsedDeduplicated.map(event =>
       (
         (event._2[FIELD_DEVICE_ID], event._2[FIELD_CATEGORY]),
         (int(event._2[FIELD_MEASURE1]), float(event._2[FIELD_MEASURE2]))
-      )).
-        reduceByKey(vN,vNplus1 => (vN._1 + vNplus1._1, vN._2 + vNplus1._2)).
-        transform(time,x => x.
-          map(kv => new {
+      ))
+        .reduceByKey(vN,vNplus1 => (vN._1 + vNplus1._1, vN._2 + vNplus1._2))
+        .transform(time,x => x
+          .map(kv => new {
             val window_time = time
             val device_id = kv._1._1
             val category = kv._1._2 
@@ -73,6 +71,11 @@ object DirectKafkaAggregateEvents {
     */
 
     parsed.print()
+    parsed.foreachRDD(_.map(case (x: String, y: String) => 
+      s"$x | $y").collect().foreach(println))
+
+    parsedDeduplicated.print()
+    //parsed.foreachRDD(_.collect().foreach(println))
     //aggregated.pprint()
     //aggregated.saveToCassandra("boontadata", "agg_events")
 
