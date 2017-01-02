@@ -1,19 +1,30 @@
 package io.boontadata.spark.job1
 
 import kafka.serializer.StringDecoder
-
 import org.apache.spark.streaming._
 import org.apache.spark.streaming.kafka._
 import org.apache.spark.SparkConf
 
-object DirectKafkaAggregateEvents {
-  val FIELD_MESSAGE_ID = 0
-  val FIELD_DEVICE_ID = 1
-  val FIELD_TIMESTAMP = 2
-  val FIELD_CATEGORY = 3
-  val FIELD_MEASURE1 = 4
-  val FIELD_MEASURE2 = 5
+class IotEvent(
+  val messageId: String,
+  val deviceId: String,
+  val timestamp: String,
+  val category: String, 
+  val measure1: Int, 
+  val measure2: Float) extends Serializable {
+  override def toString(): String = {
+    "%s\t%s\t%s\t%s\t%s\t%s\n".format(messageId, deviceId, timestamp, category, measure1, measure2)
+  }
+}
 
+object IotEvent extends Serializable {
+  def fromString(in: String): IotEvent = {
+    val parts = in.split("\\|")
+    new IotEvent(parts(0), parts(1), parts(2), parts(3), parts(4).toInt, parts(5).toFloat)
+  }
+}
+
+object DirectKafkaAggregateEvents {
   def main(args: Array[String]) {
     if (args.length < 2) {
       System.err.println(s"""
@@ -37,13 +48,29 @@ object DirectKafkaAggregateEvents {
     val messages = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
       ssc, kafkaParams, topicsSet)
 
-    // Get the lines, split them into words, count the words and print
-    val lines = messages.map(tuple => tuple._2)
-    val parsed = lines.map(_.split("|"))
-    val parsedDeduplicated = parsed.map(event =>  
-      (event(FIELD_MESSAGE_ID),event))
-        .reduceByKey((x,y) => y)
+    val lines = messages.map(tuple => tuple._2) // Spark receives Kafka payload as the second field of the tuple
+    
+    val parsed = lines.map(IotEvent.fromString(_))
+    
+    val parsedDeduplicated = parsed
+      .map(event => (event.messageId, event))
+      .reduceByKey((vN, vNplus1) => vNplus1)
+      .map({ case (k: String, event: IotEvent) => event})
+
+    val aggregated = parsedDeduplicated
+      .map({ case event: IotEvent => ((event.deviceId, event.category), event)})
+      .reduceByKey({ case (vN: IotEvent, vNplus1: IotEvent) 
+        => 
+        val deviceId = vN.deviceId
+        val category = vN.category 
+        val timestamp = vN.timestamp
+        val sumM1 = vN.measure1 + vN.measure1
+        val sumM2 = vN.measure2 + vN.measure2
+        })
+      .map(tuple => tuple._2)
+
     /*
+   
     val aggregated = parsedDeduplicated.map(event =>
       (
         (event._2[FIELD_DEVICE_ID], event._2[FIELD_CATEGORY]),
@@ -59,11 +86,13 @@ object DirectKafkaAggregateEvents {
             val m2_sum_spark = kv._2._2 }))
     */
 
-    parsed.print()
-    parsed.foreachRDD(_.map(case (x: String, y: String) => 
-      s"$x | $y").collect().foreach(println))
+    aggregated.print()
 
-    parsedDeduplicated.print()
+    /*
+
+    */
+
+    //parsedDeduplicated.print()
     //parsed.foreachRDD(_.collect().foreach(println))
     //aggregated.pprint()
     //aggregated.saveToCassandra("boontadata", "agg_events")
