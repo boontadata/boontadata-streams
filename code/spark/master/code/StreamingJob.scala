@@ -36,7 +36,7 @@ object IotEventFactory {
 }
 
 class Aggregate(
-  val window_time: Long,
+  val window_time: String,
   val device_id: String,
   val category: String, 
   val m1_sum_spark: Int, 
@@ -59,6 +59,7 @@ object DirectKafkaAggregateEvents {
     }
 
     val Array(brokers, topics) = args
+    val windowTimeFormat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     // Create context with 2 second batch interval
     val sparkConf = new SparkConf()
@@ -86,10 +87,16 @@ object DirectKafkaAggregateEvents {
       .reduceByKey(
         (vN, vNplus1)
         => 
-        IotEventFactory.fromParts("", vN.deviceId, "", vN.category, vN.measure1 + vN.measure1, vN.measure2 + vN.measure2))
+        IotEventFactory.fromParts("", vN.deviceId, "", vN.category, 
+          vN.measure1 + vNplus1.measure1, 
+          vN.measure2 + vNplus1.measure2))
       .transform((rdd, time) => rdd
         .map({ case(k, e) => new Aggregate(
-          time.milliseconds, e.deviceId, e.category, e.measure1, e.measure2)}))
+          windowTimeFormat.format(new java.util.Date(time.milliseconds)), 
+          e.deviceId, 
+          e.category, 
+          e.measure1, 
+          e.measure2)}))
 
     aggregated.print()
 
