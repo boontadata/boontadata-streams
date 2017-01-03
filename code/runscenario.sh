@@ -56,11 +56,8 @@ scenario_spark()
     docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) as nb_debug from debug; select count(*) as nb_rawevents from raw_events; select count(*) as nb_aggevents from agg_events;"
 
     echo "start Spark job"
-    docker exec -ti sparkm1 spark-submit boontadata-spark-job1-assembly-0.1.jar ks1:9092,ks2:9092,ks3:9092 sampletopic
-
-    #looking for the app id. A line should look like: 
-    #17/01/03 09:32:31 INFO cluster.StandaloneSchedulerBackend: Connected to Spark cluster with app ID app-20170103093231-0004
-
+    docker exec -ti sparkm1 bash -c ". start-job.sh" | tee /tmp/spark-submission.txt
+    sparksubmissionid=`grep submissionId /tmp/spark-submission.txt | awk '{print $3}' | cut -d'"' -f 2`
     tellandwaitnsecs 15
     
     echo "inject data"
@@ -73,10 +70,8 @@ scenario_spark()
     docker exec -ti client1 python /workdir/compare.py
 
     echo "kill the Spark job"
-    flinkjobid=`docker exec -ti flink-master flink list | grep io.boontadata.flink1.StreamingJob | awk '{print $4}'`
-    echo "Flink job id is $flinkjobid"
-    docker exec -ti flink-master flink cancel $flinkjobid
-    docker exec -ti flink-master flink list
+    echo "Spark submission id is $sparksubmissionid"
+    docker exec -ti spark-submit --kill $sparksubmissionid --master spark://sparkm1:6066
 }
 
 scenario_truncate()
