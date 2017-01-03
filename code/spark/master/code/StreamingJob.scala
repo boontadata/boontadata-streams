@@ -1,5 +1,7 @@
 package io.boontadata.spark.job1
 
+import com.datastax.spark.connector.streaming._
+import com.datastax.spark.connector.SomeColumns
 import kafka.serializer.StringDecoder
 import org.apache.spark.streaming._
 import org.apache.spark.streaming.kafka._
@@ -59,7 +61,9 @@ object DirectKafkaAggregateEvents {
     val Array(brokers, topics) = args
 
     // Create context with 2 second batch interval
-    val sparkConf = new SparkConf().setAppName("boontadata-DirectKafkaAggregateEvents")
+    val sparkConf = new SparkConf()
+      .setAppName("boontadata-DirectKafkaAggregateEvents")
+      .set("spark.cassandra.connection.host", "cassandra1,cassandra2,cassandra3")
     val ssc = new StreamingContext(sparkConf, Seconds(5))
 
     // Create direct kafka stream with brokers and topics
@@ -89,10 +93,8 @@ object DirectKafkaAggregateEvents {
 
     aggregated.print()
 
-    //parsedDeduplicated.print()
-    //parsed.foreachRDD(_.collect().foreach(println))
-    //aggregated.pprint()
-    //aggregated.saveToCassandra("boontadata", "agg_events")
+    aggregated.saveToCassandra("boontadata", "agg_events", 
+      SomeColumns("device_id", "category", "window_time", "m1_sum_spark", "m2_sum_spark"))
 
     // Start the computation
     ssc.start()
