@@ -47,6 +47,38 @@ scenario_flink()
     docker exec -ti flink-master flink list
 }
 
+scenario_spark()
+{
+    timeType=$1
+    echo "starting Flink scenario with $timeType"
+
+    echo "Initial content in the Cassandra database"
+    docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) as nb_debug from debug; select count(*) as nb_rawevents from raw_events; select count(*) as nb_aggevents from agg_events;"
+
+    echo "start Spark job"
+    docker exec -ti sparkm1 spark-submit boontadata-spark-job1-assembly-0.1.jar ks1:9092,ks2:9092,ks3:9092 sampletopic
+
+    #looking for the app id. A line should look like: 
+    #17/01/03 09:32:31 INFO cluster.StandaloneSchedulerBackend: Connected to Spark cluster with app ID app-20170103093231-0004
+
+    tellandwaitnsecs 15
+    
+    echo "inject data"
+    docker exec -ti client1 python /workdir/ingest.py
+
+    echo "wait for Spark to finish ingesting"
+    tellandwaitnsecs 10
+
+    echo "get the result"
+    docker exec -ti client1 python /workdir/compare.py
+
+    echo "kill the Spark job"
+    flinkjobid=`docker exec -ti flink-master flink list | grep io.boontadata.flink1.StreamingJob | awk '{print $4}'`
+    echo "Flink job id is $flinkjobid"
+    docker exec -ti flink-master flink cancel $flinkjobid
+    docker exec -ti flink-master flink list
+}
+
 scenario_truncate()
 {
     echo "Initial content in the Cassandra database"
@@ -74,6 +106,10 @@ case $scenario in
     flink2)
         scenario_truncate
         scenario_flink EventTime
+        ;;
+    spark1)
+        scenario_truncate
+        scenario_spark ProcessingTime
         ;;
     truncate)
         scenario_truncate

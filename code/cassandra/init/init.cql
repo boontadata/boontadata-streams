@@ -41,3 +41,8 @@ CREATE TABLE IF NOT EXISTS boontadata.debug (
 INSERT INTO boontadata.debug 
     (id, message) 
     VALUES ('sample-1', 'this is a sample debug message');
+
+CREATE TABLE IF NOT EXISTS boontadata.config (
+    key text,
+    value text,
+    PRIMARY KEY (key));
