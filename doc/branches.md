@@ -7,6 +7,20 @@ Branch `master` is the first one, then the newest branches are at the top.
 
 This branch always has the latest stable and global version
 
+## spark3
+
+Add scenario with Spark Streaming - in Scala, with Spark 1.6 means instead of Spark 2, even if the engine is Spark 2.
+As explained in branch Saprk 2, Spark 2 streaming is still in alpha.
+
+## spark2
+
+Add scenario with Spark Streaming - in Scala this time
+tried to implement <http://spark.apache.org/docs/latest/structured-streaming-programming-guide.html>, but it was too early: <http://stackoverflow.com/questions/41303037/spark-2-0-2-sql-streaming-failed-to-find-data-source-kafka>.
+
+## spark1
+
+Add scenario with Spark Streaming - that was a tentative in Python
+
 ## flink2
 
 Prepare demos around the Flink scenario. 

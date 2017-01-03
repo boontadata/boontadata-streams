@@ -16,6 +16,40 @@ then
     return 1
 fi
 
+build_jar()
+{
+    jarfile=$1
+    sourcespath=$2
+    jvmbuildcommand=$3
+
+    echo "building $jarfile if needed"
+
+    if test -e $jarfile
+    then
+        if test $reset = "reset"
+        then
+            echo "resetting $jarfile"
+            rm $jarfile
+        else
+            echo "will not rebuild $jarfile which already exists"
+        fi
+    fi
+
+    if test ! -e $jarfile
+    then
+        echo "will build $jarfile"
+        devjvmimage="$BOONTADATA_DOCKER_REGISTRY/boontadata/devjvm:0.1"
+        docker run --name devjvm -d \
+            -v $BOONTADATA_HOME/dockervolumesforcache/maven-m2:/root/.m2 \
+            -v $BOONTADATA_HOME/dockervolumesforcache/sbt-ivy2:/root/.ivy2 \
+            -v $BOONTADATA_HOME/dockervolumesforcache/sbt-sbt:/root/.sbt \
+            -v $sourcespath:/usr/src/dev \
+            -w /usr/src/dev $devjvmimage
+        docker exec -ti devjvm $jvmbuildcommand
+        docker rm -f devjvm
+    fi
+}
+
 build_and_push()
 {
     folderpath=$1
@@ -34,30 +68,10 @@ build_and_push()
     #special build steps
     case $tagname in
         "$BOONTADATA_DOCKER_REGISTRY/boontadata/flinkmaster")
-            jarfile="$BOONTADATA_HOME/code/flink/master/code/target/flink1-0.1.jar"
-            if test -e $jarfile
-            then
-                if test $reset = "reset"
-                then
-                    echo "resetting $jarfile"
-                    rm $jarfile
-                else
-                    echo "will not rebuild $jarfile which already exists"
-                fi
-            fi
-
-            if test ! -e $jarfile
-            then
-                echo "will build $jarfile"
-                devjvmimage="$BOONTADATA_DOCKER_REGISTRY/boontadata/devjvm:0.1"
-                echo "will compile flink job"
-                docker run --name devjvm -d \
-                    -v $BOONTADATA_HOME/dockervolumesforcache/maven-m2:/root/.m2 \
-                    -v $BOONTADATA_HOME/code/flink/master/code:/usr/src/dev \
-                    -w /usr/src/dev $devjvmimage
-                docker exec -ti devjvm mvn clean package
-                docker rm -f devjvm
-            fi
+            build_jar "$BOONTADATA_HOME/code/flink/master/code/target/flink1-0.1.jar" "$BOONTADATA_HOME/code/flink/master/code" "mvn clean package"
+            ;;
+        "$BOONTADATA_DOCKER_REGISTRY/boontadata/sparkmaster")
+            build_jar "$BOONTADATA_HOME/code/spark/master/code/target/scala-2.11/boontadata-spark-job1-assembly-0.1.jar" "$BOONTADATA_HOME/code/spark/master/code" "sbt clean assembly"
             ;;
         *)
             ;;
@@ -92,7 +106,9 @@ build_and_push $BOONTADATA_HOME/code/flink/base
 build_and_push $BOONTADATA_HOME/code/flink/master
 build_and_push $BOONTADATA_HOME/code/flink/worker
 build_and_push $BOONTADATA_HOME/code/kafka-docker
-build_and_push $BOONTADATA_HOME/code/spark
+build_and_push $BOONTADATA_HOME/code/spark/base
+build_and_push $BOONTADATA_HOME/code/spark/master
+build_and_push $BOONTADATA_HOME/code/spark/worker
 build_and_push $BOONTADATA_HOME/code/zookeeper
 
 docker images

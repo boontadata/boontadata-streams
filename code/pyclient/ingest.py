@@ -130,7 +130,7 @@ def main():
         if r.r1 < 0.01 :
             # late arrival, out of order
             devicetime=int(sendtime-basedelay-int(r.r2*1000*300)) #may add up to 300 additional seconds to the base delay
-            patterncode='d<s' # devicetime < sendtime
+            patterncode='late' # devicetime < sendtime
         else:
             devicetime=sendtime
         df.loc[i, 'devicetime'] = devicetime

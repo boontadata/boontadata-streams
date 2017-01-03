@@ -1,5 +1,5 @@
   sparkm1:
-    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/spark:0.1
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/sparkmaster:0.1
     container_name: sparkm1
     hostname: sparkm1
     command: spark-class org.apache.spark.deploy.master.Master -h sparkm1
@@ -19,10 +19,12 @@
       - 34108:7006
       - 34109:7077
       - 34110:8080
+    volumes:
+      - /$BOONTADATA_HOME/dockervolumesforcache/sparkhdfs:/clustervolume
     networks:
       - boontadatanet
   sparkw1:
-    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/spark:0.1
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/sparkworker:0.1
     container_name: sparkw1
     hostname: sparkw1
     command: spark-class org.apache.spark.deploy.worker.Worker spark://sparkm1:7077
@@ -44,10 +46,12 @@
       - 34124:7016
       - 34125:8881
       - 34126:8081
+    volumes:
+      - /$BOONTADATA_HOME/dockervolumesforcache/sparkhdfs:/clustervolume
     networks:
       - boontadatanet
   sparkw2:
-    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/spark:0.1
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/sparkworker:0.1
     container_name: sparkw2
     hostname: sparkw2
     command: spark-class org.apache.spark.deploy.worker.Worker spark://sparkm1:7077
@@ -69,5 +73,7 @@
       - 34134:7016
       - 34135:8881
       - 34136:8081
+    volumes:
+      - /$BOONTADATA_HOME/dockervolumesforcache/sparkhdfs:/clustervolume
     networks:
       - boontadatanet

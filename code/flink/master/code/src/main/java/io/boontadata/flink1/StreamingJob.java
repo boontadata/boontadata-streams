@@ -57,14 +57,14 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  * http://flink.apache.org/docs/latest/apis/cli.html
  */
 public class StreamingJob {
-	private static final String VERSION = "161205a";
+	private static final String VERSION = "170103a";
 
 	private static final Integer FIELD_MESSAGE_ID = 0;
 	private static final Integer FIELD_DEVICE_ID = 1;
 	private static final Integer FIELD_TIMESTAMP = 2;
 	private static final Integer FIELD_CATEGORY = 3;
 	private static final Integer FIELD_MEASURE1 = 4;
-	private static final Integer FIELD_MESAURE2 = 5; 
+	private static final Integer FIELD_MEASURE2 = 5; 
 
 	public static void main(String[] args) throws Exception {
 		String timeCharacteristic = "EventTime";
@@ -115,7 +115,7 @@ public class StreamingJob {
 							Long.parseLong(splits[FIELD_TIMESTAMP]),
 							splits[FIELD_CATEGORY],
 							Long.parseLong(splits[FIELD_MEASURE1]),
-							Double.parseDouble(splits[FIELD_MESAURE2])
+							Double.parseDouble(splits[FIELD_MEASURE2])
 						);
 					}
 				}
@@ -205,7 +205,7 @@ public class StreamingJob {
 					for(Iterator<Tuple6<String, String, Long, String, Long, Double>> i=input.iterator(); i.hasNext();) {
                                                 Tuple6<String, String, Long, String, Long, Double> item = i.next();
 						sum_of_m1 += item.f4; // FIELD_MEASURE1
-						sum_of_m2 += item.f5; // FIELD_MESAURE2
+						sum_of_m2 += item.f5; // FIELD_MEASURE2
 					}
 
 					out.collect(new Tuple5<String, String, String, Long, Double>(
@@ -222,7 +222,7 @@ public class StreamingJob {
 		stream_with_aggregations
 			.addSink(new CassandraTupleSink<Tuple5<String, String, String, Long, Double>>(
                                 "INSERT INTO boontadata.agg_events"
-                                        + " (window_time, device_id, category, m1_sum_flink, m2_sum_flink)"
+                                        + " (window_time, device_id, category, m1_sum_downstream, m2_sum_downstream)"
                                         + " VALUES (?, ?, ?, ?, ?);",
                                 new ClusterBuilder() {
                                         @Override

@@ -87,7 +87,9 @@ devjvmimage="$BOONTADATA_DOCKER_REGISTRY/boontadata/devjvm:0.1"
 docker pull $devjvmimage 
 docker run --name devjvm -d \
     -v $BOONTADATA_HOME/dockervolumesforcache/maven-m2:/root/.m2 \
-    -v $BOONTADATA_HOME/code/flink/master/code:/usr/src/dev \
+    -v $BOONTADATA_HOME/dockervolumesforcache/sbt-ivy2:/root/.ivy2 \
+    -v $BOONTADATA_HOME/dockervolumesforcache/sbt-sbt:/root/.sbt \
+    -v $BOONTADATA_HOME/code/spark/master/code:/usr/src/dev \
     -w /usr/src/dev $devjvmimage
 docker exec -ti devjvm /bin/bash
 
@@ -136,7 +138,8 @@ On Azure Container Services with Swarm.
 Ssh to the main node. Then:
 ```
 export DOCKER_HOST=:2375
-
+cd $BOONTADATA_HOME/code
+. startscenarios.sh $scenario
 ```
 
 
@@ -155,8 +158,13 @@ docker exec -ti client1 bash /workdir/ingestfromdevices.sh 10
 
 in another terminal, consume from Spark:
 ```
-docker exec -ti spark1 /workdir/start-consume.sh
+docker exec -ti sparkm1 spark-submit --packages org.apache.spark:spark-streaming-kafka-0-8-assembly_2.11:2.0.2 /workdir/consume.py
 ```
+or
+```
+docker exec -ti sparkm1 /workdir/start-consume.sh
+```
+
 
 ### run a Flink job
 
@@ -187,6 +195,7 @@ role | url
 :----|:----
 Apache Flink Web Dashboard | http://0.0.0.0:34010/#/overview
 Apache Spark Web Dashboard | http://0.0.0.0:34110
+Apache Spark UI | http://0.0.0.0:34101
 
 ## clean volumes
 

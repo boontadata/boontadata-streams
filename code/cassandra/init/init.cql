@@ -24,12 +24,10 @@ CREATE TABLE IF NOT EXISTS boontadata.agg_events (
     category text,
     m1_sum_ingest_sendtime bigint,
     m1_sum_ingest_devicetime bigint,
-    m1_sum_spark bigint,
-    m1_sum_flink bigint,
+    m1_sum_downstream bigint,
     m2_sum_ingest_sendtime double,
     m2_sum_ingest_devicetime double,
-    m2_sum_spark double,
-    m2_sum_flink double,
+    m2_sum_downstream double,
     PRIMARY KEY (device_id, category, window_time))
     WITH CLUSTERING ORDER BY (category ASC, window_time ASC);
 
