@@ -71,7 +71,7 @@ scenario_spark()
 
     echo "kill the Spark job"
     echo "Spark submission id is $sparksubmissionid"
-    docker exec -ti spark-submit --kill $sparksubmissionid --master spark://sparkm1:6066
+    docker exec -ti sparkm1 bash -c "spark-submit --kill $sparksubmissionid --master spark://sparkm1:6066"
 }
 
 scenario_truncate()

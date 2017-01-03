@@ -1,6 +1,5 @@
 package io.boontadata.spark.job1
 
-import com.datastax.spark.connector._
 import com.datastax.spark.connector.streaming._
 import com.datastax.spark.connector.SomeColumns
 import kafka.serializer.StringDecoder
@@ -106,10 +105,6 @@ object DirectKafkaAggregateEvents {
 
     // Start the computation
     ssc.start()
-
-    val configCollection = ssc.sc.parallelize(Seq(("spark-app-id", ssc.sc.applicationId)))
-    configCollection.saveToCassandra("boontadata", "config", SomeColumns("key", "value"))
-
     ssc.awaitTermination()
   }
 }
