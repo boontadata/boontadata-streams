@@ -40,10 +40,10 @@ class Aggregate(
   val window_time: String,
   val device_id: String,
   val category: String, 
-  val m1_sum_spark: Int, 
-  val m2_sum_spark: Float) extends Serializable {
+  val m1_sum_downstream: Int, 
+  val m2_sum_downstream: Float) extends Serializable {
   override def toString(): String = {
-    "%s\t%s\t%s\t%s\t%s\n".format(window_time, device_id, category, m1_sum_spark, m2_sum_spark)
+    "%s\t%s\t%s\t%s\t%s\n".format(window_time, device_id, category, m1_sum_downstream, m2_sum_downstream)
   }
 }
 
@@ -102,7 +102,7 @@ object DirectKafkaAggregateEvents {
     aggregated.print()
 
     aggregated.saveToCassandra("boontadata", "agg_events", 
-      SomeColumns("device_id", "category", "window_time", "m1_sum_spark", "m2_sum_spark"))
+      SomeColumns("device_id", "category", "window_time", "m1_sum_downstream", "m2_sum_downstream"))
 
     // Start the computation
     ssc.start()

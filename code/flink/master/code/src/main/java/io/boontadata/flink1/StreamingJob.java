@@ -57,7 +57,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  * http://flink.apache.org/docs/latest/apis/cli.html
  */
 public class StreamingJob {
-	private static final String VERSION = "161205a";
+	private static final String VERSION = "170103a";
 
 	private static final Integer FIELD_MESSAGE_ID = 0;
 	private static final Integer FIELD_DEVICE_ID = 1;
@@ -222,7 +222,7 @@ public class StreamingJob {
 		stream_with_aggregations
 			.addSink(new CassandraTupleSink<Tuple5<String, String, String, Long, Double>>(
                                 "INSERT INTO boontadata.agg_events"
-                                        + " (window_time, device_id, category, m1_sum_flink, m2_sum_flink)"
+                                        + " (window_time, device_id, category, m1_sum_downstream, m2_sum_downstream)"
                                         + " VALUES (?, ?, ?, ?, ?);",
                                 new ClusterBuilder() {
                                         @Override
