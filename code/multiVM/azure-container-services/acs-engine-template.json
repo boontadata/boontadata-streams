@@ -1,0 +1,27 @@
+{
+    "apiVersion": "vlabs",
+    "properties": {
+        "orchestratorProfile": { "orchestratorType": "Swarm" },
+        "masterProfile": {
+            "count": 1,
+            "dnsPrefix": "boontadataswarm",
+            "vmSize": "Standard_D2_v2",
+            "vnetSubnetId": "/subscriptions/b4ed3d75-dd0d-4660-aacd-7cb2d1bed125/resourceGroups/a_170116c_acs/providers/Microsoft.Network/virtualNetworks/vNet170116c/subnets/acs-master-nodes",
+            "firstConsecutiveStaticIP": "10.100.0.5"
+        },
+        "agentPoolProfiles": [
+            {
+                "name": "agentprivate",
+                "count": 4,
+                "vmSize": "Standard_D2_v2",
+                "vnetSubnetId": "/subscriptions/b4ed3d75-dd0d-4660-aacd-7cb2d1bed125/resourceGroups/a_170116c_acs/providers/Microsoft.Network/virtualNetworks/vNet170116c/subnets/acs-private-agent-nodes"
+            }
+        ],
+        "linuxProfile": {
+            "adminUsername": "benjguin",
+            "ssh": { "publicKeys": [ { "keyData": 
+                "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFc3JmK8S/wZYej6LGl3yuwea6geBt2aAR++sT/R78Clb5U9nLHxe5cx9bxtx+D/4iDTv9i5Wh3bAkIqHMiOBuKHuyeKEmd5LvuEgxegRLK6soUhb3gIO0I7lmgn+i3u4hPXt/B8/b1lFxCRJQ5DeOUw6q8NHBvwHC+ydHxGW8LGH+WtipBjHq/1uzwV/h+l4+HNJxcYUzrn1doMrOGSfMvPOkWqYNlvf/wYbV3OnyqAbcbkkxrKxlwry06IE5Swg862tspDrd6VCMXH0KdpvTsw3z2dbg2pKGCTfIRpXzSMSdCeSYAUPf096AaKebMnbVnDcI4XVqmjWI4eHY6K33 benjamin@3-4.fr"
+            } ] }
+        }
+    }
+}
