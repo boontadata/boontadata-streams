@@ -1,0 +1,234 @@
+#This is a test file used to test on an ACS Swarm cluster
+#it should be generalized afterwards with variables and compose blocks
+version: '2'
+services:
+  zookeeper:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/zookeeper:0.1
+    container_name: zk1
+    hostname: zk1
+    ports:
+      - "34050:2181"
+      - "34051:2888"
+      - "34052:3888"
+      - "34053:22"
+    networks:
+      - boontadatanet
+    environment:
+      - "constraint:node==swarm-agent-1F5B3375000003"
+  kafka1:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/kafka:0.1
+    container_name: ks1
+    hostname: ks1
+    ports:
+      - "34001:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      "constraint:node==swarm-agent-1F5B3375000003":
+      KAFKA_ADVERTISED_HOST_NAME: $HOSTIP
+      KAFKA_ZOOKEEPER_CONNECT: zk1:2181
+      KAFKA_BROKER_ID: 1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - boontadatanet
+  kafka2:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/kafka:0.1
+    container_name: ks2
+    hostname: ks2
+    ports:
+      - "34002:9092"
+    depends_on:
+      - zookeeper
+      - kafka1
+    environment:
+      "constraint:node==swarm-agent-1F5B3375000003":
+      KAFKA_ADVERTISED_HOST_NAME: $HOSTIP
+      KAFKA_ZOOKEEPER_CONNECT: zk1:2181
+      KAFKA_BROKER_ID: 2
+    volumes:
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - boontadatanet
+  kafka3:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/kafka:0.1
+    container_name: ks3
+    hostname: ks3
+    ports:
+      - "34003:9092"
+    depends_on:
+      - zookeeper
+      - kafka1
+      - kafka2
+    environment:
+      "constraint:node==swarm-agent-1F5B3375000003":
+      KAFKA_ADVERTISED_HOST_NAME: $HOSTIP
+      KAFKA_CREATE_TOPICS: "sampletopic:16:3"
+      KAFKA_ZOOKEEPER_CONNECT: zk1:2181
+      KAFKA_BROKER_ID: 3
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - boontadatanet
+  pyclient:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/pyclient:0.1
+    container_name: client1
+    hostname: client1
+    environment:
+      KAFKA_ADVERTISED_SERVERS: "ks1:9092,ks2:9092,ks3:9092"
+    networks:
+      - boontadatanet
+  cassandra1:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/cassandra:0.2
+    container_name: cassandra1
+    hostname: cassandra1
+    restart: on-failure:10
+    ports:
+      - "34060:7000"
+      - "34061:7001"
+      - "34062:7199"
+      - "34063:9042"
+      - "34064:9160"
+    environment:
+      MAX_HEAP_SIZE: "2G"
+      HEAP_NEWSIZE: "256M"
+      CASSANDRA_BROADCAST_ADDRESS: "cassandra1"
+    networks:
+      - boontadatanet
+  cassandra2:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/cassandra:0.2
+    container_name: cassandra2
+    hostname: cassandra2
+    restart: on-failure:10
+    ports:
+      - "34070:7000"
+      - "34071:7001"
+      - "34072:7199"
+      - "34073:9042"
+      - "34074:9160"
+    depends_on:
+      - cassandra1
+    environment:
+      MAX_HEAP_SIZE: "2G"
+      HEAP_NEWSIZE: "256M"
+      CASSANDRA_BROADCAST_ADDRESS: "cassandra2"
+      CASSANDRA_SEEDS: "cassandra1"
+    networks:
+      - boontadatanet
+  cassandra3:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/cassandra:0.2
+    container_name: cassandra3
+    hostname: cassandra3
+    restart: on-failure:10
+    ports:
+      - "34080:7000"
+      - "34081:7001"
+      - "34082:7199"
+      - "34083:9042"
+      - "34084:9160"
+    depends_on:
+      - cassandra1
+      - cassandra2
+    environment:
+      MAX_HEAP_SIZE: "2G"
+      HEAP_NEWSIZE: "256M"
+      CASSANDRA_SEEDS: "cassandra1,cassandra2"
+    networks:
+      - boontadatanet
+  cassandrainit:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/cassandrainit:0.2
+    container_name: cinit
+    hostname: cinit
+    restart: on-failure:5
+    depends_on:
+      - cassandra1
+      - cassandra2
+      - cassandra3
+    networks:
+      - boontadatanet
+  sparkm1:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/sparkmaster:0.1
+    container_name: sparkm1
+    hostname: sparkm1
+    command: spark-class org.apache.spark.deploy.master.Master -h sparkm1
+    environment:
+      "constraint:node==swarm-agent-1F5B3375000002":
+      MASTER: spark://sparkm1:7077
+      SPARK_CONF_DIR: /conf
+      SPARK_PUBLIC_DNS: localhost
+      KAFKA_ADVERTISED_SERVERS: "ks1:9092,ks2:9092,ks3:9092"
+    ports:
+      - 34101:4040
+      - 34102:6066
+      - 34103:7001
+      - 34104:7002
+      - 34105:7003
+      - 34106:7004
+      - 34107:7005
+      - 34108:7006
+      - 34109:7077
+      - 34110:8080
+    volumes:
+      - /$BOONTADATA_HOME/dockervolumesforcache/sparkhdfs:/clustervolume
+    networks:
+      - boontadatanet
+  sparkw1:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/sparkworker:0.1
+    container_name: sparkw1
+    hostname: sparkw1
+    command: spark-class org.apache.spark.deploy.worker.Worker spark://sparkm1:7077
+    environment:
+      "constraint:node==swarm-agent-1F5B3375000002":
+      SPARK_CONF_DIR: /conf
+      SPARK_WORKER_CORES: 2
+      SPARK_WORKER_MEMORY: 1g
+      SPARK_WORKER_PORT: 8881
+      SPARK_WORKER_WEBUI_PORT: 8081
+      SPARK_PUBLIC_DNS: localhost
+      KAFKA_ADVERTISED_SERVERS: "ks1:9092,ks2:9092,ks3:9092"
+    depends_on:
+      - sparkm1
+    ports:
+      - 34120:7012
+      - 34121:7013
+      - 34122:7014
+      - 34123:7015
+      - 34124:7016
+      - 34125:8881
+      - 34126:8081
+    volumes:
+      - /$BOONTADATA_HOME/dockervolumesforcache/sparkhdfs:/clustervolume
+    networks:
+      - boontadatanet
+  sparkw2:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/sparkworker:0.1
+    container_name: sparkw2
+    hostname: sparkw2
+    command: spark-class org.apache.spark.deploy.worker.Worker spark://sparkm1:7077
+    environment:
+      "constraint:node==swarm-agent-1F5B3375000002":
+      SPARK_CONF_DIR: /conf
+      SPARK_WORKER_CORES: 2
+      SPARK_WORKER_MEMORY: 1g
+      SPARK_WORKER_PORT: 8881
+      SPARK_WORKER_WEBUI_PORT: 8081
+      SPARK_PUBLIC_DNS: localhost
+      KAFKA_ADVERTISED_SERVERS: "ks1:9092,ks2:9092,ks3:9092"
+    depends_on:
+      - sparkm1
+    ports:
+      - 34130:7012
+      - 34131:7013
+      - 34132:7014
+      - 34133:7015
+      - 34134:7016
+      - 34135:8881
+      - 34136:8081
+    volumes:
+      - /$BOONTADATA_HOME/dockervolumesforcache/sparkhdfs:/clustervolume
+    networks:
+      - boontadatanet
+networks:
+  boontadatanet:
+    driver: ${DOCKER_NETWORK_TYPE}

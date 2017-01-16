@@ -30,13 +30,20 @@ fi
 
 cd $BOONTADATA_HOME/code
 if test -e docker-compose.yml; then rm -v docker-compose.yml; fi
-echo composing docker-compose.yml from compose-blocks
-cp compose-blocks/common-start.yml docker-compose.yml
-cat compose-blocks/${scenario}.yml >> docker-compose.yml
-cat compose-blocks/common-end.yml >> docker-compose.yml
 
-export HOSTIP=`hostname -i`
+if test "$scenario" = "multi"
+then
+    echo copying sample docker-compose.yml file
+    cp $BOONTADATA_HOME/code/multiVM/azure-container-services/sample-docker-compose.yml $BOONTADATA_HOME/code/docker-compose.yml
+    export HOSTIP=10.0.0.7
+else
+    echo composing docker-compose.yml from compose-blocks
+    cp compose-blocks/common-start.yml docker-compose.yml
+    cat compose-blocks/${scenario}.yml >> docker-compose.yml
+    cat compose-blocks/common-end.yml >> docker-compose.yml
 
+    export HOSTIP=`hostname -i`
+fi
 
 echo starting scenario $scenario 
 
