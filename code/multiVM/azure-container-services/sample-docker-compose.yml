@@ -14,7 +14,7 @@ services:
     networks:
       - boontadatanet
     environment:
-      - "constraint:node==swarm-agent-1F5B3375000001"
+      - "constraint:node==swarm-agent-37EC17AC000001"
   kafka1:
     image: $BOONTADATA_DOCKER_REGISTRY/boontadata/kafka:0.1
     container_name: ks1
@@ -24,7 +24,7 @@ services:
     depends_on:
       - zookeeper
     environment:
-      "constraint:node==swarm-agent-1F5B3375000001":
+      "constraint:node==swarm-agent-37EC17AC000001":
       KAFKA_ADVERTISED_HOST_NAME: $HOSTIP
       KAFKA_ZOOKEEPER_CONNECT: zk1:2181
       KAFKA_BROKER_ID: 1
@@ -42,7 +42,7 @@ services:
       - zookeeper
       - kafka1
     environment:
-      "constraint:node==swarm-agent-1F5B3375000001":
+      "constraint:node==swarm-agent-37EC17AC000001":
       KAFKA_ADVERTISED_HOST_NAME: $HOSTIP
       KAFKA_ZOOKEEPER_CONNECT: zk1:2181
       KAFKA_BROKER_ID: 2
@@ -62,7 +62,7 @@ services:
       - kafka1
       - kafka2
     environment:
-      "constraint:node==swarm-agent-1F5B3375000001":
+      "constraint:node==swarm-agent-37EC17AC000001":
       KAFKA_ADVERTISED_HOST_NAME: $HOSTIP
       KAFKA_CREATE_TOPICS: "sampletopic:16:3"
       KAFKA_ZOOKEEPER_CONNECT: zk1:2181
@@ -153,7 +153,7 @@ services:
     hostname: sparkm1
     command: spark-class org.apache.spark.deploy.master.Master -h sparkm1
     environment:
-      "constraint:node==swarm-agent-1F5B3375000000":
+      "constraint:node==swarm-agent-37EC17AC000002":
       MASTER: spark://sparkm1:7077
       SPARK_CONF_DIR: /conf
       SPARK_PUBLIC_DNS: localhost
@@ -179,7 +179,7 @@ services:
     hostname: sparkw1
     command: spark-class org.apache.spark.deploy.worker.Worker spark://sparkm1:7077
     environment:
-      "constraint:node==swarm-agent-1F5B3375000000":
+      "constraint:node==swarm-agent-37EC17AC000002":
       SPARK_CONF_DIR: /conf
       SPARK_WORKER_CORES: 2
       SPARK_WORKER_MEMORY: 1g
@@ -207,7 +207,7 @@ services:
     hostname: sparkw2
     command: spark-class org.apache.spark.deploy.worker.Worker spark://sparkm1:7077
     environment:
-      "constraint:node==swarm-agent-1F5B3375000000":
+      "constraint:node==swarm-agent-37EC17AC000002":
       SPARK_CONF_DIR: /conf
       SPARK_WORKER_CORES: 2
       SPARK_WORKER_MEMORY: 1g

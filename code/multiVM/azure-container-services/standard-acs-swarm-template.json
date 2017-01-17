@@ -4,13 +4,14 @@
   "parameters": {
     "dnsNamePrefix": {
       "type": "string",
+      "defaultValue": "acs170117a",
       "metadata": {
         "description": "Sets the Domain name prefix for the cluster.  The concatenation of the domain name and the regionalized DNS zone make up the fully qualified domain name associated with the public IP address."
       }
     },
     "agentCount": {
       "type": "int",
-      "defaultValue": 1,
+      "defaultValue": 4,
       "metadata": {
         "description": "The number of agents for the cluster.  This value can be from 1 to 100 (note, for Kubernetes clusters you will also get 1 or 2 public agents in addition to these seleted masters)"
       },
@@ -19,7 +20,7 @@
     },
     "agentVMSize": {
       "type": "string",
-      "defaultValue": "Standard_D2",
+      "defaultValue": "Standard_D2_v2",
       "allowedValues": [
         "Standard_A0",
         "Standard_A1",
@@ -75,14 +76,14 @@
     },
     "linuxAdminUsername": {
       "type": "string",
-      "defaultValue": "azureuser",
+      "defaultValue": "demo34",
       "metadata": {
         "description": "User name for the Linux Virtual Machines."
       }
     },
     "orchestratorType": {
       "type": "string",
-      "defaultValue": "Kubernetes",
+      "defaultValue": "Swarm",
       "allowedValues": [
         "Kubernetes",
         "DCOS",
@@ -106,6 +107,7 @@
     },
     "sshRSAPublicKey": {
       "type": "string",
+      "defaultValue": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDP2710oeoDM19w90V0bdnZs7U3fQJvofIq9+Rp2bx9qu2nNJvxLoJv15qFizx/9cmclj6ToMKR2PV1J/Ef3T4tvFrP9JKPsu9RGW+XKJUv/smVR5JRl0JWDGMEEhXJehp+tGcICTZ7lU9wURXwDLPLAHW5IYL1JrMsReM4GxaOs4SUgCVmSG3wfYeevGpuKd+c4unLUzk1pBNXUK+I/Mkfjo1dvDTQkKXOB+1H6+0vT41snusFC2LyFlLuMXwd/uhL21ToyGPVzBaPHhXHMJKVmfD1Bi4buijo1d2VYvoEcjQ2L9w4q1ixe7QeoaQyzvIhPdZYdQSI8odM7Sk4zxkH benjguin@X11511A",
       "metadata": {
         "description": "Configure all linux machines with the SSH RSA public key string.  Your key should include three parts, for example 'ssh-rsa AAAAB...snip...UcyupgH azureuser@linuxvm'"
       }
