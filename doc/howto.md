@@ -26,7 +26,7 @@ cd $BOONTADATA_HOME/code
 ```
 cd $BOONTADATA_HOME/code
 . startscenario.sh flink
-. runscenario.sh flink
+. runscenario.sh flink2
 ```
 
 cf [sample_execution_log.md](sample_execution_log.md) for more.
