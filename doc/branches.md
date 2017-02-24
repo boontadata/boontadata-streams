@@ -7,6 +7,10 @@ Branch `master` is the first one, then the newest branches are at the top.
 
 This branch always has the latest stable and global version
 
+## storm1
+
+Add scenario with Storm + Trident.
+
 ## spark3
 
 Add scenario with Spark Streaming - in Scala, with Spark 1.6 means instead of Spark 2, even if the engine is Spark 2.
