@@ -73,23 +73,64 @@ public class StatefulWindowingTopology {
     }
 
     public static void main(String[] args) throws Exception {
+
+/*
         TopologyBuilder builder = new TopologyBuilder();
-        builder.setSpout("spout", new RandomIntegerSpout());
-        builder.setBolt("sumbolt", new WindowSumBolt().withWindow(new Count(5), new Count(3))
-                .withMessageIdField("msgid"), 1).shuffleGrouping("spout");
-        builder.setBolt("printer", new PrinterBolt(), 1).shuffleGrouping("sumbolt");
+        builder.setSpout("kafkaSpout", new XYZ());
+        builder.setBolt("deduplicateBold", new WindowDeduplicateBolt().XYZ);
+        builder.setBolt("sumBolt", XYZ);
+        builder.setBolt("cassandraBolt", XYZ);
+        Config conf = new Config();*/
+
+        // http://www.programcreek.com/java-api-examples/index.php?source_dir=web-crawler-master/src/jvm/storm/crawler/WebCrawlerTopology.java
+        TridentTopology tridentTopology = new TridentTopology();
+        BrokerHosts zk = new ZkHosts("zk1");
+        TridentKafkaConfig spoutConf = new TridentKafkaConfig(zk, "sampletopic");
+        spoutConf.scheme = new SchemeAsMultiScheme(new StringScheme());
+        OpaqueTridentKafkaSpout kafkaSpout = new OpaqueTridentKafkaSpout(spoutConf); 
+
+        tridentTopology.newStream("kafkaSpout", kafkaSpout).parallelismHint(3)
+            .each(new Fields("str"), new SplitKafkaInput(), new Fields("msgid", "devid", "devts", "cat", "m1", "m2"))
+            .tumblingWindow(BaseWindowedBolt.Duration windowDuration, 
+                WindowsStoreFactory windowStoreFactory,
+                new Fields("msgid", "devid", "devts", "cat", "m1", "m2"), 
+                deduplicateAggregator, 
+                new Fields("tw", "msgid", "devid", "devts", "cat", "m1", "m2"))
+            .tumblingWindow(BaseWindowedBolt.Duration windowDuration, 
+                WindowsStoreFactory windowStoreFactory,
+                new Fields("tw", "msgid", "devid", "devts", "cat", "m1", "m2"), 
+                Aggregator sumAggregator, 
+                new Fields("tw", "devid", "cat", "m1", "m2"))
+            .partitionPersist(insertValuesStateFactory, 
+                new Fields("tw", "devid", "cat", "sum_m1", "sum_m2"), 
+                new CassandraStateUpdater(), new Fields());
+
+        //http://storm.apache.org/releases/1.0.1/storm-cassandra.html
+
+        CassandraState.Options options = new CassandraState.Options(new CassandraContext());
+        CQLStatementTupleMapper insertTemperatureValues = boundQuery(
+                "INSERT INTO weather.temperature(weather_station_id, weather_station_name, event_time, temperature) VALUES(?, ?, ?, ?)")
+                .bind(with(field("weather_station_id"), field("name").as("weather_station_name"), field("event_time").now(), field("temperature")));
+        options.withCQLStatementTupleMapper(insertTemperatureValues);
+        CassandraStateFactory insertValuesStateFactory =  new CassandraStateFactory(options);
+        TridentState selectState = topology.newStaticState(selectWeatherStationStateFactory);
+        stream = stream.stateQuery(selectState, new Fields("weather_station_id"), new CassandraQuery(), new Fields("name"));
+        stream = stream.each(new Fields("name"), new PrintFunction(), new Fields("name_x"));
+        stream.partitionPersist(insertValuesStateFactory, new Fields("weather_station_id", "name", "event_time", "temperature"), new CassandraStateUpdater(), new Fields());
+
+
         Config conf = new Config();
         conf.setDebug(false);
         //conf.put(Config.TOPOLOGY_STATE_PROVIDER, "org.apache.storm.redis.state.RedisKeyValueStateProvider");
         if (args != null && args.length > 0) {
             conf.setNumWorkers(1);
-            StormSubmitter.submitTopologyWithProgressBar(args[0], conf, builder.createTopology());
+            StormSubmitter.submitTopologyWithProgressBar(args[0], conf, tridentTopology.build());
         } else {
             LocalCluster cluster = new LocalCluster();
-            StormTopology topology = builder.createTopology();
-            cluster.submitTopology("test", conf, topology);
+            StormTopology stormTopology = tridentTopology.build();
+            cluster.submitTopology("boontadata_local", conf, topology);
             Utils.sleep(40000);
-            cluster.killTopology("test");
+            cluster.killTopology("boontadata_local");
             cluster.shutdown();
         }
     }
