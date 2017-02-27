@@ -4,44 +4,50 @@
     hostname: stormzk1
     networks:
       - boontadatanet
+  stormmaster:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/stormmaster:0.1
+    container_name: stormmaster
+    hostname: stormmaster
+    command: storm nimbus
+    depends_on:
+      - stormzk1
+    ports:
+      - 34200:8080
+    networks:
+      - boontadatanet
   stormworker1:
     image: $BOONTADATA_DOCKER_REGISTRY/boontadata/stormworker:0.1
     container_name: stormworker1
     hostname: stormworker1
-    command: storm nimbus
+    command: storm supervisor
     depends_on:
       - stormzk1
-    links:
-      - stormzk1
+      - stormmaster
     ports:
       - 34201:6627
     networks:
       - boontadatanet
   stormworker2:
     image: $BOONTADATA_DOCKER_REGISTRY/boontadata/stormworker:0.1
-    container_name: stormworker1
-    hostname: stormworker1
-    command: storm nimbus
+    container_name: stormworker2
+    hostname: stormworker2
+    command: storm supervisor
     depends_on:
       - stormzk1
-    links:
-      - stormzk1
+      - stormmaster
     ports:
       - 34202:6627
     networks:
       - boontadatanet
-  stormmaster:
-    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/stormmaster:0.1
-    container_name: stormmaster
-    hostname: stormmaster
+  stormworker3:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/stormworker:0.1
+    container_name: stormworker3
+    hostname: stormworker3
     command: storm supervisor
     depends_on:
-      - stormworker1
-      - stormworker2
       - stormzk1
-    links:
-      - stormworker1
-      - stormworker2
-      - stormzk1
+      - stormmaster
+    ports:
+      - 34203:6627
     networks:
       - boontadatanet
