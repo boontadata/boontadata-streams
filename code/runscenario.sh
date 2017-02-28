@@ -85,7 +85,7 @@ scenario_storm()
     echo "start Storm job"
     docker exec -ti stormmaster storm jar /workdir/boontadata-storm1.jar io.boontadata.storm1.Storm1Topology storm1Topology
     tellandwaitnsecs 10
-    docker exec -ti stormmaster storm -c nimbus.host=stormmaster list
+    docker exec -ti stormmaster storm list
     
     echo "inject data"
     docker exec -ti client1 python /workdir/ingest.py
@@ -97,8 +97,8 @@ scenario_storm()
     docker exec -ti client1 python /workdir/compare.py
 
     echo "kill the Storm job"
-    docker exec -ti stormmaster storm -c nimbus.host=stormmaster kill storm1Topology
-    docker exec -ti stormmaster storm -c nimbus.host=stormmaster list
+    docker exec -ti stormmaster storm kill storm1Topology
+    docker exec -ti stormmaster storm list
 }
 
 scenario_truncate()

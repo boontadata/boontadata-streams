@@ -2,7 +2,6 @@ package io.boontadata.storm1;
 
 import org.apache.storm.trident.TridentTopology;
 
-
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
@@ -44,6 +43,7 @@ public class Storm1Topology {
             
             //How can I find the window time in order to emit tw field? 
             // asked the question on Stack Overflow: http://stackoverflow.com/questions/42488607/how-to-retrieve-current-window-time-in-apache-storm-trident
+            // in the mean time, the txid can be used instead of time window.
         }
     }
 
