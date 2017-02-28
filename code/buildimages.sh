@@ -110,5 +110,9 @@ build_and_push $BOONTADATA_HOME/code/spark/base
 build_and_push $BOONTADATA_HOME/code/spark/master
 build_and_push $BOONTADATA_HOME/code/spark/worker
 build_and_push $BOONTADATA_HOME/code/zookeeper
+build_and_push $BOONTADATA_HOME/code/storm/stormbase
+build_and_push $BOONTADATA_HOME/code/storm/stormmaster
+build_and_push $BOONTADATA_HOME/code/storm/stormworker
+build_and_push $BOONTADATA_HOME/code/storm/stormzookeeper
 
 docker images
