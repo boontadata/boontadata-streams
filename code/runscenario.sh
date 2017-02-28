@@ -74,6 +74,33 @@ scenario_spark()
     docker exec -ti sparkm1 bash -c "spark-submit --kill $sparksubmissionid --master spark://sparkm1:6066"
 }
 
+scenario_storm()
+{
+    timeType=$1
+    echo "starting Storm scenario with $timeType"
+
+    echo "Initial content in the Cassandra database"
+    docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) as nb_debug from debug; select count(*) as nb_rawevents from raw_events; select count(*) as nb_aggevents from agg_events;"
+
+    echo "start Storm job"
+    docker exec -ti stormmaster storm jar /workdir/boontadata-storm1.jar io.boontadata.storm1.Storm1Topology storm1Topology
+    tellandwaitnsecs 10
+    docker exec -ti stormmaster storm -c nimbus.host=stormmaster list
+    
+    echo "inject data"
+    docker exec -ti client1 python /workdir/ingest.py
+
+    echo "wait for Storm to finish ingesting"
+    tellandwaitnsecs 10
+
+    echo "get the result"
+    docker exec -ti client1 python /workdir/compare.py
+
+    echo "kill the Storm job"
+    docker exec -ti stormmaster storm -c nimbus.host=stormmaster kill storm1Topology
+    docker exec -ti stormmaster storm -c nimbus.host=stormmaster list
+}
+
 scenario_truncate()
 {
     echo "Initial content in the Cassandra database"
@@ -105,6 +132,10 @@ case $scenario in
     spark1)
         scenario_truncate
         scenario_spark ProcessingTime
+        ;;
+    storm1)
+        scenario_truncate
+        scenario_storm ProcessingTime
         ;;
     truncate)
         scenario_truncate

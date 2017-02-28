@@ -2,6 +2,7 @@
     image: $BOONTADATA_DOCKER_REGISTRY/boontadata/stormzookeeper:0.1
     container_name: stormzk1
     hostname: stormzk1
+    restart: always
     networks:
       - boontadatanet
   stormmaster:
@@ -11,6 +12,24 @@
     command: storm nimbus
     depends_on:
       - stormzk1
+    links:
+      - stormzk1
+    restart: always
+    ports:
+      - 34201:6627
+    networks:
+      - boontadatanet
+  stormui:
+    image: $BOONTADATA_DOCKER_REGISTRY/boontadata/stormmaster:0.1
+    container_name: stormui
+    hostname: stormui
+    command: storm ui
+    depends_on:
+      - stormzk1
+      - stormmaster
+    links:
+      - stormzk1
+      - stormmaster
     ports:
       - 34200:8080
     networks:
@@ -23,8 +42,6 @@
     depends_on:
       - stormzk1
       - stormmaster
-    ports:
-      - 34201:6627
     networks:
       - boontadatanet
   stormworker2:
@@ -35,8 +52,6 @@
     depends_on:
       - stormzk1
       - stormmaster
-    ports:
-      - 34202:6627
     networks:
       - boontadatanet
   stormworker3:
@@ -47,7 +62,5 @@
     depends_on:
       - stormzk1
       - stormmaster
-    ports:
-      - 34203:6627
     networks:
       - boontadatanet

@@ -73,6 +73,9 @@ build_and_push()
         "$BOONTADATA_DOCKER_REGISTRY/boontadata/sparkmaster")
             build_jar "$BOONTADATA_HOME/code/spark/master/code/target/scala-2.11/boontadata-spark-job1-assembly-0.1.jar" "$BOONTADATA_HOME/code/spark/master/code" "sbt clean assembly"
             ;;
+        "$BOONTADATA_DOCKER_REGISTRY/boontadata/stormmaster")
+            build_jar "$BOONTADATA_HOME/code/storm/master/code/target/boontadata-storm1.jar" "$BOONTADATA_HOME/code/storm/master/code" "mvn clean package"
+            ;;
         *)
             ;;
     esac
@@ -110,9 +113,9 @@ build_and_push $BOONTADATA_HOME/code/spark/base
 build_and_push $BOONTADATA_HOME/code/spark/master
 build_and_push $BOONTADATA_HOME/code/spark/worker
 build_and_push $BOONTADATA_HOME/code/zookeeper
-build_and_push $BOONTADATA_HOME/code/storm/stormbase
-build_and_push $BOONTADATA_HOME/code/storm/stormmaster
-build_and_push $BOONTADATA_HOME/code/storm/stormworker
-build_and_push $BOONTADATA_HOME/code/storm/stormzookeeper
+build_and_push $BOONTADATA_HOME/code/storm/base
+build_and_push $BOONTADATA_HOME/code/storm/master
+build_and_push $BOONTADATA_HOME/code/storm/worker
+build_and_push $BOONTADATA_HOME/code/storm/zookeeper
 
 docker images
