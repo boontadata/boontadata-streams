@@ -4,4 +4,6 @@
 
 FROM storm:1.0
 
+ADD storm.yaml /conf
+
 MAINTAINER boontadata <contact@boontadata.io>

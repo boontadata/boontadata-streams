@@ -12,8 +12,6 @@
     command: storm nimbus
     depends_on:
       - stormzk1
-    links:
-      - stormzk1
     restart: always
     ports:
       - 34201:6627
@@ -25,9 +23,6 @@
     hostname: stormui
     command: storm ui
     depends_on:
-      - stormzk1
-      - stormmaster
-    links:
       - stormzk1
       - stormmaster
     ports:
