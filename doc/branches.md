@@ -7,9 +7,26 @@ Branch `master` is the first one, then the newest branches are at the top.
 
 This branch always has the latest stable and global version
 
+## storm2
+
+Starts from storm1, but tries to implement the sceanrio in SQL, instead of code.
+Still too early (17 MAR 2017). 
+
+Per <https://storm.apache.org/releases/1.0.3/storm-sql.html>: 
+
+> Current Limitations
+>
+> **Aggregation**, **windowing** and joining tables are **yet to be implemented**. Specifying parallelism hints in the topology is not yet supported. All processors have a parallelism hint of 1.
+>
+> Users also need to provide the dependency of the external data sources in the extlib directory. Otherwise the topology will fail to run because of ClassNotFoundException.
+>
+> The current implementation of the Kafka connector in StormSQL assumes both the input and the output are in JSON formats. The connector has not yet recognized the INPUTFORMAT and OUTPUTFORMAT clauses yet.
+
 ## storm1
 
 Add scenario with Storm + Trident.
+Not finished. 
+
 
 ## spark3
 

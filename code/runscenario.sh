@@ -83,7 +83,7 @@ scenario_storm()
     docker exec -ti cassandra3 cqlsh --execute "use boontadata; select count(*) as nb_debug from debug; select count(*) as nb_rawevents from raw_events; select count(*) as nb_aggevents from agg_events;"
 
     echo "start Storm job"
-    docker exec -ti stormmaster storm jar /workdir/boontadata-storm1.jar io.boontadata.storm1.Storm1Topology storm1Topology
+    docker exec -ti stormmaster storm sql storm1.sql storm1Topology
     tellandwaitnsecs 10
     docker exec -ti stormmaster storm list
     
