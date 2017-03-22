@@ -7,6 +7,11 @@ Branch `master` is the first one, then the newest branches are at the top.
 
 This branch always has the latest stable and global version
 
+## flink3
+
+fix errors in Flink scenarios
+move from Flink 1.1.3 to Flink 1.2.0
+
 ## spark3
 
 Add scenario with Spark Streaming - in Scala, with Spark 1.6 means instead of Spark 2, even if the engine is Spark 2.
