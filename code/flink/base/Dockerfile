@@ -6,7 +6,7 @@
 FROM shouldbee/scala:2.11.7-openjdk8
 
 ENV HADOOP_VERSION 2.7.0
-ENV FLINK_VERSION 1.1.3
+ENV FLINK_VERSION 1.2.0
 ENV SCALA_VERSION 2.11
 ENV FLINK_ROOT_DIR /opt/flink
 
@@ -20,11 +20,11 @@ RUN mkdir -p /opt && \
     ln -s hadoop-${HADOOP_VERSION} hadoop && \
     echo Hadoop ${HADOOP_VERSION} native libraries installed in /opt/hadoop/lib/native
 
-# Get Flink from US Apache mirror.
+# Get Flink from Apache mirror.
 RUN mkdir -p /opt && \
     cd /opt && \
-    curl http://www.us.apache.org/dist/flink/flink-${FLINK_VERSION}/flink-${FLINK_VERSION}-bin-hadoop27-scala_${SCALA_VERSION}.tgz | \
-        tar -zx && \
+    curl -O http://wwwftp.ciril.fr/pub/apache/flink/flink-${FLINK_VERSION}/flink-${FLINK_VERSION}-bin-hadoop27-scala_${SCALA_VERSION}.tgz && \
+        tar xvfz flink-${FLINK_VERSION}-bin-hadoop27-scala_${SCALA_VERSION}.tgz && \
     ln -s flink-${FLINK_VERSION} flink && \
     echo Flink ${FLINK_VERSION} installed in /opt
 
