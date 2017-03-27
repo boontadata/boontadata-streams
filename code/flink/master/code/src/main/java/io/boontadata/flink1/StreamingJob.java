@@ -25,6 +25,8 @@ import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction;
 import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
 import org.apache.flink.streaming.api.TimeCharacteristic;
+import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
+import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
@@ -36,28 +38,8 @@ import org.apache.flink.streaming.util.serialization.SimpleStringSchema;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-/**
- * Skeleton for a Flink Streaming Job.
- *
- * For a full example of a Flink Streaming Job, see the SocketTextStreamWordCount.java
- * file in the same package/directory or have a look at the website.
- *
- * You can also generate a .jar file that you can submit on your Flink
- * cluster.
- * Just type
- * 		mvn clean package
- * in the projects root directory.
- * You will find the jar in
- * 		target/quickstart-0.1.jar
- * From the CLI you can then run
- * 		./bin/flink run -c io.boontadata.flink1.StreamingJob target/quickstart-0.1.jar
- *
- * For more information on the CLI see:
- *
- * http://flink.apache.org/docs/latest/apis/cli.html
- */
 public class StreamingJob {
-	private static final String VERSION = "170327b";
+	private static final String VERSION = "170327c";
 
 	private static final Integer FIELD_MESSAGE_ID = 0;
 	private static final Integer FIELD_DEVICE_ID = 1;
@@ -81,8 +63,9 @@ public class StreamingJob {
 			env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 		} else if (timeCharacteristic.equals("ProcessingTime")) {
 			env.setStreamTimeCharacteristic(TimeCharacteristic.ProcessingTime);
-		} else if (timeCharacteristic.equals("IngestionTime")) {
-			env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
+		// IngestionTime is not implemented here
+		//} else if (timeCharacteristic.equals("IngestionTime")) {
+		//	env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
 		}
 
 		Format windowTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -95,7 +78,7 @@ public class StreamingJob {
 
 
 		// get data from Kafka, parse, and assign time and watermarks
-		DataStream<Tuple6<String, String, Long, String, Long, Double>> stream_parsed_with_timestamps = env 
+		DataStream<Tuple6<String, String, Long, String, Long, Double>> stream_parsed = env 
 			.addSource(new FlinkKafkaConsumer082<>(
                                 "sampletopic",
                                 new SimpleStringSchema(),
@@ -119,13 +102,24 @@ public class StreamingJob {
 						);
 					}
 				}
-			)
-			.assignTimestampsAndWatermarks(new BoundedOutOfOrdernessGenerator());
+			);
 
 		// deduplicate on message ID
-		WindowedStream stream_windowed_for_deduplication = stream_parsed_with_timestamps
-			.keyBy(FIELD_MESSAGE_ID)
-			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS));
+		WindowedStream stream_windowed_for_deduplication;
+		if (timeCharacteristic == "EventTime")
+		{
+			stream_windowed_for_deduplication = stream_parsed
+				.assignTimestampsAndWatermarks(new BoundedOutOfOrdernessGenerator())
+				.keyBy(FIELD_MESSAGE_ID)
+				.window(TumblingEventTimeWindows.of(Time.seconds(5)));
+		}
+		else // ProcessingTime
+		{
+			stream_windowed_for_deduplication = stream_parsed
+				.keyBy(FIELD_MESSAGE_ID)
+				.window(TumblingProcessingTimeWindows.of(Time.seconds(5)));
+		}
+
 
 		DataStream<Tuple6<String,String,Long,String,Long,Double>> stream_deduplicated = stream_windowed_for_deduplication			
 			.apply(new WindowFunction<Tuple6<String, String, Long, String, Long, Double>, 
@@ -140,9 +134,19 @@ public class StreamingJob {
 			});
 
 		// Group by device ID, Category
-		WindowedStream stream_windowed_for_groupby = stream_deduplicated
-			.keyBy(FIELD_DEVICE_ID, FIELD_CATEGORY)
-			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS));
+		WindowedStream stream_windowed_for_groupby;
+		if (timeCharacteristic == "EventTime")
+		{
+			stream_windowed_for_groupby = stream_deduplicated
+				.keyBy(FIELD_DEVICE_ID, FIELD_CATEGORY)
+				.window(TumblingEventTimeWindows.of(Time.seconds(5)));
+		}
+		else
+		{
+			stream_windowed_for_groupby = stream_deduplicated
+				.keyBy(FIELD_DEVICE_ID, FIELD_CATEGORY)
+				.window(TumblingProcessingTimeWindows.of(Time.seconds(5)));
+		}
 
 		// add debug information on stream_windowed_for_groupby
 		stream_windowed_for_groupby
