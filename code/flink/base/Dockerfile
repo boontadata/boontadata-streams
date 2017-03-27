@@ -23,7 +23,7 @@ RUN mkdir -p /opt && \
 # Get Flink from Apache mirror.
 RUN mkdir -p /opt && \
     cd /opt && \
-    curl -O http://wwwftp.ciril.fr/pub/apache/flink/flink-${FLINK_VERSION}/flink-${FLINK_VERSION}-bin-hadoop27-scala_${SCALA_VERSION}.tgz | \
+    curl http://www.us.apache.org/dist/flink/flink-${FLINK_VERSION}/flink-${FLINK_VERSION}-bin-hadoop27-scala_${SCALA_VERSION}.tgz | \
         tar -zx && \
     ln -s flink-${FLINK_VERSION} flink && \
     echo Flink ${FLINK_VERSION} installed in /opt
