@@ -20,7 +20,7 @@ RUN mkdir -p /opt && \
     ln -s hadoop-${HADOOP_VERSION} hadoop && \
     echo Hadoop ${HADOOP_VERSION} native libraries installed in /opt/hadoop/lib/native
 
-# Get Flink from US Apache mirror.
+# Get Flink from Apache mirror.
 RUN mkdir -p /opt && \
     cd /opt && \
     curl http://archive.apache.org/dist/flink/flink-${FLINK_VERSION}/flink-${FLINK_VERSION}-bin-hadoop27-scala_${SCALA_VERSION}.tgz | \
