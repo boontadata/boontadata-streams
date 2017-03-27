@@ -7,6 +7,7 @@ if test -z $BOONTADATA_DOCKER_REGISTRY
 then
     echo BOONTADATA_DOCKER_REGISTRY variable must not be null or empty
     echo you also need to login with `docker login`
+    echo NB: no need to login and no push if you use boontadata.local as the value of $BOONTADATA_DOCKER_REGISTRY
     return 1
 fi
 
@@ -90,7 +91,12 @@ build_and_push()
         docker build -t $fulltag $folderpath --file $filepath2
         echo "local docker images for $tagname:"
         docker images | grep "$tagname"
-        docker push $fulltag
+        if test $BOONTADATA_DOCKER_REGISTRY = "boontadata.local"
+        then
+            echo "don't push to boontadata.local"
+        else
+            docker push $fulltag
+        fi
     fi
 }
 
