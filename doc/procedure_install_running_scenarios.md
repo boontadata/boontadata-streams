@@ -1,13 +1,13 @@
 ## Things to know before starting
-1- Technologies
-	- docker
-	- docker-compose
-	- docker repository
+1- Technologies:
+  * docker
+  * docker-compose
+  * docker repository
 
 2- Real Time Scenarios: 
-	- Flink event_time
-	- Flink process_time
-	- Spark process_time
+  * Flink event_time
+  * Flink process_time
+  * Spark process_time
 
 
 
@@ -54,7 +54,7 @@ ssh into the VM and execute the following statements
 docker run hello-world
 ```
 
-####following https://docs.docker.com/compose/install/
+## Install docker compose following [install docker-compose](https://docs.docker.com/compose/install/)
 
 ```
 sudo su
@@ -62,7 +62,6 @@ curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose
 exit
 sudo chmod a+x /usr/local/bin/docker-compose
 ```
-
 
 ## build or rebuild required images: 
 
