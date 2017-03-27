@@ -4,7 +4,7 @@
 	
 	<groupId>io.boontadata.flink1</groupId>
 	<artifactId>flink1</artifactId>
-	<version>0.1</version>
+	<version>0.2</version>
 	<packaging>jar</packaging>
 
 	<name>Flink flink1 Job</name>
@@ -12,7 +12,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<flink.version>1.1.3</flink.version>
+		<flink.version>1.2.0</flink.version>
 	</properties>
 
 	<repositories>
@@ -58,6 +58,14 @@
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-connector-cassandra_2.11</artifactId>
 			<version>${flink.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<!-- cf http://apache-flink-user-mailing-list-archive.2336050.n4.nabble.com/Flink-1-2-and-Cassandra-Connector-td11546.html -->
+			<!-- should be resolved in Apache Flink 1.2.1, cf https://issues.apache.org/jira/browse/FLINK-6084 -->
+			<groupId>com.codahale.metrics</groupId>
+			<artifactId>metrics-core</artifactId>
+			<version>3.0.2</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -149,6 +157,17 @@
 									<overWrite>true</overWrite>
 									<outputDirectory>${project.build.directory}/classes</outputDirectory>
 									<includes>org/apache/flink/**,com/datastax/driver/**</includes>
+								</artifactItem>
+								<artifactItem>
+									<!-- cf http://apache-flink-user-mailing-list-archive.2336050.n4.nabble.com/Flink-1-2-and-Cassandra-Connector-td11546.html -->
+									<!-- should be resolved in Apache Flink 1.2.1, cf https://issues.apache.org/jira/browse/FLINK-6084 -->
+									<groupId>com.codahale.metrics</groupId>
+									<artifactId>metrics-core</artifactId>
+									<version>3.0.2</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/classes</outputDirectory>
+									<includes>com/codahale/metrics/**</includes>
 								</artifactItem>
 								<artifactItem>
 									<groupId>com.yammer.metrics</groupId>

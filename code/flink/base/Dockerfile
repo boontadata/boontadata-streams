@@ -10,13 +10,13 @@ ENV FLINK_VERSION 1.2.0
 ENV SCALA_VERSION 2.11
 ENV FLINK_ROOT_DIR /opt/flink
 
-# Get Hadoop from US Apache mirror and extract just the native
+# Get Hadoop from Apache mirror and extract just the native
 # libs. (Until we care about running HDFS with these containers, this
 # is all we need.)
 RUN mkdir -p /opt && \
     cd /opt && \
-    curl http://www.us.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | \
-        tar -zx hadoop-${HADOOP_VERSION}/lib/native && \
+    curl -O http://wwwftp.ciril.fr/pub/apache/flink/flink-${FLINK_VERSION}/flink-${FLINK_VERSION}-bin-hadoop27-scala_${SCALA_VERSION}.tgz && \
+        tar xvfz flink-${FLINK_VERSION}-bin-hadoop27-scala_${SCALA_VERSION}.tgz && \
     ln -s hadoop-${HADOOP_VERSION} hadoop && \
     echo Hadoop ${HADOOP_VERSION} native libraries installed in /opt/hadoop/lib/native
 
