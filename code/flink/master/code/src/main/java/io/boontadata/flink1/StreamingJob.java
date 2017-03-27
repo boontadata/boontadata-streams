@@ -57,7 +57,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  * http://flink.apache.org/docs/latest/apis/cli.html
  */
 public class StreamingJob {
-	private static final String VERSION = "170327a";
+	private static final String VERSION = "170327b";
 
 	private static final Integer FIELD_MESSAGE_ID = 0;
 	private static final Integer FIELD_DEVICE_ID = 1;
