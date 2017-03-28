@@ -22,8 +22,8 @@ result = session.execute(
     + "m2_sum_ingest_sendtime, m2_sum_ingest_devicetime, m2_sum_downstream "
     + "FROM agg_events ")
 df = pandas.DataFrame(result[0])
-df['delta_m1_sum_ingestdevice_downstream'] = df.apply(lambda row: row.m1_sum_ingest_devicetime - row.m1_sum_downstream, axis=1)
-df['delta_m2_sum_ingestdevice_downstream'] = df.apply(lambda row: row.m2_sum_ingest_devicetime - row.m2_sum_downstream, axis=1)
+df['delta_m1_sum_downstream_ingestdevice'] = df.apply(lambda row: row.m1_sum_downstream - row.m1_sum_ingest_devicetime, axis=1)
+df['delta_m2_sum_downstream_ingestdevice'] = df.apply(lambda row: row.m2_sum_downstream - row.m2_sum_ingest_devicetime, axis=1)
 
 #disconnect from Cassandra
 cluster.shutdown()
@@ -38,9 +38,9 @@ print('----------------------------------------------')
 print(df
     .sort_values(by=['device_id', 'category', 'window_time'], axis=0, ascending=[True, True, True], inplace=False)
     .loc[:,['category', 'window_time', 'm1_sum_ingest_devicetime', 'm1_sum_downstream', 
-        'delta_m1_sum_ingestdevice_downstream', 'm1_sum_ingest_sendtime', 
+        'delta_m1_sum_downstream_ingestdevice', 'm1_sum_ingest_sendtime', 
         'm2_sum_ingest_devicetime', 'm2_sum_downstream', 
-        'delta_m2_sum_ingestdevice_downstream', 'm2_sum_ingest_sendtime',
+        'delta_m2_sum_downstream_ingestdevice', 'm2_sum_ingest_sendtime',
         'device_id']])
 print()
 
@@ -48,14 +48,14 @@ print('Comparing ingest device and downstream for m1_sum')
 print('--------------------------------------------------')
 print("{} exceptions out of {}"
     .format(
-        len(df.query('delta_m1_sum_ingestdevice_downstream != 0').index),
+        len(df.query('delta_m1_sum_downstream_ingestdevice != 0').index),
         len(df.index)
     ))
 print()
 
 print('Exceptions are:')
 print(
-    df.query('delta_m1_sum_ingestdevice_downstream != 0')
-    .loc[:,['window_time', 'device_id', 'category', 'm1_sum_ingest_devicetime', 'm1_sum_downstream', 'delta_m1_sum_ingestdevice_downstream']]
+    df.query('delta_m1_sum_downstream_ingestdevice != 0')
+    .loc[:,['window_time', 'device_id', 'category', 'm1_sum_ingest_devicetime', 'm1_sum_downstream', 'delta_m1_sum_downstream_ingestdevice']]
     )
 

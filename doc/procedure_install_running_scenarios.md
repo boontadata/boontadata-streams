@@ -13,12 +13,18 @@
 
 ## set variables
 The following values are an example, please change with your own values
+
+Note that `boontadata.local` is a special value that doesn't need a remote Docker registry in the cloud. 
+
 ```
 echo 'export BOONTADATA_HOME=$HOME/boontadata-streams' >> ~/.bashrc
-echo 'export BOONTADATA_DOCKER_REGISTRY=boontadata-microsoft.azurecr.io' >> ~/.bashrc
+echo 'export BOONTADATA_DOCKER_REGISTRY=boontadata.local' >> ~/.bashrc
 ```
 
 ## sign in the $BOONTADATA_DOCKER_REGISTRY
+
+if you didn't use `boontadata.local`, then you must connect to your remote registry
+
 ```
 docker login $BOONTADATA_DOCKER_REGISTRY 
 ```
@@ -90,7 +96,7 @@ cf [sample_execution_log.md](sample_execution_log.md) for more.
 
 ```
 cd $BOONTADATA_HOME/code
-docker cp flink/master/code/target/flink1-0.1.jar flink-master:/workdir
+docker cp flink/master/code/target/flink1-0.2.jar flink-master:/workdir
 ```
 
 

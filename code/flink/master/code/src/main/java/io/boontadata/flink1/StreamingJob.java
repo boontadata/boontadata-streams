@@ -39,7 +39,7 @@ import org.apache.flink.streaming.util.serialization.SimpleStringSchema;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class StreamingJob {
-	private static final String VERSION = "170327c";
+	private static final String VERSION = "170328a";
 
 	private static final Integer FIELD_MESSAGE_ID = 0;
 	private static final Integer FIELD_DEVICE_ID = 1;
@@ -63,9 +63,8 @@ public class StreamingJob {
 			env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 		} else if (timeCharacteristic.equals("ProcessingTime")) {
 			env.setStreamTimeCharacteristic(TimeCharacteristic.ProcessingTime);
-		// IngestionTime is not implemented here
-		//} else if (timeCharacteristic.equals("IngestionTime")) {
-		//	env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
+		} else if (timeCharacteristic.equals("IngestionTime")) {
+			env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
 		}
 
 		Format windowTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -102,24 +101,13 @@ public class StreamingJob {
 						);
 					}
 				}
-			);
+			)
+			.assignTimestampsAndWatermarks(new BoundedOutOfOrdernessGenerator());
 
 		// deduplicate on message ID
-		WindowedStream stream_windowed_for_deduplication;
-		if (timeCharacteristic == "EventTime")
-		{
-			stream_windowed_for_deduplication = stream_parsed
-				.assignTimestampsAndWatermarks(new BoundedOutOfOrdernessGenerator())
-				.keyBy(FIELD_MESSAGE_ID)
-				.window(TumblingEventTimeWindows.of(Time.seconds(5)));
-		}
-		else // ProcessingTime
-		{
-			stream_windowed_for_deduplication = stream_parsed
-				.keyBy(FIELD_MESSAGE_ID)
-				.window(TumblingProcessingTimeWindows.of(Time.seconds(5)));
-		}
-
+		WindowedStream stream_windowed_for_deduplication = stream_parsed
+			.keyBy(FIELD_MESSAGE_ID)
+			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS));
 
 		DataStream<Tuple6<String,String,Long,String,Long,Double>> stream_deduplicated = stream_windowed_for_deduplication			
 			.apply(new WindowFunction<Tuple6<String, String, Long, String, Long, Double>, 
@@ -134,19 +122,9 @@ public class StreamingJob {
 			});
 
 		// Group by device ID, Category
-		WindowedStream stream_windowed_for_groupby;
-		if (timeCharacteristic == "EventTime")
-		{
-			stream_windowed_for_groupby = stream_deduplicated
-				.keyBy(FIELD_DEVICE_ID, FIELD_CATEGORY)
-				.window(TumblingEventTimeWindows.of(Time.seconds(5)));
-		}
-		else
-		{
-			stream_windowed_for_groupby = stream_deduplicated
-				.keyBy(FIELD_DEVICE_ID, FIELD_CATEGORY)
-				.window(TumblingProcessingTimeWindows.of(Time.seconds(5)));
-		}
+		WindowedStream stream_windowed_for_groupby = stream_deduplicated
+			.keyBy(FIELD_DEVICE_ID, FIELD_CATEGORY)
+			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS));
 
 		// add debug information on stream_windowed_for_groupby
 		stream_windowed_for_groupby

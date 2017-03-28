@@ -102,6 +102,10 @@ case $scenario in
         scenario_truncate
         scenario_flink EventTime
         ;;
+    flink3)
+        scenario_truncate
+        scenario_flink IngestionTime
+        ;;
     spark1)
         scenario_truncate
         scenario_spark ProcessingTime
