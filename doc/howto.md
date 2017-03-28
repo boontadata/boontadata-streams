@@ -11,6 +11,12 @@ export BOONTADATA_HOME=$HOME/boontadata-streams
 export BOONTADATA_DOCKER_REGISTRY=acr34-microsoft.azurecr.io
 ```
 
+If you don't have a remote docker resgitry, you can use the local one: 
+
+```
+export BOONTADATA_DOCKER_REGISTRY=boontadata.local
+```
+
 ## build or rebuild required images: 
 
 $resetoption is optional and it can be reset or noreset. The default is noreset.

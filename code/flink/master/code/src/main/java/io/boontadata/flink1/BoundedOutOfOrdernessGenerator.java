@@ -28,6 +28,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  */
 public class BoundedOutOfOrdernessGenerator implements AssignerWithPeriodicWatermarks<Tuple6<String, String, Long, String, Long, Double>> {
     private final long maxOutOfOrderness = 1_000L; // 1 second
+    private final long maxProcessingTimeLag = 6_000L; // 6 seconds
     private long currentMaxTimestamp = 0;
 
     @Override
@@ -40,6 +41,7 @@ public class BoundedOutOfOrdernessGenerator implements AssignerWithPeriodicWater
     @Override
     public Watermark getCurrentWatermark() {
         // return the watermark as current highest timestamp minus the out-of-orderness bound
-        return new Watermark(currentMaxTimestamp - maxOutOfOrderness);
+        // or current processing time - maxProcessingTimeLag if it's higher (case of the last events)
+        return new Watermark(Math.max(currentMaxTimestamp - maxOutOfOrderness, System.currentTimeMillis() - maxProcessingTimeLag));
     }
 }

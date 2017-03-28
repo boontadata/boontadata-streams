@@ -25,6 +25,8 @@ import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction;
 import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
 import org.apache.flink.streaming.api.TimeCharacteristic;
+import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
+import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
@@ -36,28 +38,8 @@ import org.apache.flink.streaming.util.serialization.SimpleStringSchema;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-/**
- * Skeleton for a Flink Streaming Job.
- *
- * For a full example of a Flink Streaming Job, see the SocketTextStreamWordCount.java
- * file in the same package/directory or have a look at the website.
- *
- * You can also generate a .jar file that you can submit on your Flink
- * cluster.
- * Just type
- * 		mvn clean package
- * in the projects root directory.
- * You will find the jar in
- * 		target/quickstart-0.1.jar
- * From the CLI you can then run
- * 		./bin/flink run -c io.boontadata.flink1.StreamingJob target/quickstart-0.1.jar
- *
- * For more information on the CLI see:
- *
- * http://flink.apache.org/docs/latest/apis/cli.html
- */
 public class StreamingJob {
-	private static final String VERSION = "170327a";
+	private static final String VERSION = "170328a";
 
 	private static final Integer FIELD_MESSAGE_ID = 0;
 	private static final Integer FIELD_DEVICE_ID = 1;
@@ -95,7 +77,7 @@ public class StreamingJob {
 
 
 		// get data from Kafka, parse, and assign time and watermarks
-		DataStream<Tuple6<String, String, Long, String, Long, Double>> stream_parsed_with_timestamps = env 
+		DataStream<Tuple6<String, String, Long, String, Long, Double>> stream_parsed = env 
 			.addSource(new FlinkKafkaConsumer082<>(
                                 "sampletopic",
                                 new SimpleStringSchema(),
@@ -123,7 +105,7 @@ public class StreamingJob {
 			.assignTimestampsAndWatermarks(new BoundedOutOfOrdernessGenerator());
 
 		// deduplicate on message ID
-		WindowedStream stream_windowed_for_deduplication = stream_parsed_with_timestamps
+		WindowedStream stream_windowed_for_deduplication = stream_parsed
 			.keyBy(FIELD_MESSAGE_ID)
 			.timeWindow(Time.of(5000, MILLISECONDS), Time.of(5000, MILLISECONDS));
 
