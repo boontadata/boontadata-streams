@@ -20,7 +20,7 @@ Additional goals include comparing performances, resilience to node failures, ..
 
 ## In which state is the project right now
 
-You can consult a [typical execution log](doc/sample_execution_log.txt).
+You can consult [typical execution logs](doc/sample_execution_logs/).
 
 An injector sends data to Kafka. It may send duplicates, send out of order, or send late. 
 The injector also aggregates what it sent and saves its version of the truth to Cassandra.
