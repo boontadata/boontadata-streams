@@ -22,6 +22,13 @@ Per <https://storm.apache.org/releases/1.0.3/storm-sql.html>:
 >
 > The current implementation of the Kafka connector in StormSQL assumes both the input and the output are in JSON formats. The connector has not yet recognized the INPUTFORMAT and OUTPUTFORMAT clauses yet.
 
+update on 26 APR: <https://storm.apache.org/releases/2.0.0-SNAPSHOT/storm-sql.html>: 
+
+> Current Limitations
+>
+> Windowing is yet to be implemented.
+> (...)
+
 ## storm1
 
 Add scenario with Storm + Trident.
