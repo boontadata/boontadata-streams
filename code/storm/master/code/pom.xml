@@ -112,36 +112,6 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.9</version>
-				<executions>
-					<execution>
-						<id>unpack</id>
-						<!-- executed just before the package phase -->
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-                <!-- TODO
-								<artifactItem>
-									<groupId>org.apache.flink</groupId>
-									<artifactId>flink-clients_2.11</artifactId>
-									<version>${flink.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-									<outputDirectory>${project.build.directory}/classes</outputDirectory>
-									<includes>org/apache/flink/client/**</includes>
-								</artifactItem>
-                -->
-							</artifactItems>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>					
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
