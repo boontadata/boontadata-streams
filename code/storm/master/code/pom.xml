@@ -11,14 +11,14 @@
   <packaging>jar</packaging>
 
 	<name>boontadata Storm storm1 topology</name>
-	<url>http://boontadata.io</url>
+	<url>https://github.com/boontadata</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <provided.scope>provided</provided.scope>
     <storm.kafka.version>0.10.2.0</storm.kafka.version>
     <storm.topology>io.boontadata.storm1.Storm1Topology</storm.topology>
-    <storm.version>1.0.3</storm.version>
+    <storm.version>1.1.0</storm.version>
   </properties>
 
 	<repositories>

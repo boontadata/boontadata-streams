@@ -74,7 +74,8 @@ build_and_push()
             build_jar "$BOONTADATA_HOME/code/spark/master/code/target/scala-2.11/boontadata-spark-job1-assembly-0.1.jar" "$BOONTADATA_HOME/code/spark/master/code" "sbt clean assembly"
             ;;
         "$BOONTADATA_DOCKER_REGISTRY/boontadata/stormmaster")
-            build_jar "$BOONTADATA_HOME/code/storm/master/code/target/boontadata-storm1.jar" "$BOONTADATA_HOME/code/storm/master/code" "mvn clean package"
+            #build_jar "$BOONTADATA_HOME/code/storm/master/code/target/boontadata-storm1.jar" "$BOONTADATA_HOME/code/storm/master/code" "mvn clean package"
+            build_jar "$BOONTADATA_HOME/code/storm/master/codesampleafac/target/trident-hackaton-0.0.1-SNAPSHOT-jar-with-dependencies.jar" "$BOONTADATA_HOME/code/storm/master/codesampleafac" "mvn clean package"
             ;;
         *)
             ;;

@@ -101,6 +101,24 @@ scenario_storm()
     docker exec -ti stormmaster storm list
 }
 
+scenario_stormsampleafac()
+{
+    timeType=$1
+    echo "starting Storm sample afac scenario"
+
+    echo "start Storm job"
+    docker exec -ti stormmaster storm jar /workdir/trident-hackaton-0.0.1-SNAPSHOT.jar com.datasalt.trident.examples.PerLocationCounts2 storm1Topology
+    tellandwaitnsecs 10
+    docker exec -ti stormmaster storm list
+    
+    echo "wait for Storm to finish running"
+    tellandwaitnsecs 45
+
+    echo "kill the Storm job"
+    docker exec -ti stormmaster storm kill storm1Topology
+    docker exec -ti stormmaster storm list
+}
+
 scenario_truncate()
 {
     echo "Initial content in the Cassandra database"
@@ -135,7 +153,8 @@ case $scenario in
         ;;
     storm1)
         scenario_truncate
-        scenario_storm ProcessingTime
+        #scenario_storm ProcessingTime
+        scenario_stormsampleafac
         ;;
     truncate)
         scenario_truncate

@@ -1,13 +1,9 @@
 package io.boontadata.storm1;
 
-import org.apache.storm.trident.TridentTopology;
-
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
 import org.apache.storm.generated.StormTopology;
-import org.apache.storm.starter.bolt.PrinterBolt;
-import org.apache.storm.starter.spout.RandomIntegerSpout;
 import org.apache.storm.state.KeyValueState;
 import org.apache.storm.state.State;
 import org.apache.storm.task.OutputCollector;
@@ -24,30 +20,41 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
 
+import org.apache.storm.trident.TridentTopology;
+import org.apache.storm.trident.operation.Aggregator;
+
 import static org.apache.storm.topology.base.BaseWindowedBolt.Count;
 
-public class Storm1Topology {
-    private static final Logger LOG = LoggerFactory.getLogger(StatefulWindowingTopology.class);
+/* replace 
+    Map<String,Integer>
+    by
+    Map<Tuple2<Long, String>, Tuple4<String, Long, String, Long, Float>>
+*/
 
-    private static class SumAggregator extends Aggregator<Map<Tuple2<Long, String>, Tuple4<String, Long, String, Long, Float>>> {
-        Map<Tuple2<Long, String>, Tuple4<String, Long, String, Long, Float>> init(object batchId, TridentCollector collector) {
-            return new HashMap<Tuple2<Long, String>, Tuple4<String, Long, String, Long, Float>>();
+public class Storm1Topology {
+    private static class SumAggregator implements Aggregator<Map<String,Integer>> {
+        
+        public Map<String,Integer> init(object batchId, TridentCollector collector) {
+            return new HashMap<String,Integer>();
         }
 
-        void aggregate(Map<Tuple2<Long, String>, Tuple4<String, Long, String, Long, Float>> val, TridentTuple tuple, TridentCollector collector) {
+        public void aggregate(Map<String,Integer> val, TridentTuple tuple, TridentCollector collector) {
             //
         }
 
-        void complete(Map<Tuple2<Long, String>, Tuple4<String, Long, String, Long, Float>> val, TridentCollector collector) {
+        public void complete(Map<String,Integer> val, TridentCollector collector) {
             //
             
             //How can I find the window time in order to emit tw field? 
             // asked the question on Stack Overflow: http://stackoverflow.com/questions/42488607/how-to-retrieve-current-window-time-in-apache-storm-trident
             // in the mean time, the txid can be used instead of time window.
         }
+
+        public void cleanup() {
+        }
     }
 
-    private static class DeduplicateAggregator extends Aggregator<> {
+    private static class DeduplicateAggregator implements Aggregator<> {
         // TODO
     }
 

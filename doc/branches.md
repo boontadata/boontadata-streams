@@ -11,6 +11,10 @@ This branch always has the latest stable and global version
 
 Add scenario with Storm + Trident.
 
+## storm2
+
+Storm + SQL (should be available when Storm 2 releases)
+
 ## spark3
 
 Add scenario with Spark Streaming - in Scala, with Spark 1.6 means instead of Spark 2, even if the engine is Spark 2.

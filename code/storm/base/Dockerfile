@@ -1,8 +1,8 @@
 # $BOONTADATA_DOCKER_REGISTRY/boontadata/stormbase
 #
-# VERSION   0.1
+# VERSION   0.2
 
-FROM storm:1.0
+FROM storm:1.1.0
 
 ADD storm.yaml /conf
 
