@@ -21,9 +21,9 @@ import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.topology.base.BaseStatefulWindowedBolt;
-import org.apache.storm.trident.operation.BaseFunction;
 import org.apache.storm.trident.operation.Aggregator;
 import org.apache.storm.trident.TridentTopology;
+import org.apache.storm.trident.tuple.TridentTuple;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
@@ -31,7 +31,6 @@ import org.apache.storm.utils.Utils;
 import org.apache.storm.windowing.TupleWindow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import static org.apache.storm.topology.base.BaseWindowedBolt.Count;
 import static org.apache.storm.cassandra.DynamicStatementBuilder.*;
@@ -65,7 +64,7 @@ public class Storm1Topology {
     }
     */
 
-    public class SplitKafkaInput extends BaseFunction { 
+    public class SplitKafkaInput { 
         @Override 
         public void execute(TridentTuple tridentTuple, TridentCollector tridentCollector) { 
             String kafkaInput = tridentTuple.getString(0); 
