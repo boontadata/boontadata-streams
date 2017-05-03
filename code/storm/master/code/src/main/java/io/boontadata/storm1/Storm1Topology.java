@@ -3,12 +3,13 @@ package io.boontadata.storm1;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-//import org.apache.storm.Config;
+import org.apache.storm.Config;
 import org.apache.storm.generated.StormTopology;
 import org.apache.storm.cassandra.CassandraContext;
 import org.apache.storm.cassandra.query.builder.BoundCQLStatementMapperBuilder;
 import org.apache.storm.cassandra.trident.state.CassandraState;
 import org.apache.storm.cassandra.trident.state.CassandraStateFactory;
+import org.apache.storm.cassandra.trident.state.CassandraStateUpdater;
 import org.apache.storm.kafka.BrokerHosts;
 import org.apache.storm.kafka.StringScheme;
 import org.apache.storm.kafka.trident.OpaqueTridentKafkaSpout;
@@ -17,7 +18,7 @@ import org.apache.storm.kafka.ZkHosts;
 import org.apache.storm.spout.SchemeAsMultiScheme;
 //import org.apache.storm.state.KeyValueState;
 //import org.apache.storm.state.State;
-//import org.apache.storm.StormSubmitter;
+import org.apache.storm.StormSubmitter;
 //import org.apache.storm.task.OutputCollector;
 //import org.apache.storm.task.TopologyContext;
 //import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -148,6 +149,8 @@ public class Storm1Topology {
     }
 
     public static StormTopology buildTopology() {
+        Storm1Topology defaultInstance = new Storm1Topology();
+
         TridentTopology tridentTopology = new TridentTopology();
         BrokerHosts zk = new ZkHosts("zk1");
         TridentKafkaConfig spoutConf = new TridentKafkaConfig(zk, "sampletopic");
@@ -172,20 +175,18 @@ public class Storm1Topology {
 
         tridentTopology.newStream("kafkaSpout", kafkaSpout)
             .parallelismHint(3)
-            .each(new Fields("str"), new SplitKafkaInput(), new Fields("msgid", "devid", "devts", "cat", "m1", "m2"))
+            .each(new Fields("str"), defaultInstance.new SplitKafkaInput(), new Fields("msgid", "devid", "devts", "cat", "m1", "m2"))
             .partitionBy(new Fields("msgid"))
             .tumblingWindow(new BaseWindowedBolt.Duration(5, TimeUnit.SECONDS), 
                 new InMemoryWindowsStoreFactory(),
                 new Fields("msgid", "devid", "devts", "cat", "m1", "m2"), 
-                new DeduplicateAggregator(), 
+                defaultInstance.new DeduplicateAggregator(), 
                 new Fields("tw", "msgid", "devid", "devts", "cat", "m1", "m2"))
-            .withWatermarkInterval(new BaseWindowedBolt.Duration(1, TimeUnit.SECONDS))
             .tumblingWindow(new BaseWindowedBolt.Duration(5, TimeUnit.SECONDS), 
                 new InMemoryWindowsStoreFactory(),
                 new Fields("tw", "msgid", "devid", "devts", "cat", "m1", "m2"), 
-                new SumAggregator(), 
+                defaultInstance.new SumAggregator(), 
                 new Fields("tw", "devid", "cat", "m1", "m2"))
-            .withWatermarkInterval(new BaseWindowedBolt.Duration(1, TimeUnit.SECONDS))
             .partitionPersist(insertValuesStateFactory, 
                 new Fields("tw", "devid", "cat", "sum_m1", "sum_m2"), 
                 new CassandraStateUpdater(), new Fields());
