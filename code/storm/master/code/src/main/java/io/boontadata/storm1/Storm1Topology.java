@@ -1,10 +1,12 @@
 package io.boontadata.storm1;
 
+import java.util.HashMap;
 import java.util.Map;
-import org.apache.storm.Config;
+import java.util.concurrent.TimeUnit;
+//import org.apache.storm.Config;
 import org.apache.storm.generated.StormTopology;
 import org.apache.storm.cassandra.CassandraContext;
-import org.apache.storm.cassandra.query.CQLStatementTupleMapper;
+import org.apache.storm.cassandra.query.builder.BoundCQLStatementMapperBuilder;
 import org.apache.storm.cassandra.trident.state.CassandraState;
 import org.apache.storm.cassandra.trident.state.CassandraStateFactory;
 import org.apache.storm.kafka.BrokerHosts;
@@ -13,17 +15,19 @@ import org.apache.storm.kafka.trident.OpaqueTridentKafkaSpout;
 import org.apache.storm.kafka.trident.TridentKafkaConfig;
 import org.apache.storm.kafka.ZkHosts;
 import org.apache.storm.spout.SchemeAsMultiScheme;
-import org.apache.storm.state.KeyValueState;
-import org.apache.storm.state.State;
-import org.apache.storm.StormSubmitter;
-import org.apache.storm.task.OutputCollector;
-import org.apache.storm.task.TopologyContext;
-import org.apache.storm.topology.OutputFieldsDeclarer;
-import org.apache.storm.topology.TopologyBuilder;
-import org.apache.storm.topology.base.BaseStatefulWindowedBolt;
-import org.apache.storm.trident.operation.Aggregator;
+//import org.apache.storm.state.KeyValueState;
+//import org.apache.storm.state.State;
+//import org.apache.storm.StormSubmitter;
+//import org.apache.storm.task.OutputCollector;
+//import org.apache.storm.task.TopologyContext;
+//import org.apache.storm.topology.OutputFieldsDeclarer;
+//import org.apache.storm.topology.TopologyBuilder;
+//import org.apache.storm.topology.base.BaseStatefulWindowedBolt;
+import org.apache.storm.topology.base.BaseWindowedBolt;
+import org.apache.storm.trident.operation.*;
 import org.apache.storm.trident.TridentTopology;
 import org.apache.storm.trident.tuple.TridentTuple;
+import org.apache.storm.trident.windowing.InMemoryWindowsStoreFactory;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
@@ -36,35 +40,7 @@ import static org.apache.storm.topology.base.BaseWindowedBolt.Count;
 import static org.apache.storm.cassandra.DynamicStatementBuilder.*;
 
 public class Storm1Topology {
-    /*
-    private static class SumAggregator implements Aggregator<Map<Tuple2<Long, String>, Tuple4<String, Long, String, Long, Float>>> {
-        
-        public Map<Tuple2<Long, String>, Tuple4<String, Long, String, Long, Float>> init(object batchId, TridentCollector collector) {
-            return new HashMap<Tuple2<Long, String>, Tuple4<String, Long, String, Long, Float>>();
-        }
-
-        public void aggregate(Map<Tuple2<Long, String>, Tuple4<String, Long, String, Long, Float>> val, TridentTuple tuple, TridentCollector collector) {
-            //
-        }
-
-        public void complete(Map<Tuple2<Long, String>, Tuple4<String, Long, String, Long, Float>> val, TridentCollector collector) {
-            //
-            
-            //How can I find the window time in order to emit tw field? 
-            // asked the question on Stack Overflow: http://stackoverflow.com/questions/42488607/how-to-retrieve-current-window-time-in-apache-storm-trident
-            // in the mean time, the txid can be used instead of time window.
-        }
-
-        public void cleanup() {
-        }
-    }
-
-    private static class DeduplicateAggregator implements Aggregator<> {
-        // TODO
-    }
-    */
-
-    public class SplitKafkaInput { 
+    public class SplitKafkaInput extends BaseFunction { 
         @Override 
         public void execute(TridentTuple tridentTuple, TridentCollector tridentCollector) { 
             String kafkaInput = tridentTuple.getString(0); 
@@ -86,6 +62,91 @@ public class Storm1Topology {
         } 
     }
 
+    public class DeduplicateState {
+        // each Map row contains the following fields (#, type)
+        // key:  msgid (String)
+        // value: Tuple made of msgid (0, String), devid (1, String), devts (2, Long), cat (3, String), m1 (4, Long), m2 (5, Float)
+        public HashMap<String, TridentTuple> deduplicated = new HashMap<String, TridentTuple>();
+    }
+
+    public class DeduplicateAggregator implements Aggregator<DeduplicateState> {
+        public DeduplicateState init(Object batchId, TridentCollector collector) {
+            return new DeduplicateState();
+        }
+
+        public void aggregate(DeduplicateState state, TridentTuple tuple, TridentCollector collector) {
+            String msgid = tuple.getString(0);
+            if (! state.deduplicated.containsKey(msgid)) {
+                state.deduplicated.put(msgid, tuple);
+            }
+        }
+ 
+        public void complete(DeduplicateState state, TridentCollector collector) {
+            // emit the time window and the Tuples
+            Long tw = System.currentTimeMillis();
+            for(Map.Entry<String, TridentTuple> entry : state.deduplicated.entrySet()) {
+                TridentTuple t = entry.getValue();
+                collector.emit(new Values(tw, t.getString(0), t.getString(1), t.getLong(2), t.getString(3), t.getLong(4), t.getFloat(5)));
+            }
+        }
+
+        @Override
+        public void prepare(Map conf, TridentOperationContext context) {
+        }
+
+        @Override
+        public void cleanup() {
+        }
+    }
+
+    public class SumState {
+        // each Map row contains the following fields (#, type)
+        // key:  twmsgid (String)
+        // value: Tuple made of tw (0, Long), devid (1, String), cat (2, String), m1 (3, Long), m2 (4, Float)
+        public HashMap<String, Map> summed = new HashMap<String, Map>();
+    }
+
+    public class SumAggregator implements Aggregator<SumState> {
+        public SumState init(Object batchId, TridentCollector collector) {
+            return new SumState();
+        }
+
+        public void aggregate(SumState state, TridentTuple tuple, TridentCollector collector) {
+            // the TridentTuple tuple has the following fields and types
+            // tw (0, Long), msgid (1, String), devid (2, String), devts (3, Long), cat (4, String), m1 (5, Long), m2 (6, Float)
+            String twmsgid = tuple.getLong(0).toString() + "-" + tuple.getString(1);
+            if (state.summed.containsKey(twmsgid)) {
+                Map map = state.summed.get(twmsgid);
+                map.put(3, (Long) map.get(3) + tuple.getLong(5));
+                map.put(4, (Float) map.get(4) + tuple.getFloat(6));
+            } else {
+                Map map = new HashMap();
+                map.put(0, tuple.getLong(0));
+                map.put(1, tuple.getString(2));
+                map.put(2, tuple.getString(4));
+                map.put(3, tuple.getLong(5));
+                map.put(4, tuple.getFloat(6));
+                state.summed.put(twmsgid, map);
+            }
+        }
+ 
+        public void complete(SumState state, TridentCollector collector) {
+            for(Map.Entry<String, Map> entry : state.summed.entrySet()) {
+                Map m = entry.getValue();
+                // emit tw, devid, cat, m1, m2
+                collector.emit(new Values((String) m.get(0), (String) m.get(1), (String) m.get(2), (Long) m.get(3), (Float) m.get(4)));
+            }
+        }
+
+        @Override
+        public void prepare(Map conf, TridentOperationContext context) {
+        }
+
+        @Override
+        public void cleanup() {
+        }
+    }
+
     public static StormTopology buildTopology() {
         TridentTopology tridentTopology = new TridentTopology();
         BrokerHosts zk = new ZkHosts("zk1");
@@ -95,20 +156,18 @@ public class Storm1Topology {
 
         //inspired by http://storm.apache.org/releases/1.0.1/storm-cassandra.html
         CassandraState.Options options = new CassandraState.Options(new CassandraContext());
-        CQLStatementTupleMapper insertValues = boundQuery(
+        BoundCQLStatementMapperBuilder insertValues = boundQuery(
             "INSERT INTO boontadata.agg_events"
             + " (window_time, device_id, category, m1_sum_downstream, m2_sum_downstream)"
-            + " VALUES (?, ?, ?, ?, ?);")
+            + " VALUES (:tw, :devid, :cat, :sum_m1, :sum_m2);")
             .bind(
-                with(
-                    field("tw").as("window_time"), 
-                    field("devid").as("device_id"), 
-                    field("cat").as("category"),
-                    field("sum_m1").as("m1_sum_downstream"), 
-                    field("sum_m2").as("m2_sum_downstream")
-                )
-            );
-        options.withCQLStatementTupleMapper(insertValues);
+                field("tw").as("window_time"), 
+                field("devid").as("device_id"), 
+                field("cat").as("category"),
+                field("sum_m1").as("m1_sum_downstream"), 
+                field("sum_m2").as("m2_sum_downstream")
+            ).byNamedSetters();
+        options.withCQLStatementTupleMapper(insertValues.build());
         CassandraStateFactory insertValuesStateFactory =  new CassandraStateFactory(options);
 
         tridentTopology.newStream("kafkaSpout", kafkaSpout)
