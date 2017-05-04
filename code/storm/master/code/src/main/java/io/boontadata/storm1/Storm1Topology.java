@@ -1,5 +1,6 @@
 package io.boontadata.storm1;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -40,7 +41,7 @@ import org.slf4j.LoggerFactory;
 import static org.apache.storm.topology.base.BaseWindowedBolt.Count;
 import static org.apache.storm.cassandra.DynamicStatementBuilder.*;
 
-public class Storm1Topology {
+public class Storm1Topology implements Serializable {
     public class SplitKafkaInput extends BaseFunction { 
         @Override 
         public void execute(TridentTuple tridentTuple, TridentCollector tridentCollector) { 
@@ -134,7 +135,7 @@ public class Storm1Topology {
         public void complete(SumState state, TridentCollector collector) {
             for(Map.Entry<String, Map> entry : state.summed.entrySet()) {
                 Map m = entry.getValue();
-                // emit tw, devid, cat, m1, m2
+                // emit tw, devid, cat, sum_m1, sum_m2
                 collector.emit(new Values((String) m.get(0), (String) m.get(1), (String) m.get(2), (Long) m.get(3), (Float) m.get(4)));
             }
         }
@@ -186,7 +187,7 @@ public class Storm1Topology {
                 new InMemoryWindowsStoreFactory(),
                 new Fields("tw", "msgid", "devid", "devts", "cat", "m1", "m2"), 
                 defaultInstance.new SumAggregator(), 
-                new Fields("tw", "devid", "cat", "m1", "m2"))
+                new Fields("tw", "devid", "cat", "sum_m1", "sum_m2"))
             .partitionPersist(insertValuesStateFactory, 
                 new Fields("tw", "devid", "cat", "sum_m1", "sum_m2"), 
                 new CassandraStateUpdater(), new Fields());
