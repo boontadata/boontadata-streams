@@ -161,7 +161,7 @@ public class Storm1Topology implements Serializable {
         //inspired by http://storm.apache.org/releases/1.0.1/storm-cassandra.html
         CassandraState.Options options = new CassandraState.Options(new CassandraContext());
         BoundCQLStatementMapperBuilder insertValues = boundQuery(
-            "INSERT INTO boontadata.agg_events"
+            "INSERT INTO agg_events"
             + " (window_time, device_id, category, m1_sum_downstream, m2_sum_downstream)"
             + " VALUES (:tw, :devid, :cat, :sum_m1, :sum_m2);")
             .bind(
@@ -197,6 +197,10 @@ public class Storm1Topology implements Serializable {
     public static void main(String[] args) throws Exception {
         Config conf = new Config();
         conf.setDebug(true);
+        conf.put("cassandra.keyspace", "boontadata");
+        conf.put("cassandra.nodes", "cassandra1:9042,cassandra2:9042,cassandra3:9042");
+        //conf.put("cassandra.port", 9042);
+
         String topologyName = "boontadata-storm1";
         if (args.length > 0) {
             topologyName = args[0];
