@@ -1,0 +1,450 @@
+format version: 5
+output mode:
+1 items
+0 -> single
+output directories:
+1 items
+output dir -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes
+compile options:
+0 items
+javac options:
+0 items
+compiler version:
+1 items
+0 -> 2.11.8
+compile order:
+1 items
+0 -> Mixed
+name hashing:
+1 items
+0 -> true
+products:
+15 items
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/Commons$.class
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/Commons$UserEvent$.class
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/Commons$UserEvent.class
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/Commons.class
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/Main$.class
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/Main.class
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/SparkJob$$anon$1.class
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/SparkJob$$anonfun$1.class
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/SparkJob$$anonfun$2.class
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/SparkJob$$anonfun$com$aggregateStructuredStream$SparkJob$$processRow$1.class
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/SparkJob$$typecreator2$1.class
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/SparkJob$$typecreator3$1.class
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/SparkJob.class
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/Statements$.class
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/Statements.class
+binary dependencies:
+13 items
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> /home/ubuntu/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.8.jar
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/.ivy2/cache/com.datastax.spark/spark-cassandra-connector_2.11/jars/spark-cassandra-connector_2.11-2.0.0-M3.jar
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/.ivy2/cache/log4j/log4j/bundles/log4j-1.2.17.jar
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/.ivy2/cache/org.apache.spark/spark-catalyst_2.11/jars/spark-catalyst_2.11-2.1.0.jar
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/.ivy2/cache/org.apache.spark/spark-core_2.11/jars/spark-core_2.11-2.1.0.jar
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/.ivy2/cache/org.apache.spark/spark-sql_2.11/jars/spark-sql_2.11-2.1.0.jar
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.8.jar
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/.ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.11.8.jar
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> /home/ubuntu/.ivy2/cache/com.datastax.spark/spark-cassandra-connector_2.11/jars/spark-cassandra-connector_2.11-2.0.0-M3.jar
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> /home/ubuntu/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.8.jar
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar
+direct source dependencies:
+0 items
+direct external dependencies:
+0 items
+public inherited source dependencies:
+0 items
+public inherited external dependencies:
+0 items
+member reference internal dependencies:
+2 items
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> /home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala
+member reference external dependencies:
+0 items
+inheritance internal dependencies:
+0 items
+inheritance external dependencies:
+0 items
+class names:
+15 items
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> com.aggregateStructuredStream.Commons
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> com.aggregateStructuredStream.Commons$
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> com.aggregateStructuredStream.Commons$UserEvent
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> com.aggregateStructuredStream.Commons$UserEvent$
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> com.aggregateStructuredStream.Main
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> com.aggregateStructuredStream.Main$
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> com.aggregateStructuredStream.SparkJob
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> com.aggregateStructuredStream.SparkJob$$anon$1
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> com.aggregateStructuredStream.SparkJob$$anonfun$1
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> com.aggregateStructuredStream.SparkJob$$anonfun$2
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> com.aggregateStructuredStream.SparkJob$$anonfun$com$aggregateStructuredStream$SparkJob$$processRow$1
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> com.aggregateStructuredStream.SparkJob$$typecreator2$1
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> com.aggregateStructuredStream.SparkJob$$typecreator3$1
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> com.aggregateStructuredStream.Statements
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> com.aggregateStructuredStream.Statements$
+used names:
+298 items
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> %
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> &&
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> <init>
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> ==
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> A
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> AbstractFunction5
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> Any
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> AnyRef
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> Boolean
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> Calendar
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> Commons
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> Date
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> DateFormat
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> IndexOutOfBoundsException
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> Int
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> Iterator
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> Long
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> None
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> Nothing
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> Object
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> Predef
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> Product
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> ScalaRunTime
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> Serializable
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> SimpleDateFormat
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> Some
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> String
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> StringOps
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> T
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> T0
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> T1
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> T2
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> T3
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> T4
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> T5
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> Timestamp
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> Tuple5
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> Unit
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> UserEvent
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> _hashCode
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> _toString
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> add
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> aggregateStructuredStream
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> asInstanceOf
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> augmentString
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> calendar
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> category
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> com
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> device_id
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> eq
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> format
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> format1
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> get
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> getInstance
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> getTime
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> isInstanceOf
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> java
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> m1_sum_downstream
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> m2_sum_downstream
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> package
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> runtime
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> scala
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> sec
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> setTime
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> sql
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> text
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> timeL
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> timeStr
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> toLong
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> toString
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> ts
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> typedProductIterator
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> unary_-
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> util
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> window_time
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> ||
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> $
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> $anon
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> $m
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> $m$untyped
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> $typecreator2
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> $typecreator3
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> $u
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> <init>
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> <repeated>
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> ?0
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> A
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Any
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> AnyRef
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Array
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Boolean
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Builder
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> CassandraConnector
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Class
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> ClassLoader
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> ClassSymbol
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Column
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> ColumnName
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Commons
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> DataFrame
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> DataStreamReader
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> DataStreamWriter
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Dataset
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> DateFormat
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Encoder
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Exception
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> ForeachWriter
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Function1
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> INFO
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Int
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Internal
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> JavaConversions
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> JavaUniverse
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Level
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> List
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Logger
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Long
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Main
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Mirror
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> ModuleSymbol
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Nil
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Nothing
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Object
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Predef
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Product
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> ReificationSupportApi
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> RelationalGroupedDataset
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> ResultSet
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Serializable
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Session
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> SimpleDateFormat
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> SingleType
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Singleton
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> SparkConf
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> SparkContext
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> SparkJob
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> SparkSession
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Statements
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> StreamingQuery
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> String
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> StringContext
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> StringOps
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> StringToColumn
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Symbol
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> T
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> T0
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> T1
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> T2
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> T3
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> T4
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> T5
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> T6
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> ThisType
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Throwable
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Timestamp
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Tuple6
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Type
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> TypeCreator
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> TypeRef
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> TypeSymbol
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> TypeTag
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> U
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Unit
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> Universe
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> UserEvent
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> WARN
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> agg
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> aggregateStructuredStream
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> apache
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> appName
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> apply
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> as
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> asInstanceOf
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> asModule
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> asType
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> augmentString
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> awaitTermination
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> builder
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> cast
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> category
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> collection
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> cols
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> columns
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> com
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> config
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> connector
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> core
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> cql
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> createKeySpaceAndTable
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> datastax
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> device_id
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> df
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> driver
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> ds
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> error
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> ex
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> execute
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> foreach
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> format
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> functions
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> getClass
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> getClassLoader
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> getConf
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> getLogger
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> getMessage
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> getOrCreate
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> getTimeStamp
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> groupBy
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> immutable
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> implicits
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> info
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> internal
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> java
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> line
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> lines
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> load
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> log4j
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> logger
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> m1_sum_downstream
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> m2_sum_downstream
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> map
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> master
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> materializeTypeTag
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> moduleClass
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> newProductEncoder
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> newStringEncoder
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> option
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> org
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> outputMode
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> package
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> printSchema
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> processRow
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> query
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> queryName
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> readStream
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> reflect
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> reificationSupport
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> runJob
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> runtime
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> runtimeMirror
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> scala
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> select
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> selectExpr
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> selectType
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> session
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> setLevel
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> spark
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> sparkContext
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> sparkJob
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> sparkSession
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> split
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> sql
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> start
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> staticClass
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> staticModule
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> staticPackage
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> stop
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> sum
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> text
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> toDF
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> toInt
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> toTypeConstructor
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> universe
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> value
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> window_time
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> withSessionDo
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> writeStream
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> writer
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> <init>
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> <repeated>
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> Any
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> Boolean
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> Object
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> Predef
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> ResultSet
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> Serializable
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> Session
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> Statements
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> String
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> StringContext
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> Timestamp
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> aggregateStructuredStream
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> category
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> com
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> core
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> datastax
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> device_id
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> driver
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> dropTable
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> execute
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> java
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> m1_sum_downstream
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> m2_sum_downstream
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> s
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> scala
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> session
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> sql
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> window_time
+product stamps:
+15 items
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/Commons$.class -> lastModified(1493395705000)
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/Commons$UserEvent$.class -> lastModified(1493395705000)
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/Commons$UserEvent.class -> lastModified(1493395705000)
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/Commons.class -> lastModified(1493395705000)
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/Main$.class -> lastModified(1493395705000)
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/Main.class -> lastModified(1493395705000)
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/SparkJob$$anon$1.class -> lastModified(1493395705000)
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/SparkJob$$anonfun$1.class -> lastModified(1493395705000)
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/SparkJob$$anonfun$2.class -> lastModified(1493395705000)
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/SparkJob$$anonfun$com$aggregateStructuredStream$SparkJob$$processRow$1.class -> lastModified(1493395705000)
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/SparkJob$$typecreator2$1.class -> lastModified(1493395705000)
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/SparkJob$$typecreator3$1.class -> lastModified(1493395706000)
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/SparkJob.class -> lastModified(1493395705000)
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/Statements$.class -> lastModified(1493395706000)
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/target/scala-2.11/classes/com/aggregateStructuredStream/Statements.class -> lastModified(1493395706000)
+source stamps:
+3 items
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> hash(a51fbdd607face141b1f6f265400e091113657f5)
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> hash(07903f5ab98dd6b4bbafe018966edd8f92dc7207)
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> hash(fcfc6f01676d203bbf1e65b26081fc38c593f4df)
+binary stamps:
+8 items
+/home/ubuntu/.ivy2/cache/com.datastax.spark/spark-cassandra-connector_2.11/jars/spark-cassandra-connector_2.11-2.0.0-M3.jar -> lastModified(1472647006000)
+/home/ubuntu/.ivy2/cache/log4j/log4j/bundles/log4j-1.2.17.jar -> lastModified(1338025419000)
+/home/ubuntu/.ivy2/cache/org.apache.spark/spark-catalyst_2.11/jars/spark-catalyst_2.11-2.1.0.jar -> lastModified(1481872148000)
+/home/ubuntu/.ivy2/cache/org.apache.spark/spark-core_2.11/jars/spark-core_2.11-2.1.0.jar -> lastModified(1481871925000)
+/home/ubuntu/.ivy2/cache/org.apache.spark/spark-sql_2.11/jars/spark-sql_2.11-2.1.0.jar -> lastModified(1481872304000)
+/home/ubuntu/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.8.jar -> lastModified(1457105192000)
+/home/ubuntu/.ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.11.8.jar -> lastModified(1457105200000)
+/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar -> lastModified(1485187082000)
+class names:
+8 items
+/home/ubuntu/.ivy2/cache/com.datastax.spark/spark-cassandra-connector_2.11/jars/spark-cassandra-connector_2.11-2.0.0-M3.jar -> com.datastax.driver.core.Session
+/home/ubuntu/.ivy2/cache/log4j/log4j/bundles/log4j-1.2.17.jar -> org.apache.log4j.Level
+/home/ubuntu/.ivy2/cache/org.apache.spark/spark-catalyst_2.11/jars/spark-catalyst_2.11-2.1.0.jar -> org.apache.spark.sql.Encoder
+/home/ubuntu/.ivy2/cache/org.apache.spark/spark-core_2.11/jars/spark-core_2.11-2.1.0.jar -> org.apache.spark.SparkContext
+/home/ubuntu/.ivy2/cache/org.apache.spark/spark-sql_2.11/jars/spark-sql_2.11-2.1.0.jar -> org.apache.spark.sql.ForeachWriter
+/home/ubuntu/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.8.jar -> scala.Serializable
+/home/ubuntu/.ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.11.8.jar -> scala.reflect.api.TypeCreator
+/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar -> java.lang.Object
+internal apis:
+3 items
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> 
+rO0ABXNyABB4c2J0aS5hcGkuU291cmNlSjH5SdlLSkQCAAdJAAdhcGlIYXNoWgAIaGFzTWFjcm9aABBoYXNQYWNrYWdlT2JqZWN0TAAYX2ludGVybmFsT25seV9uYW1lSGFzaGVzdAAkTHhzYnRpL2FwaS9faW50ZXJuYWxPbmx5X05hbWVIYXNoZXM7TAADYXBpdAAVTHhzYnRpL2FwaS9Tb3VyY2VBUEk7TAALY29tcGlsYXRpb250ABdMeHNidGkvYXBpL0NvbXBpbGF0aW9uO1sABGhhc2h0AAJbQnhw5vQFuQAAc3IAInhzYnRpLmFwaS5faW50ZXJuYWxPbmx5X05hbWVIYXNoZXNU2r6Z+tTsTAIAAlsAD2ltcGxpY2l0TWVtYmVyc3QAI1tMeHNidGkvYXBpL19pbnRlcm5hbE9ubHlfTmFtZUhhc2g7WwAOcmVndWxhck1lbWJlcnNxAH4AB3hwdXIAI1tMeHNidGkuYXBpLl9pbnRlcm5hbE9ubHlfTmFtZUhhc2g7SVqAtt2Wi/QCAAB4cAAAAAB1cQB+AAkAAAAsc3IAIHhzYnRpLmFwaS5faW50ZXJuYWxPbmx5X05hbWVIYXNoWw71InY4V88CAAJJAARoYXNoTAAEbmFtZXQAEkxqYXZhL2xhbmcvU3RyaW5nO3hwhIidlHQABm5vdGlmeXNxAH4ADBxBkFl0AAd1bmFwcGx5c3EAfgAMhcbrq3QAEW0yX3N1bV9kb3duc3RyZWFtc3EAfgAMjgUH1XQAB2N1cnJpZWRzcQB+AAwTGiPYdAAJZGV2aWNlX2lkc3EAfgAMjr+w03QABHdhaXRzcQB+AAzqZ6gPdAAOY29weSRkZWZhdWx0JDJzcQB+AAy0evTqdAANJGFzSW5zdGFuY2VPZnNxAH4ADD+G4TN0AA5jb3B5JGRlZmF1bHQkNXNxAH4ADMX1i3l0AAxwcm9kdWN0QXJpdHlzcQB+AAz82C12dAAGZXF1YWxzc3EAfgAMzcVaa3QADGFzSW5zdGFuY2VPZnNxAH4ADHv/5+B0AAxzeW5jaHJvbml6ZWRzcQB+AAzO6a1SdAANJGlzSW5zdGFuY2VPZnNxAH4ADDYbAIR0AAZ0dXBsZWRzcQB+AAylC2ZvdAAIY2FuRXF1YWxzcQB+AAyMOEUCdAAOY29weSRkZWZhdWx0JDRzcQB+AAwS8gvHdAALd2luZG93X3RpbWVzcQB+AAwXuHzAdAANcHJvZHVjdFByZWZpeHNxAH4ADK6SkOJ0AAlub3RpZnlBbGxzcQB+AAyW0xkPdAAMaXNJbnN0YW5jZU9mc3EAfgAM/pNrJHQABjxpbml0PnNxAH4ADI7Pvrt0AAVhcHBseXNxAH4ADHI2ECx0AAI9PXNxAH4ADFJcs+d0AAdDb21tb25zc3EAfgAMIBUrwXQABWNsb25lc3EAfgAMtrgGf3QABiRpbml0JHNxAH4ADJID92V0AAxnZXRUaW1lU3RhbXBzcQB+AAzJPPYSdAAOY29weSRkZWZhdWx0JDNzcQB+AAzkjh7IdAAEY29weXNxAH4ADMBDWL90AAhjYXRlZ29yeXNxAH4ADOXEMeR0AAh0b1N0cmluZ3NxAH4ADAkxXVJ0AAIhPXNxAH4ADPCddJd0ABFtMV9zdW1fZG93bnN0cmVhbXNxAH4ADI11TMN0AAlVc2VyRXZlbnRzcQB+AAyIuNkHdAAIZ2V0Q2xhc3NzcQB+AAw8Nbs7dAAOY29weSRkZWZhdWx0JDFzcQB+AAwJUd2MdAACbmVzcQB+AAwOnYI8dAACZXFzcQB+AAwGkdfCdAAPcHJvZHVjdEl0ZXJhdG9yc3EAfgAMnVYvJXQAAiMjc3EAfgAMmI1eeHQACGZpbmFsaXplc3EAfgAMUPmpKHQADnByb2R1Y3RFbGVtZW50c3EAfgAMMN9Im3QACGhhc2hDb2Rlc3IAE3hzYnRpLmFwaS5Tb3VyY2VBUEm5Xqf5KSM4pAIAAlsAC2RlZmluaXRpb25zdAAXW0x4c2J0aS9hcGkvRGVmaW5pdGlvbjtbAAhwYWNrYWdlc3QAFFtMeHNidGkvYXBpL1BhY2thZ2U7eHB1cgAXW0x4c2J0aS5hcGkuRGVmaW5pdGlvbjuIyVzntONeDgIAAHhwAAAAAXNyABN4c2J0aS5hcGkuQ2xhc3NMaWtlgzQcod+wl2wCAARMAA5kZWZpbml0aW9uVHlwZXQAGkx4c2J0aS9hcGkvRGVmaW5pdGlvblR5cGU7WwAQc2F2ZWRBbm5vdGF0aW9uc3QAE1tMamF2YS9sYW5nL1N0cmluZztMAAhzZWxmVHlwZXQAEEx4c2J0aS9hcGkvTGF6eTtMAAlzdHJ1Y3R1cmVxAH4Ab3hyACF4c2J0aS5hcGkuUGFyYW1ldGVyaXplZERlZmluaXRpb275EW6x1VA84gIAAVsADnR5cGVQYXJhbWV0ZXJzdAAaW0x4c2J0aS9hcGkvVHlwZVBhcmFtZXRlcjt4cgAUeHNidGkuYXBpLkRlZmluaXRpb26HKhvocULjRgIABEwABmFjY2Vzc3QAEkx4c2J0aS9hcGkvQWNjZXNzO1sAC2Fubm90YXRpb25zdAAXW0x4c2J0aS9hcGkvQW5ub3RhdGlvbjtMAAltb2RpZmllcnN0ABVMeHNidGkvYXBpL01vZGlmaWVycztMAARuYW1lcQB+AA14cHNyABB4c2J0aS5hcGkuUHVibGljulg9rmwtYEICAAB4cgAQeHNidGkuYXBpLkFjY2Vzc91imvgdYzFIAgAAeHB1cgAXW0x4c2J0aS5hcGkuQW5ub3RhdGlvbjvrl+sZEPaNSAIAAHhwAAAAAHNyABN4c2J0aS5hcGkuTW9kaWZpZXJzl+dh3BMme7MCAAFCAAVmbGFnc3hwAHQAJWNvbS5hZ2dyZWdhdGVTdHJ1Y3R1cmVkU3RyZWFtLkNvbW1vbnN1cgAaW0x4c2J0aS5hcGkuVHlwZVBhcmFtZXRlcjvZbSYPKJ3ytgIAAHhwAAAAAH5yABh4c2J0aS5hcGkuRGVmaW5pdGlvblR5cGUAAAAAAAAAABIAAHhyAA5qYXZhLmxhbmcuRW51bQAAAAAAAAAAEgAAeHB0AAZNb2R1bGV1cgATW0xqYXZhLmxhbmcuU3RyaW5nO63SVufpHXtHAgAAeHAAAAAAc3IAIXhzYnRpLmFwaS5BYnN0cmFjdExhenkkU3RyaWN0TGF6eQ1mHGspFiq4AgABTAAFdmFsdWV0ABJMamF2YS9sYW5nL09iamVjdDt4cHNyABN4c2J0aS5hcGkuRW1wdHlUeXBlvP2eRkk7iSQCAAB4cgAUeHNidGkuYXBpLlNpbXBsZVR5cGVyeGKIISO/QAIAAHhyAA54c2J0aS5hcGkuVHlwZT9q2SEWSarKAgAAeHBzcQB+AIdzcgATeHNidGkuYXBpLlN0cnVjdHVyZamq+YCTb9gAAgADTAAIZGVjbGFyZWRxAH4Ab0wACWluaGVyaXRlZHEAfgBvTAAHcGFyZW50c3EAfgBveHEAfgCMc3EAfgCHdXEAfgBqAAAAAHNxAH4Ah3VxAH4AagAAAABzcQB+AId1cgARW0x4c2J0aS5hcGkuVHlwZTt0/6Vae/npQQIAAHhwAAAAAnNyABR4c2J0aS5hcGkuUHJvamVjdGlvbvPSjVTpRaQtAgACTAACaWRxAH4ADUwABnByZWZpeHQAFkx4c2J0aS9hcGkvU2ltcGxlVHlwZTt4cQB+AIt0AAZPYmplY3RzcgATeHNidGkuYXBpLlNpbmdsZXRvbvynX/jPVuRGAgABTAAEcGF0aHQAEEx4c2J0aS9hcGkvUGF0aDt4cQB+AItzcgAOeHNidGkuYXBpLlBhdGibPVwIzqUnhAIAAVsACmNvbXBvbmVudHN0ABpbTHhzYnRpL2FwaS9QYXRoQ29tcG9uZW50O3hwdXIAGltMeHNidGkuYXBpLlBhdGhDb21wb25lbnQ7Q9oJdC1nFnQCAAB4cAAAAANzcgAMeHNidGkuYXBpLklkmDJsizdTxEACAAFMAAJpZHEAfgANeHIAF3hzYnRpLmFwaS5QYXRoQ29tcG9uZW50X5oiWy6Gn7wCAAB4cHQABGphdmFzcQB+AKR0AARsYW5nc3IADnhzYnRpLmFwaS5UaGlz2wntpsxaQFwCAAB4cQB+AKVzcQB+AJh0AANBbnlzcQB+AJxzcQB+AJ91cQB+AKIAAAACc3EAfgCkdAAFc2NhbGFxAH4Aq3VyABRbTHhzYnRpLmFwaS5QYWNrYWdlO1sTGTdwpyehAgAAeHAAAAACc3IAEXhzYnRpLmFwaS5QYWNrYWdlflmP9q7OOVgCAAFMAARuYW1lcQB+AA14cHQAHWNvbS5hZ2dyZWdhdGVTdHJ1Y3R1cmVkU3RyZWFtc3EAfgC1dAADY29tc3IAFXhzYnRpLmFwaS5Db21waWxhdGlvbu364MNq6KBCAgACSgAJc3RhcnRUaW1lWwAHb3V0cHV0c3QAGltMeHNidGkvYXBpL091dHB1dFNldHRpbmc7eHAAAAFbtVH0QHVyABpbTHhzYnRpLmFwaS5PdXRwdXRTZXR0aW5nO39qwvOnh6VCAgAAeHAAAAABc3IAF3hzYnRpLmFwaS5PdXRwdXRTZXR0aW5netmaR3T7HXsCAAJMAA9vdXRwdXREaXJlY3RvcnlxAH4ADUwAD3NvdXJjZURpcmVjdG9yeXEAfgANeHB0AFMvaG9tZS91YnVudHUvdHJpYWxCb29udGFkYXRhL2Jvb250YWRhdGEtc3RydWN0dXJlZC1zdHJlYW0vdGFyZ2V0L3NjYWxhLTIuMTEvY2xhc3Nlc3QAAS91cgACW0Ks8xf4BghU4AIAAHhwAAAAFKUfvdYH+s4UGx9vJlQA4JERNlf1
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> 
+rO0ABXNyABB4c2J0aS5hcGkuU291cmNlSjH5SdlLSkQCAAdJAAdhcGlIYXNoWgAIaGFzTWFjcm9aABBoYXNQYWNrYWdlT2JqZWN0TAAYX2ludGVybmFsT25seV9uYW1lSGFzaGVzdAAkTHhzYnRpL2FwaS9faW50ZXJuYWxPbmx5X05hbWVIYXNoZXM7TAADYXBpdAAVTHhzYnRpL2FwaS9Tb3VyY2VBUEk7TAALY29tcGlsYXRpb250ABdMeHNidGkvYXBpL0NvbXBpbGF0aW9uO1sABGhhc2h0AAJbQnhw9ZnfQAAAc3IAInhzYnRpLmFwaS5faW50ZXJuYWxPbmx5X05hbWVIYXNoZXNU2r6Z+tTsTAIAAlsAD2ltcGxpY2l0TWVtYmVyc3QAI1tMeHNidGkvYXBpL19pbnRlcm5hbE9ubHlfTmFtZUhhc2g7WwAOcmVndWxhck1lbWJlcnNxAH4AB3hwdXIAI1tMeHNidGkuYXBpLl9pbnRlcm5hbE9ubHlfTmFtZUhhc2g7SVqAtt2Wi/QCAAB4cAAAAAB1cQB+AAkAAAAbc3IAIHhzYnRpLmFwaS5faW50ZXJuYWxPbmx5X05hbWVIYXNoWw71InY4V88CAAJJAARoYXNoTAAEbmFtZXQAEkxqYXZhL2xhbmcvU3RyaW5nO3hw9CRfInQACFNwYXJrSm9ic3EAfgAM8RBEuHQABm5vdGlmeXNxAH4ADAYLQV10AAR3YWl0c3EAfgAMoa2dWnQADSRhc0luc3RhbmNlT2ZzcQB+AAzzMQ56dAAGbG9nZ2Vyc3EAfgAM+I+lm3QABmVxdWFsc3NxAH4ADIko7Dx0AAxhc0luc3RhbmNlT2ZzcQB+AAwD68lXdAAMc3luY2hyb25pemVkc3EAfgAMMCy5NHQADSRpc0luc3RhbmNlT2ZzcQB+AAxzCZA6dAAEbWFpbnNxAH4ADMZxoT50AAlub3RpZnlBbGxzcQB+AAyLLwrIdAAMaXNJbnN0YW5jZU9mc3EAfgAMda7Cs3QABjxpbml0PnNxAH4ADFRVoaN0AAI9PXNxAH4ADFB+AdR0AAVjbG9uZXNxAH4ADP1H4Kh0AAxzcGFya1Nlc3Npb25zcQB+AAwjGagYdAAJY29ubmVjdG9yc3EAfgAMRlz7pXQABnJ1bkpvYnNxAH4ADAiDlEl0AARNYWluc3EAfgAMhxUtUHQACHRvU3RyaW5nc3EAfgAMRv/2U3QAAiE9c3EAfgAMBQRmzHQACGdldENsYXNzc3EAfgAMJMJ6+XQAAm5lc3EAfgAM+AUxz3QAAmVxc3EAfgAMAtwGUnQAAiMjc3EAfgAMBnVKs3QACGZpbmFsaXplc3EAfgAMeHZq/XQACGhhc2hDb2Rlc3IAE3hzYnRpLmFwaS5Tb3VyY2VBUEm5Xqf5KSM4pAIAAlsAC2RlZmluaXRpb25zdAAXW0x4c2J0aS9hcGkvRGVmaW5pdGlvbjtbAAhwYWNrYWdlc3QAFFtMeHNidGkvYXBpL1BhY2thZ2U7eHB1cgAXW0x4c2J0aS5hcGkuRGVmaW5pdGlvbjuIyVzntONeDgIAAHhwAAAAAnNyABN4c2J0aS5hcGkuQ2xhc3NMaWtlgzQcod+wl2wCAARMAA5kZWZpbml0aW9uVHlwZXQAGkx4c2J0aS9hcGkvRGVmaW5pdGlvblR5cGU7WwAQc2F2ZWRBbm5vdGF0aW9uc3QAE1tMamF2YS9sYW5nL1N0cmluZztMAAhzZWxmVHlwZXQAEEx4c2J0aS9hcGkvTGF6eTtMAAlzdHJ1Y3R1cmVxAH4ATXhyACF4c2J0aS5hcGkuUGFyYW1ldGVyaXplZERlZmluaXRpb275EW6x1VA84gIAAVsADnR5cGVQYXJhbWV0ZXJzdAAaW0x4c2J0aS9hcGkvVHlwZVBhcmFtZXRlcjt4cgAUeHNidGkuYXBpLkRlZmluaXRpb26HKhvocULjRgIABEwABmFjY2Vzc3QAEkx4c2J0aS9hcGkvQWNjZXNzO1sAC2Fubm90YXRpb25zdAAXW0x4c2J0aS9hcGkvQW5ub3RhdGlvbjtMAAltb2RpZmllcnN0ABVMeHNidGkvYXBpL01vZGlmaWVycztMAARuYW1lcQB+AA14cHNyABB4c2J0aS5hcGkuUHVibGljulg9rmwtYEICAAB4cgAQeHNidGkuYXBpLkFjY2Vzc91imvgdYzFIAgAAeHB1cgAXW0x4c2J0aS5hcGkuQW5ub3RhdGlvbjvrl+sZEPaNSAIAAHhwAAAAAHNyABN4c2J0aS5hcGkuTW9kaWZpZXJzl+dh3BMme7MCAAFCAAVmbGFnc3hwAHQAImNvbS5hZ2dyZWdhdGVTdHJ1Y3R1cmVkU3RyZWFtLk1haW51cgAaW0x4c2J0aS5hcGkuVHlwZVBhcmFtZXRlcjvZbSYPKJ3ytgIAAHhwAAAAAH5yABh4c2J0aS5hcGkuRGVmaW5pdGlvblR5cGUAAAAAAAAAABIAAHhyAA5qYXZhLmxhbmcuRW51bQAAAAAAAAAAEgAAeHB0AAZNb2R1bGV1cgATW0xqYXZhLmxhbmcuU3RyaW5nO63SVufpHXtHAgAAeHAAAAAAc3IAIXhzYnRpLmFwaS5BYnN0cmFjdExhenkkU3RyaWN0TGF6eQ1mHGspFiq4AgABTAAFdmFsdWV0ABJMamF2YS9sYW5nL09iamVjdDt4cHNyABN4c2J0aS5hcGkuRW1wdHlUeXBlvP2eRkk7iSQCAAB4cgAUeHNidGkuYXBpLlNpbXBsZVR5cGVyeGKIISO/QAIAAHhyAA54c2J0aS5hcGkuVHlwZT9q2SEWSarKAgAAeHBzcQB+AGVzcgATeHNidGkuYXBpLlN0cnVjdHVyZamq+YCTb9gAAgADTAAIZGVjbGFyZWRxAH4ATUwACWluaGVyaXRlZHEAfgBNTAAHcGFyZW50c3EAfgBNeHEAfgBqc3EAfgBldXEAfgBIAAAAAXNyAA14c2J0aS5hcGkuRGVmUr6f4ny0NmkCAAJMAApyZXR1cm5UeXBldAAQTHhzYnRpL2FwaS9UeXBlO1sAD3ZhbHVlUGFyYW1ldGVyc3QAGltMeHNidGkvYXBpL1BhcmFtZXRlckxpc3Q7eHEAfgBOcQB+AFd1cQB+AFgAAAAAc3EAfgBaAHEAfgAhdXEAfgBdAAAAAHNyABR4c2J0aS5hcGkuUHJvamVjdGlvbvPSjVTpRaQtAgACTAACaWRxAH4ADUwABnByZWZpeHQAFkx4c2J0aS9hcGkvU2ltcGxlVHlwZTt4cQB+AGl0AARVbml0c3IAE3hzYnRpLmFwaS5TaW5nbGV0b278p1/4z1bkRgIAAUwABHBhdGh0ABBMeHNidGkvYXBpL1BhdGg7eHEAfgBpc3IADnhzYnRpLmFwaS5QYXRomz1cCM6lJ4QCAAFbAApjb21wb25lbnRzdAAaW0x4c2J0aS9hcGkvUGF0aENvbXBvbmVudDt4cHVyABpbTHhzYnRpLmFwaS5QYXRoQ29tcG9uZW50O0PaCXQtZxZ0AgAAeHAAAAACc3IADHhzYnRpLmFwaS5JZJgybIs3U8RAAgABTAACaWRxAH4ADXhyABd4c2J0aS5hcGkuUGF0aENvbXBvbmVudF+aIlsuhp+8AgAAeHB0AAVzY2FsYXNyAA54c2J0aS5hcGkuVGhpc9sJ7abMWkBcAgAAeHEAfgCFdXIAGltMeHNidGkuYXBpLlBhcmFtZXRlckxpc3Q79dM6HfKzcO4CAAB4cAAAAAFzcgAXeHNidGkuYXBpLlBhcmFtZXRlckxpc3TWxbwcZEl04wIAAloACmlzSW1wbGljaXRbAApwYXJhbWV0ZXJzdAAcW0x4c2J0aS9hcGkvTWV0aG9kUGFyYW1ldGVyO3hwAHVyABxbTHhzYnRpLmFwaS5NZXRob2RQYXJhbWV0ZXI7z7jFXaXdtW0CAAB4cAAAAAFzcgAZeHNidGkuYXBpLk1ldGhvZFBhcmFtZXRlch9FrhfTSbDqAgAEWgAKaGFzRGVmYXVsdEwACG1vZGlmaWVydAAdTHhzYnRpL2FwaS9QYXJhbWV0ZXJNb2RpZmllcjtMAARuYW1lcQB+AA1MAAN0cGVxAH4AcnhwAH5yABt4c2J0aS5hcGkuUGFyYW1ldGVyTW9kaWZpZXIAAAAAAAAAABIAAHhxAH4AYHQABVBsYWludAAEYXJnc3NyABd4c2J0aS5hcGkuUGFyYW1ldGVyaXplZBZs7mkDybt/AgACTAAIYmFzZVR5cGVxAH4AeVsADXR5cGVBcmd1bWVudHN0ABFbTHhzYnRpL2FwaS9UeXBlO3hxAH4AaXNxAH4AeHQABUFycmF5cQB+AH51cgARW0x4c2J0aS5hcGkuVHlwZTt0/6Vae/npQQIAAHhwAAAAAXNxAH4AeHQABlN0cmluZ3NxAH4AfHNxAH4Af3VxAH4AggAAAANzcQB+AIR0AARqYXZhc3EAfgCEdAAEbGFuZ3EAfgCJc3EAfgBldXEAfgBIAAAAAHNxAH4AZXVxAH4AnQAAAAJzcQB+AHh0AAZPYmplY3RxAH4AoXNxAH4AeHQAA0FueXEAfgB+c3EAfgBKcQB+AFd1cQB+AFgAAAAAc3EAfgBaAHQAJmNvbS5hZ2dyZWdhdGVTdHJ1Y3R1cmVkU3RyZWFtLlNwYXJrSm9idXEAfgBdAAAAAH5xAH4AX3QACENsYXNzRGVmdXEAfgBjAAAAAHNxAH4AZXEAfgBrc3EAfgBlc3EAfgBtc3EAfgBldXEAfgBIAAAAAHNxAH4AZXVxAH4ASAAAAABzcQB+AGV1cQB+AJ0AAAAEc3EAfgB4dAAMU2VyaWFsaXphYmxlc3EAfgB8c3EAfgB/dXEAfgCCAAAAAnNxAH4AhHEAfgCHcQB+AIlzcQB+AHhxAH4AwnNxAH4AfHNxAH4Af3VxAH4AggAAAANzcQB+AIRxAH4ApXNxAH4AhHQAAmlvcQB+AIlzcQB+AHhxAH4ArXNxAH4AfHNxAH4Af3VxAH4AggAAAANzcQB+AIRxAH4ApXNxAH4AhHEAfgCncQB+AIlzcQB+AHhxAH4Ar3EAfgDDdXIAFFtMeHNidGkuYXBpLlBhY2thZ2U7WxMZN3CnJ6ECAAB4cAAAAAJzcgAReHNidGkuYXBpLlBhY2thZ2V+WY/2rs45WAIAAUwABG5hbWVxAH4ADXhwdAAdY29tLmFnZ3JlZ2F0ZVN0cnVjdHVyZWRTdHJlYW1zcQB+ANd0AANjb21zcgAVeHNidGkuYXBpLkNvbXBpbGF0aW9u7frgw2rooEICAAJKAAlzdGFydFRpbWVbAAdvdXRwdXRzdAAaW0x4c2J0aS9hcGkvT3V0cHV0U2V0dGluZzt4cAAAAVu1UfRAdXIAGltMeHNidGkuYXBpLk91dHB1dFNldHRpbmc7f2rC86eHpUICAAB4cAAAAAFzcgAXeHNidGkuYXBpLk91dHB1dFNldHRpbmd62ZpHdPsdewIAAkwAD291dHB1dERpcmVjdG9yeXEAfgANTAAPc291cmNlRGlyZWN0b3J5cQB+AA14cHQAUy9ob21lL3VidW50dS90cmlhbEJvb250YWRhdGEvYm9vbnRhZGF0YS1zdHJ1Y3R1cmVkLXN0cmVhbS90YXJnZXQvc2NhbGEtMi4xMS9jbGFzc2VzdAABL3VyAAJbQqzzF/gGCFTgAgAAeHAAAAAUB5A/WrmN1rS7r+AYlm7dj5Lccgc=
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> 
+rO0ABXNyABB4c2J0aS5hcGkuU291cmNlSjH5SdlLSkQCAAdJAAdhcGlIYXNoWgAIaGFzTWFjcm9aABBoYXNQYWNrYWdlT2JqZWN0TAAYX2ludGVybmFsT25seV9uYW1lSGFzaGVzdAAkTHhzYnRpL2FwaS9faW50ZXJuYWxPbmx5X05hbWVIYXNoZXM7TAADYXBpdAAVTHhzYnRpL2FwaS9Tb3VyY2VBUEk7TAALY29tcGlsYXRpb250ABdMeHNidGkvYXBpL0NvbXBpbGF0aW9uO1sABGhhc2h0AAJbQnhwAeg9IgAAc3IAInhzYnRpLmFwaS5faW50ZXJuYWxPbmx5X05hbWVIYXNoZXNU2r6Z+tTsTAIAAlsAD2ltcGxpY2l0TWVtYmVyc3QAI1tMeHNidGkvYXBpL19pbnRlcm5hbE9ubHlfTmFtZUhhc2g7WwAOcmVndWxhck1lbWJlcnNxAH4AB3hwdXIAI1tMeHNidGkuYXBpLl9pbnRlcm5hbE9ubHlfTmFtZUhhc2g7SVqAtt2Wi/QCAAB4cAAAAAB1cQB+AAkAAAAXc3IAIHhzYnRpLmFwaS5faW50ZXJuYWxPbmx5X05hbWVIYXNoWw71InY4V88CAAJJAARoYXNoTAAEbmFtZXQAEkxqYXZhL2xhbmcvU3RyaW5nO3hwlykTdXQABm5vdGlmeXNxAH4ADGyZD510AAR3YWl0c3EAfgAMAT5X6HQAA2NxbHNxAH4ADAS0/Qp0AA0kYXNJbnN0YW5jZU9mc3EAfgAMA/w1AXQABmVxdWFsc3NxAH4ADA7uAcB0AAxhc0luc3RhbmNlT2ZzcQB+AAxPxbdVdAAMc3luY2hyb25pemVkc3EAfgAM4IglUnQADSRpc0luc3RhbmNlT2ZzcQB+AAxz5hgLdAAWY3JlYXRlS2V5U3BhY2VBbmRUYWJsZXNxAH4ADCi3x/x0AAlub3RpZnlBbGxzcQB+AAz1TWKKdAAMaXNJbnN0YW5jZU9mc3EAfgAM3TL4aHQAClN0YXRlbWVudHNzcQB+AAzLKaCudAACPT1zcQB+AAwM9eVZdAAgY3JlYXRlS2V5U3BhY2VBbmRUYWJsZSRkZWZhdWx0JDJzcQB+AAx6EYo1dAAFY2xvbmVzcQB+AAwh9RI0dAAIdG9TdHJpbmdzcQB+AAy4U9tCdAACIT1zcQB+AAyI8I2OdAAIZ2V0Q2xhc3NzcQB+AAxqMJXFdAACbmVzcQB+AAwq7JOpdAACZXFzcQB+AAwWtwC2dAACIyNzcQB+AAzfVwQPdAAIZmluYWxpemVzcQB+AAyFm8Y3dAAIaGFzaENvZGVzcgATeHNidGkuYXBpLlNvdXJjZUFQSblep/kpIzikAgACWwALZGVmaW5pdGlvbnN0ABdbTHhzYnRpL2FwaS9EZWZpbml0aW9uO1sACHBhY2thZ2VzdAAUW0x4c2J0aS9hcGkvUGFja2FnZTt4cHVyABdbTHhzYnRpLmFwaS5EZWZpbml0aW9uO4jJXOe0414OAgAAeHAAAAABc3IAE3hzYnRpLmFwaS5DbGFzc0xpa2WDNByh37CXbAIABEwADmRlZmluaXRpb25UeXBldAAaTHhzYnRpL2FwaS9EZWZpbml0aW9uVHlwZTtbABBzYXZlZEFubm90YXRpb25zdAATW0xqYXZhL2xhbmcvU3RyaW5nO0wACHNlbGZUeXBldAAQTHhzYnRpL2FwaS9MYXp5O0wACXN0cnVjdHVyZXEAfgBFeHIAIXhzYnRpLmFwaS5QYXJhbWV0ZXJpemVkRGVmaW5pdGlvbvkRbrHVUDziAgABWwAOdHlwZVBhcmFtZXRlcnN0ABpbTHhzYnRpL2FwaS9UeXBlUGFyYW1ldGVyO3hyABR4c2J0aS5hcGkuRGVmaW5pdGlvbocqG+hxQuNGAgAETAAGYWNjZXNzdAASTHhzYnRpL2FwaS9BY2Nlc3M7WwALYW5ub3RhdGlvbnN0ABdbTHhzYnRpL2FwaS9Bbm5vdGF0aW9uO0wACW1vZGlmaWVyc3QAFUx4c2J0aS9hcGkvTW9kaWZpZXJzO0wABG5hbWVxAH4ADXhwc3IAEHhzYnRpLmFwaS5QdWJsaWO6WD2ubC1gQgIAAHhyABB4c2J0aS5hcGkuQWNjZXNz3WKa+B1jMUgCAAB4cHVyABdbTHhzYnRpLmFwaS5Bbm5vdGF0aW9uO+uX6xkQ9o1IAgAAeHAAAAAAc3IAE3hzYnRpLmFwaS5Nb2RpZmllcnOX52HcEyZ7swIAAUIABWZsYWdzeHAAdAAoY29tLmFnZ3JlZ2F0ZVN0cnVjdHVyZWRTdHJlYW0uU3RhdGVtZW50c3VyABpbTHhzYnRpLmFwaS5UeXBlUGFyYW1ldGVyO9ltJg8onfK2AgAAeHAAAAAAfnIAGHhzYnRpLmFwaS5EZWZpbml0aW9uVHlwZQAAAAAAAAAAEgAAeHIADmphdmEubGFuZy5FbnVtAAAAAAAAAAASAAB4cHQABk1vZHVsZXVyABNbTGphdmEubGFuZy5TdHJpbmc7rdJW5+kde0cCAAB4cAAAAABzcgAheHNidGkuYXBpLkFic3RyYWN0TGF6eSRTdHJpY3RMYXp5DWYcaykWKrgCAAFMAAV2YWx1ZXQAEkxqYXZhL2xhbmcvT2JqZWN0O3hwc3IAE3hzYnRpLmFwaS5FbXB0eVR5cGW8/Z5GSTuJJAIAAHhyABR4c2J0aS5hcGkuU2ltcGxlVHlwZXJ4YoghI79AAgAAeHIADnhzYnRpLmFwaS5UeXBlP2rZIRZJqsoCAAB4cHNxAH4AXXNyABN4c2J0aS5hcGkuU3RydWN0dXJlqar5gJNv2AACAANMAAhkZWNsYXJlZHEAfgBFTAAJaW5oZXJpdGVkcQB+AEVMAAdwYXJlbnRzcQB+AEV4cQB+AGJzcQB+AF11cQB+AEAAAAAAc3EAfgBddXEAfgBAAAAAAHNxAH4AXXVyABFbTHhzYnRpLmFwaS5UeXBlO3T/pVp7+elBAgAAeHAAAAAEc3IAFHhzYnRpLmFwaS5Qcm9qZWN0aW9u89KNVOlFpC0CAAJMAAJpZHEAfgANTAAGcHJlZml4dAAWTHhzYnRpL2FwaS9TaW1wbGVUeXBlO3hxAH4AYXQADFNlcmlhbGl6YWJsZXNyABN4c2J0aS5hcGkuU2luZ2xldG9u/Kdf+M9W5EYCAAFMAARwYXRodAAQTHhzYnRpL2FwaS9QYXRoO3hxAH4AYXNyAA54c2J0aS5hcGkuUGF0aJs9XAjOpSeEAgABWwAKY29tcG9uZW50c3QAGltMeHNidGkvYXBpL1BhdGhDb21wb25lbnQ7eHB1cgAaW0x4c2J0aS5hcGkuUGF0aENvbXBvbmVudDtD2gl0LWcWdAIAAHhwAAAAAnNyAAx4c2J0aS5hcGkuSWSYMmyLN1PEQAIAAUwAAmlkcQB+AA14cgAXeHNidGkuYXBpLlBhdGhDb21wb25lbnRfmiJbLoafvAIAAHhwdAAFc2NhbGFzcgAOeHNidGkuYXBpLlRoaXPbCe2mzFpAXAIAAHhxAH4Ae3NxAH4AbnEAfgBxc3EAfgByc3EAfgB1dXEAfgB4AAAAA3NxAH4AenQABGphdmFzcQB+AHp0AAJpb3EAfgB/c3EAfgBudAAGT2JqZWN0c3EAfgByc3EAfgB1dXEAfgB4AAAAA3NxAH4AenEAfgCFc3EAfgB6dAAEbGFuZ3EAfgB/c3EAfgBudAADQW55cQB+AHR1cgAUW0x4c2J0aS5hcGkuUGFja2FnZTtbExk3cKcnoQIAAHhwAAAAAnNyABF4c2J0aS5hcGkuUGFja2FnZX5Zj/auzjlYAgABTAAEbmFtZXEAfgANeHB0AB1jb20uYWdncmVnYXRlU3RydWN0dXJlZFN0cmVhbXNxAH4AlHQAA2NvbXNyABV4c2J0aS5hcGkuQ29tcGlsYXRpb27t+uDDauigQgIAAkoACXN0YXJ0VGltZVsAB291dHB1dHN0ABpbTHhzYnRpL2FwaS9PdXRwdXRTZXR0aW5nO3hwAAABW7VR9EB1cgAaW0x4c2J0aS5hcGkuT3V0cHV0U2V0dGluZzt/asLzp4elQgIAAHhwAAAAAXNyABd4c2J0aS5hcGkuT3V0cHV0U2V0dGluZ3rZmkd0+x17AgACTAAPb3V0cHV0RGlyZWN0b3J5cQB+AA1MAA9zb3VyY2VEaXJlY3RvcnlxAH4ADXhwdABTL2hvbWUvdWJ1bnR1L3RyaWFsQm9vbnRhZGF0YS9ib29udGFkYXRhLXN0cnVjdHVyZWQtc3RyZWFtL3RhcmdldC9zY2FsYS0yLjExL2NsYXNzZXN0AAEvdXIAAltCrPMX+AYIVOACAAB4cAAAABT8/G8BZ20gO78eZbJggfw4xZP03w==
+external apis:
+0 items
+source infos:
+3 items
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Commons.scala -> 
+AAAAAAAAAAA=
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Main.scala -> 
+AAAAAAAAAAA=
+/home/ubuntu/trialBoontadata/boontadata-structured-stream/src/main/scala/com/aggregateStructuredStream/Statements.scala -> 
+AAAAAAAAAAA=
+compilations:
+1 items
+0 -> rO0ABXNyABV4c2J0aS5hcGkuQ29tcGlsYXRpb27t+uDDauigQgIAAkoACXN0YXJ0VGltZVsAB291dHB1dHN0ABpbTHhzYnRpL2FwaS9PdXRwdXRTZXR0aW5nO3hwAAABW7VR9EB1cgAaW0x4c2J0aS5hcGkuT3V0cHV0U2V0dGluZzt/asLzp4elQgIAAHhwAAAAAXNyABd4c2J0aS5hcGkuT3V0cHV0U2V0dGluZ3rZmkd0+x17AgACTAAPb3V0cHV0RGlyZWN0b3J5dAASTGphdmEvbGFuZy9TdHJpbmc7TAAPc291cmNlRGlyZWN0b3J5cQB+AAZ4cHQAUy9ob21lL3VidW50dS90cmlhbEJvb250YWRhdGEvYm9vbnRhZGF0YS1zdHJ1Y3R1cmVkLXN0cmVhbS90YXJnZXQvc2NhbGEtMi4xMS9jbGFzc2VzdAABLw==
