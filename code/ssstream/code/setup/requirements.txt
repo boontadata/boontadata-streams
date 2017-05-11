@@ -1,0 +1,13 @@
+cassandra-driver==3.9.0
+futures==3.1.1
+gevent==1.2.1
+greenlet==0.4.12
+kafka-python==1.3.3
+kazoo==2.2.1
+numpy==1.12.1
+pandas==0.19.2
+pykafka==2.5.0
+python-dateutil==2.6.0
+pytz==2017.2
+six==1.10.0
+tabulate==0.7.7
