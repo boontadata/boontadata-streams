@@ -1,0 +1,20 @@
+version: '2'
+services:
+  node1:
+    image: pyp17image1
+    container_name: n1
+    networks:
+      - pyp17
+  node2:
+    image: pyp17image2
+    container_name: n2
+    networks:
+      - pyp17
+  node3:
+    image: pyp17image2
+    container_name: n3
+    networks:
+      - pyp17
+networks:
+  pyp17:
+    driver: bridge

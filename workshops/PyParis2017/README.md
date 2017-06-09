@@ -42,9 +42,80 @@ How to create an Azure PASS subscription and an organizational account at the sa
 
 Then, [create an Azure VM](createAzureVM.md). The one we create here has 14 GB of RAM, and 2 cores. It's running Ubuntu LTS XXX?
 
+[Install docker in the VM](installDocker.md). 
+
 ## Create my first docker-compose infrastructure
 
+In order to familiarize ourselves with the basics of Docker, we'll create a small 3-node infrastructure and play with it.
+
+In the VM, copy the folder that you have in this folder: `simpleinfra`.
+
+Inspect files.
+
+build a Docker image from the current folder (the one where you have the `Dockerfile` file):
+
+```bash
+docker build -t pyp17image1 .
+```
+
+build a second image based on the same sources
+```bash
+docker build -t pyp17image2 .
+```
+
+this second build took no time because it leveraged cache from the first build. See, the ids are the same for both images:
+```bash
+docker images
+```
+
+start the infrastructure, and list the running nodes
+
+```bash
+docker-compose up -d
+docker-compose ps
+```
+
+connect to node 1: 
+```bash
+docker exec -ti n1 /bin/sh
+```
+
+from node 1 issue a few commands:
+```bash
+ls -als
+./hw.sh
+ping -c 4 n2
+ping -c 4 n3
+```
+
+Then disconnect from node 1 (^D), and shutdown the infrastructure
+
+```bash
+docker-compose down
+```
+
 ## Get and run boontadata
+
+From the VM
+
+```bash
+cd ~/
+git clone https://github.com/boontadata/boontadata-streams.git
+export BOONTADATA_HOME=$HOME/boontadata-streams
+export BOONTADATA_DOCKER_REGISTRY=boontadata.local
+cd $BOONTADATA_HOME
+git checkout pyparis2017
+cd code
+```
+
+
+
+while it's pulling images and starting you can inspect the following files in the `code` directory: 
+- pyclientbase/Dockerfile
+- pyclient\Dockerfile
+- pyclient\ingest.py
+- pyclient\compare.py
+
 
 ## Additional Python coding
 

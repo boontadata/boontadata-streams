@@ -1,7 +1,8 @@
 #!/bin/bash
 
-#usage: . buildimages.sh <reset|noreset>
+#usage: . buildimages.sh <reset|noreset> <nopull|pullfromdockerhub>
 if test $# -lt 1; then reset=noreset; else reset=$1; fi
+if test $# -lt 2; then pull=nopull; else pull=$2; fi 
 
 if test -z $BOONTADATA_DOCKER_REGISTRY
 then
@@ -51,12 +52,13 @@ build_jar()
     fi
 }
 
-build_and_push()
+pull_or_build_and_push()
 {
     folderpath=$1
     filepath=$folderpath/Dockerfile
     filepath2=$folderpath/tmpDockerfile
     tagname=$(eval echo "`head -1 $filepath | awk '{print $2}'`")
+    shorttagname=`head -1 $filepath | awk '{print substr($2,40,length($2)-39)}'`
     tagversion=`head -3 $filepath | tail -1| awk '{print $3}'`
     fulltag="$tagname:$tagversion"
 
@@ -66,55 +68,61 @@ build_and_push()
         docker rmi $fulltag
     fi
 
-    #special build steps
-    case $tagname in
-        "$BOONTADATA_DOCKER_REGISTRY/boontadata/flinkmaster")
-            build_jar "$BOONTADATA_HOME/code/flink/master/code/target/flink1-0.2.jar" "$BOONTADATA_HOME/code/flink/master/code" "mvn clean package"
-            ;;
-        "$BOONTADATA_DOCKER_REGISTRY/boontadata/sparkmaster")
-            build_jar "$BOONTADATA_HOME/code/spark/master/code/target/scala-2.11/boontadata-spark-job1-assembly-0.1.jar" "$BOONTADATA_HOME/code/spark/master/code" "sbt clean assembly"
-            ;;
-        *)
-            ;;
-    esac
-
-    imageavailability=`docker images | grep "$tagname *$tagversion"`
-    if test -n "$imageavailability"
+    if test $pull = "pullfromdockerhub"
     then
-        echo "local image $fulltag already exists, no reset so no rebuild"
+        docker pull boontadata/$shorttagname:$tagversion
+        docker tag boontadata/$shorttagname:$tagversion $tagname:$tagversion
     else
-        echo "will build $fulltag"
-        if test -e $filepath2; then rm $filepath2; fi
-        replacestring="s/\$BOONTADATA_DOCKER_REGISTRY/${BOONTADATA_DOCKER_REGISTRY}/g"
-        sed $replacestring $filepath > $filepath2
+        #special build steps
+        case $tagname in
+            "$BOONTADATA_DOCKER_REGISTRY/boontadata/flinkmaster")
+                build_jar "$BOONTADATA_HOME/code/flink/master/code/target/flink1-0.2.jar" "$BOONTADATA_HOME/code/flink/master/code" "mvn clean package"
+                ;;
+            "$BOONTADATA_DOCKER_REGISTRY/boontadata/sparkmaster")
+                build_jar "$BOONTADATA_HOME/code/spark/master/code/target/scala-2.11/boontadata-spark-job1-assembly-0.1.jar" "$BOONTADATA_HOME/code/spark/master/code" "sbt clean assembly"
+                ;;
+            *)
+                ;;
+        esac
 
-        docker build -t $fulltag $folderpath --file $filepath2
-        echo "local docker images for $tagname:"
-        docker images | grep "$tagname"
-        if test $BOONTADATA_DOCKER_REGISTRY = "boontadata.local" 
-        then 
-            echo "don't push to boontadata.local" 
-        else 
-            docker push $fulltag 
-        fi 
+        imageavailability=`docker images | grep "$tagname *$tagversion"`
+        if test -n "$imageavailability"
+        then
+            echo "local image $fulltag already exists, no reset so no rebuild"
+        else
+            echo "will build $fulltag"
+            if test -e $filepath2; then rm $filepath2; fi
+            replacestring="s/\$BOONTADATA_DOCKER_REGISTRY/${BOONTADATA_DOCKER_REGISTRY}/g"
+            sed $replacestring $filepath > $filepath2
+
+            docker build -t $fulltag $folderpath --file $filepath2
+            echo "local docker images for $tagname:"
+            docker images | grep "$tagname"
+            if test $BOONTADATA_DOCKER_REGISTRY = "boontadata.local" 
+            then 
+                echo "don't push to boontadata.local" 
+            else 
+                docker push $fulltag 
+            fi 
+        fi
     fi
 }
 
 #create a container that we can use to build sources as jars
-build_and_push $BOONTADATA_HOME/code/devjvm
+pull_or_build_and_push $BOONTADATA_HOME/code/devjvm
 
 #create other containers
-build_and_push $BOONTADATA_HOME/code/pyclientbase
-build_and_push $BOONTADATA_HOME/code/pyclient
-build_and_push $BOONTADATA_HOME/code/cassandra/base
-build_and_push $BOONTADATA_HOME/code/cassandra/init
-build_and_push $BOONTADATA_HOME/code/flink/base
-build_and_push $BOONTADATA_HOME/code/flink/master
-build_and_push $BOONTADATA_HOME/code/flink/worker
-build_and_push $BOONTADATA_HOME/code/kafka-docker
-build_and_push $BOONTADATA_HOME/code/spark/base
-build_and_push $BOONTADATA_HOME/code/spark/master
-build_and_push $BOONTADATA_HOME/code/spark/worker
-build_and_push $BOONTADATA_HOME/code/zookeeper
+pull_or_build_and_push $BOONTADATA_HOME/code/pyclientbase
+pull_or_build_and_push $BOONTADATA_HOME/code/pyclient
+pull_or_build_and_push $BOONTADATA_HOME/code/cassandra/base
+pull_or_build_and_push $BOONTADATA_HOME/code/cassandra/init
+pull_or_build_and_push $BOONTADATA_HOME/code/flink/base
+pull_or_build_and_push $BOONTADATA_HOME/code/flink/master
+pull_or_build_and_push $BOONTADATA_HOME/code/flink/worker
+pull_or_build_and_push $BOONTADATA_HOME/code/kafka-docker
+pull_or_build_and_push $BOONTADATA_HOME/code/spark/base
+pull_or_build_and_push $BOONTADATA_HOME/code/spark/master
+pull_or_build_and_push $BOONTADATA_HOME/code/spark/worker
+pull_or_build_and_push $BOONTADATA_HOME/code/zookeeper
 
 docker images
