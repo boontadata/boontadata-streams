@@ -108,7 +108,11 @@ git checkout pyparis2017
 cd code
 ```
 
+```bash
+. buildimages.sh noreset pullfromdockerhub
+```
 
+Pull from an Azure VM takes about 5 to 7 minutes
 
 while it's pulling images and starting you can inspect the following files in the `code` directory: 
 - pyclientbase/Dockerfile
@@ -116,6 +120,32 @@ while it's pulling images and starting you can inspect the following files in th
 - pyclient\ingest.py
 - pyclient\compare.py
 
+```bash
+. startscenario.sh flink
+docker-compose ps
+```
+
+open a tunnel 
+```bash
+ssh -D 127.0.0.1:8034 $pyp17vmname.westeurope.cloudapp.azure.com
+```
+
+and browse to <http://http://0.0.0.0:34010/>
+
+```bash
+. runscenario.sh flink2
+```
+
+```bash
+docker-compose down
+```
+
+```bash
+. startscenario.sh spark
+docker-compose ps
+```
+
+To be continued
 
 ## Additional Python coding
 
