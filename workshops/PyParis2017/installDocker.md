@@ -20,9 +20,13 @@ sudo add-apt-repository \
 sudo apt-get update
 
 sudo apt-get -y install docker-ce
+```
 
+```bash
 sudo docker run hello-world
+```
 
+```bash
 sudo groupadd docker
 sudo usermod -aG docker $USER
 ```
