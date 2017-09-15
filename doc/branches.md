@@ -7,6 +7,10 @@ Branch `master` is the first one, then the newest branches are at the top.
 
 This branch always has the latest stable and global version
 
+## hf1709a
+
+Hackfest than happens in 2017-09. The goal is to be able to run the scenarios on Kubernetes on multiple hosts. 
+
 ## flink3
 
 fix errors in Flink scenarios
