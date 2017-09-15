@@ -116,15 +116,15 @@ NB: the yaml file itself is created from building blocks in the `startscenario.s
 
 ## how to build all
 
+should we need to build all, we may want to use this: 
+
 ```bash
 cd $BOONTADATA_HOME/code
 docker images | awk '{print $1 ":" $2}' | xargs --no-run-if-empty docker rmi
 . buildimages.sh reset nopull
 ```
 
-there are some issues with spark (`boontadata.local/boontadata/sparkbase:0.1`): 
+Still, some base image may not be built that way (FlinkBase) as mirror files changed urls, but the images used by boontadata are available in the docker hub registry.
+Fixing this may not be a priority for now. It will probably involve upgrading the Flink version we use which also has implication on the Java dependencies...
 
-```
-sbt.librarymanagement.ResolveException: unresolved dependency: com.eed3si9n#sbt-assembly;0.14.3: not found
-```
 

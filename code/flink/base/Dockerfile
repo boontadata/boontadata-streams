@@ -15,7 +15,7 @@ ENV FLINK_ROOT_DIR /opt/flink
 # is all we need.)
 RUN mkdir -p /opt && \
     cd /opt && \
-    curl -O https://www.apache.org/dyn/closer.cgi?path=/flink/flink-${FLINK_VERSION}/flink-${FLINK_VERSION}-bin-hadoop27-scala_${SCALA_VERSION}.tgz && \
+    curl -O http://wwwftp.ciril.fr/pub/apache/flink/flink-${FLINK_VERSION}/flink-${FLINK_VERSION}-bin-hadoop27-scala_${SCALA_VERSION}.tgz && \
         tar xvfz flink-${FLINK_VERSION}-bin-hadoop27-scala_${SCALA_VERSION}.tgz && \
     ln -s hadoop-${HADOOP_VERSION} hadoop && \
     echo Hadoop ${HADOOP_VERSION} native libraries installed in /opt/hadoop/lib/native
