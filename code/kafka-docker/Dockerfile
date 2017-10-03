@@ -1,12 +1,12 @@
-# $BOONTADATA_DOCKER_REGISTRY/boontadata/kafka
+# $BOONTADATA_DOCKER_REGISTRY/boontadata/kafka - benjguin/kafka:0.1
 #
 # VERSION   0.1
 
 FROM anapsix/alpine-java
 
-MAINTAINER Wurstmeister 
+MAINTAINER boontadata boontadata@3-4.fr
 
-RUN apk add --update unzip wget curl docker jq coreutils
+RUN apk add --update unzip wget curl jq coreutils
 
 ENV KAFKA_VERSION="0.10.0.0" SCALA_VERSION="2.11"
 ADD download-kafka.sh /tmp/download-kafka.sh

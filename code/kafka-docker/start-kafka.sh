@@ -1,20 +1,15 @@
 #!/bin/bash
 
-if [[ -z "$KAFKA_PORT" ]]; then
-    export KAFKA_PORT=9092
-fi
-if [[ -z "$KAFKA_ADVERTISED_PORT" ]]; then
-    export KAFKA_ADVERTISED_PORT=$(docker port `hostname` $KAFKA_PORT | sed -r "s/.*:(.*)/\1/g")
-fi
-if [[ -z "$KAFKA_BROKER_ID" ]]; then
-    # By default auto allocate broker ID
-    export KAFKA_BROKER_ID=-1
-fi
+# the following environment variables should be defined
+echo KAFKA_PORT: $KAFKA_PORT
+echo KAFKA_ADVERTISED_PORT: $KAFKA_ADVERTISED_PORT
+echo KAFKA_BROKER_ID: $KAFKA_BROKER_ID
+echo KAFKA_ZOOKEEPER_CONNECT: $KAFKA_ZOOKEEPER_CONNECT
+echo KAFKA_HEAP_OPTS: $KAFKA_HEAP_OPTS
+
+
 if [[ -z "$KAFKA_LOG_DIRS" ]]; then
     export KAFKA_LOG_DIRS="/kafka/kafka-logs-$HOSTNAME"
-fi
-if [[ -z "$KAFKA_ZOOKEEPER_CONNECT" ]]; then
-    export KAFKA_ZOOKEEPER_CONNECT=$(env | grep ZK.*PORT_2181_TCP= | sed -e 's|.*tcp://||' | paste -sd ,)
 fi
 
 if [[ -n "$KAFKA_HEAP_OPTS" ]]; then
@@ -43,7 +38,6 @@ if [[ -n "$CUSTOM_INIT_SCRIPT" ]] ; then
   eval $CUSTOM_INIT_SCRIPT
 fi
 
-
 KAFKA_PID=0
 
 # see https://medium.com/@gchudnov/trapping-signals-in-docker-containers-7a57fdda7d86#.bh35ir4u5
@@ -56,7 +50,6 @@ term_handler() {
   echo 'Kafka stopped.'
   exit
 }
-
 
 # Capture kill requests to stop properly
 trap "term_handler" SIGHUP SIGINT SIGTERM

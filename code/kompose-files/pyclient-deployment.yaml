@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f code/compose-blocks/compose-working.yml
+    kompose.version: 1.2.0 (99f88ef)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: pyclient
+  name: pyclient
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: pyclient
+    spec:
+      containers:
+      - env:
+        - name: KAFKA_ADVERTISED_SERVERS
+          value: ks1:9092,ks2:9092,ks3:9092
+        image: maninderjit/bdtpyclient:0.1
+        name: client1
+        resources: {}
+      restartPolicy: Always
+status: {}

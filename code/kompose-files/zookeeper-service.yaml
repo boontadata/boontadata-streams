@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f code/compose-blocks/compose-working.yml
+    kompose.version: 1.2.0 (99f88ef)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: zookeeper
+  name: zk1
+spec:
+  ports:
+  - name: client
+    port: 2181
+  - name: follower
+    port: 2888
+  - name: leader
+    port: 3888
+  selector:
+    io.kompose.service: zookeeper
+status:
+  loadBalancer: {}

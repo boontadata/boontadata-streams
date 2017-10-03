@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f code/compose-blocks/compose-working.yml
+    kompose.version: 1.2.0 (99f88ef)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: flink-worker1
+  name: flink-worker1
+spec:
+  ports:
+  - name: "34012"
+    port: 34012
+    targetPort: 6121
+  - name: "34013"
+    port: 34013
+    targetPort: 6122
+  selector:
+    io.kompose.service: flink-worker1
+status:
+  loadBalancer: {}

@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f code/compose-blocks/compose-working.yml
+    kompose.version: 1.2.0 (99f88ef)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: flink-master
+  name: flink-master
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: flink-master
+    spec:
+      containers:
+      - image: boontadata/flinkmaster:0.2
+        name: flink-master
+        ports:
+        - containerPort: 8081
+        - containerPort: 6123
+        resources: {}
+      restartPolicy: Always
+status: {}

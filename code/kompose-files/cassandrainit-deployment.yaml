@@ -1,0 +1,37 @@
+# apiVersion: extensions/v1beta1
+# kind: Deployment
+# metadata:
+#   creationTimestamp: null
+#   labels:
+#     io.kompose.service: cassandrainit
+#   name: cassandrainit
+# spec:
+#   replicas: 1
+#   strategy: {}
+#   template:
+#     metadata:
+#       creationTimestamp: null
+#       labels:
+#         io.kompose.service: cassandrainit
+#     spec:
+#       containers:
+#       - image: maninderjit/bdtcassandrainit:0.95
+#         command:
+#           - /workdir/init.sh
+#         name: cinit
+#         resources: {}
+# status: {}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cassandrainit
+spec:
+  template:
+    metadata:
+      name: cassandrainit
+    spec:
+      containers:
+      - name: cinit
+        image: maninderjit/bdtcassandrainit:0.95
+        command: ["/workdir/init.sh"]
+      restartPolicy: Never

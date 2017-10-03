@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f code/compose-blocks/compose-working.yml
+    kompose.version: 1.2.0 (99f88ef)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: kafka2
+  name: kafka2
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: kafka2
+    spec:
+      containers:
+      - image: benjguin/boontadata-kafka:0.1
+        name: ks2
+        env:
+        - name: KAFKA_ADVERTISED_PORT
+          value: "34002"
+        - name: KAFKA_ADVERTISED_HOST_NAME
+          value: "TODO"
+        - name: KAFKA_BROKER_ID
+          value: "2"
+        - name: KAFKA_PORT
+          value: "9092"
+        - name: KAFKA_ZOOKEEPER_CONNECT
+          value: zk1:2181
+        - name: KAFKA_ZOOKEEPER_CONNECTION_TIMEOUT_MS
+          value: "120000"
+        ports:
+        - containerPort: 9092
+        resources: {}
+      restartPolicy: Always
+status: {}
